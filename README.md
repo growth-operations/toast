@@ -112,21 +112,29 @@ configuration = toastapi.Configuration(
     host = "https://ws-sandbox-api.eng.toasttab.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 
 # Enter a context with an instance of the API client
 async with toastapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = toastapi.AuthenticationApi(api_client)
-    authentication_request = toastapi.AuthenticationRequest() # AuthenticationRequest | The authentication credentials for your Toast API client integration software. 
+    api_instance = toastapi.AlternatePaymentTypesApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast POS GUID of the restaurant that the configuration applies to. 
+    page_token = 'page_token_example' # str | A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>.  (optional)
+    last_modified = '2013-10-20T19:20:30+01:00' # datetime | Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.  (optional)
 
     try:
-        # Get an authentication token
-        api_response = await api_instance.authentication_login_post(authentication_request)
-        print("The response of AuthenticationApi->authentication_login_post:\n")
+        # Get alternative payment types 
+        api_response = await api_instance.alternate_payment_types_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+        print("The response of AlternatePaymentTypesApi->alternate_payment_types_get:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling AuthenticationApi->authentication_login_post: %s\n" % e)
+        print("Exception when calling AlternatePaymentTypesApi->alternate_payment_types_get: %s\n" % e)
 
 ```
 
@@ -136,7 +144,15 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AlternatePaymentTypesApi* | [**alternate_payment_types_get**](docs/AlternatePaymentTypesApi.md#alternate_payment_types_get) | **GET** /config/v2/alternatePaymentTypes | Get alternative payment types 
+*AlternatePaymentTypesApi* | [**alternate_payment_types_guid_get**](docs/AlternatePaymentTypesApi.md#alternate_payment_types_guid_get) | **GET** /config/v2/alternatePaymentTypes/{guid} | Get an alternative payment type 
 *AuthenticationApi* | [**authentication_login_post**](docs/AuthenticationApi.md#authentication_login_post) | **POST** /authentication/v1/authentication/login | Get an authentication token
+*BreakTypesApi* | [**break_types_get**](docs/BreakTypesApi.md#break_types_get) | **GET** /config/v2/breakTypes | Get break types 
+*BreakTypesApi* | [**break_types_guid_get**](docs/BreakTypesApi.md#break_types_guid_get) | **GET** /config/v2/breakTypes/{guid} | Get a break type 
+*CashDrawersApi* | [**cash_drawers_get**](docs/CashDrawersApi.md#cash_drawers_get) | **GET** /config/v2/cashDrawers | Get cash drawers 
+*CashDrawersApi* | [**cash_drawers_guid_get**](docs/CashDrawersApi.md#cash_drawers_guid_get) | **GET** /config/v2/cashDrawers/{guid} | Get a cash drawer 
+*DiningOptionsApi* | [**dining_options_get**](docs/DiningOptionsApi.md#dining_options_get) | **GET** /config/v2/diningOptions | Get dining options 
+*DiningOptionsApi* | [**dining_options_guid_get**](docs/DiningOptionsApi.md#dining_options_guid_get) | **GET** /config/v2/diningOptions/{guid} | Get a dining option 
 *DiscountsApi* | [**applicable_discounts_post**](docs/DiscountsApi.md#applicable_discounts_post) | **POST** /orders/v2/applicableDiscounts | Get applicable discounts
 *DiscountsApi* | [**orders_checks_applied_discounts_post**](docs/DiscountsApi.md#orders_checks_applied_discounts_post) | **POST** /orders/v2/orders/{orderGuid}/checks/{checkGuid}/appliedDiscounts | Add check-level discounts
 *DiscountsApi* | [**orders_checks_selections_applied_discounts_post**](docs/DiscountsApi.md#orders_checks_selections_applied_discounts_post) | **POST** /orders/v2/orders/{orderGuid}/checks/{checkGuid}/selections/{selectionGuid}/appliedDiscounts | Add item-level discounts
@@ -154,6 +170,10 @@ Class | Method | HTTP request | Description
 *JobsApi* | [**jobs_job_id_external_id_post**](docs/JobsApi.md#jobs_job_id_external_id_post) | **POST** /labor/v1/jobs/{jobId}/externalId | Add an external identifier
 *JobsApi* | [**jobs_job_id_external_id_put**](docs/JobsApi.md#jobs_job_id_external_id_put) | **PUT** /labor/v1/jobs/{jobId}/externalId | Add or replace an external identifier
 *JobsApi* | [**jobs_job_id_get**](docs/JobsApi.md#jobs_job_id_get) | **GET** /labor/v1/jobs/{jobId} | Get one job
+*MenuGroupsApi* | [**menu_groups_get**](docs/MenuGroupsApi.md#menu_groups_get) | **GET** /config/v2/menuGroups | Get menu groups 
+*MenuGroupsApi* | [**menu_groups_guid_get**](docs/MenuGroupsApi.md#menu_groups_guid_get) | **GET** /config/v2/menuGroups/{guid} | Get a menu group 
+*MenuItemsApi* | [**menu_items_get**](docs/MenuItemsApi.md#menu_items_get) | **GET** /config/v2/menuItems | Get menu items 
+*MenuItemsApi* | [**menu_items_guid_get**](docs/MenuItemsApi.md#menu_items_guid_get) | **GET** /config/v2/menuItems/{guid} | Get a menu item 
 *OrdersApi* | [**orders_bulk_get**](docs/OrdersApi.md#orders_bulk_get) | **GET** /orders/v2/ordersBulk | Get multiple orders
 *OrdersApi* | [**orders_get**](docs/OrdersApi.md#orders_get) | **GET** /orders/v2/orders | Get order identifiers (deprecated)
 *OrdersApi* | [**orders_guid_get**](docs/OrdersApi.md#orders_guid_get) | **GET** /orders/v2/orders/{guid} | Get an order
@@ -166,6 +186,8 @@ Class | Method | HTTP request | Description
 *PaymentsApi* | [**orders_order_guid_checks_check_guid_payments_payment_guid_patch**](docs/PaymentsApi.md#orders_order_guid_checks_check_guid_payments_payment_guid_patch) | **PATCH** /orders/v2/orders/{orderGuid}/checks/{checkGuid}/payments/{paymentGuid} | Update a tip amount
 *PaymentsApi* | [**payments_get**](docs/PaymentsApi.md#payments_get) | **GET** /orders/v2/payments | Get payment identifiers
 *PaymentsApi* | [**payments_guid_get**](docs/PaymentsApi.md#payments_guid_get) | **GET** /orders/v2/payments/{guid} | Get a payment
+*PrintersApi* | [**printers_get**](docs/PrintersApi.md#printers_get) | **GET** /config/v2/printers | Get printers 
+*PrintersApi* | [**printers_guid_get**](docs/PrintersApi.md#printers_guid_get) | **GET** /config/v2/printers/{guid} | Get a printer 
 *RestaurantsApi* | [**groups_management_group_guid_restaurants_get**](docs/RestaurantsApi.md#groups_management_group_guid_restaurants_get) | **GET** /restaurants/v1/groups/{managementGroupGUID}/restaurants | Get restaurants in a management group
 *RestaurantsApi* | [**restaurants_restaurant_guid_get**](docs/RestaurantsApi.md#restaurants_restaurant_guid_get) | **GET** /restaurants/v1/restaurants/{restaurantGUID} | Get restaurant configuration information
 *ShiftsApi* | [**shifts_get**](docs/ShiftsApi.md#shifts_get) | **GET** /labor/v1/shifts | Get shifts
@@ -173,6 +195,8 @@ Class | Method | HTTP request | Description
 *ShiftsApi* | [**shifts_shift_id_delete**](docs/ShiftsApi.md#shifts_shift_id_delete) | **DELETE** /labor/v1/shifts/{shiftId} | Delete a shift
 *ShiftsApi* | [**shifts_shift_id_get**](docs/ShiftsApi.md#shifts_shift_id_get) | **GET** /labor/v1/shifts/{shiftId} | Get a shift
 *ShiftsApi* | [**shifts_shift_id_put**](docs/ShiftsApi.md#shifts_shift_id_put) | **PUT** /labor/v1/shifts/{shiftId} | Update a shift
+*TablesApi* | [**tables_get**](docs/TablesApi.md#tables_get) | **GET** /config/v2/tables | Get tables 
+*TablesApi* | [**tables_guid_get**](docs/TablesApi.md#tables_guid_get) | **GET** /config/v2/tables/{guid} | Get a table 
 *TimeEntriesApi* | [**time_entries_get**](docs/TimeEntriesApi.md#time_entries_get) | **GET** /labor/v1/timeEntries | Get time entries
 *TimeEntriesApi* | [**time_entries_time_entry_id_get**](docs/TimeEntriesApi.md#time_entries_time_entry_id_get) | **GET** /labor/v1/timeEntries/{timeEntryId} | Get one time entry
 *DefaultApi* | [**menus_get**](docs/DefaultApi.md#menus_get) | **GET** /menus/v3/menus | Get menus
@@ -181,12 +205,15 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [AlternatePaymentType](docs/AlternatePaymentType.md)
  - [ApplicableDiscount](docs/ApplicableDiscount.md)
  - [ApplicableDiscountsRequest](docs/ApplicableDiscountsRequest.md)
  - [AppliedDiscount](docs/AppliedDiscount.md)
  - [AuthenticationRequest](docs/AuthenticationRequest.md)
  - [AuthenticationResponse](docs/AuthenticationResponse.md)
  - [AuthenticationToken](docs/AuthenticationToken.md)
+ - [BreakType](docs/BreakType.md)
+ - [CashDrawer](docs/CashDrawer.md)
  - [Check](docs/Check.md)
  - [ConfigReference](docs/ConfigReference.md)
  - [Customer](docs/Customer.md)
@@ -194,6 +221,8 @@ Class | Method | HTTP request | Description
  - [Delivery](docs/Delivery.md)
  - [DeliveryInfo](docs/DeliveryInfo.md)
  - [DeliveryPaymentOptions](docs/DeliveryPaymentOptions.md)
+ - [DiningOption](docs/DiningOption.md)
+ - [Discount](docs/Discount.md)
  - [Employee](docs/Employee.md)
  - [ErrorMessage](docs/ErrorMessage.md)
  - [ExternalReference](docs/ExternalReference.md)
@@ -218,6 +247,7 @@ Class | Method | HTTP request | Description
  - [PreModifier](docs/PreModifier.md)
  - [PreModifierGroup](docs/PreModifierGroup.md)
  - [PrepTimes](docs/PrepTimes.md)
+ - [Printer](docs/Printer.md)
  - [Restaurant](docs/Restaurant.md)
  - [RestaurantBasic](docs/RestaurantBasic.md)
  - [RestaurantInfo](docs/RestaurantInfo.md)
@@ -228,6 +258,7 @@ Class | Method | HTTP request | Description
  - [Selection](docs/Selection.md)
  - [Service](docs/Service.md)
  - [Shift](docs/Shift.md)
+ - [Table](docs/Table.md)
  - [TakeoutPaymentOptions](docs/TakeoutPaymentOptions.md)
  - [TimeEntry](docs/TimeEntry.md)
  - [TimeEntryBreak](docs/TimeEntryBreak.md)
@@ -260,6 +291,7 @@ Authentication schemes defined for the API:
  - **discounts:read**: Allows reading from the discounts API.
  - **discounts:write**: Allows writing to the discounts API.
  - **menus.channel:read**: Allows reading from the menus API.
+ - **config:read**: Allows reading from the configuration API.
 
 
 ## Author

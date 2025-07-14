@@ -114,6 +114,29 @@ tags:
   - name: Restaurants
     description: |
       Related to restaurant configuration and information.
+  - name: Alternate Payment Types
+  - name: Break Types
+  - name: Cash Drawers
+  - name: Dining Options
+  - name: Menu Groups
+  - name: Menu Items
+  - name: Modifier Groups
+  - name: Menus
+  - name: No Sale Reasons
+  - name: Payout Reasons
+  - name: Pre Modifier Groups
+  - name: Pre Modifiers
+  - name: Price Groups
+  - name: Printers
+  - name: Restaurant Services
+  - name: Revenue Centers
+  - name: Sales Categories
+  - name: Service Areas
+  - name: Service Charges
+  - name: Tables
+  - name: Tax Rates
+  - name: Tip Withholding
+  - name: Void Reasons
 paths:
   /authentication/v1/authentication/login:
     post:
@@ -1433,9 +1456,9 @@ paths:
             or later modified date and time.
 
 
-            Use ISO-8601 format for the date and time, including a decimal fraction of a
+            Use ISO-8601 format for the date and time, including a decimal
 
-            second. For example,
+            fraction of a second. For example,
 
             `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.
 
@@ -3034,6 +3057,776 @@ paths:
         - oauth2:
             - restaurants:read
 
+  /config/v2/alternatePaymentTypes/{guid}:
+    get:
+      tags:
+        - Alternate Payment Types
+      operationId: alternatePaymentTypesGuidGet
+      summary: |
+        Get an alternative payment type
+      description: |
+        Returns an `AlternatePaymentType`
+        object containing information about an alternative form of payment
+        configured for a restaurant. Alternate payment types are forms
+        of payment that are not standard in the Toast POS and that are
+        configured for a particular restaurant. For example, a
+        third-party service that processes payments might be configured
+        as an alternate payment type.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the alternate payment
+            type is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the alternative form of payment.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns an `AlternatePaymentType` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlternatePaymentType"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/alternatePaymentTypes:
+    get:
+      tags:
+        - Alternate Payment Types
+      operationId: alternatePaymentTypesGet
+      summary: |
+        Get alternative payment types
+      description: |
+        Returns an array of `AlternatePaymentType`
+        objects containing information about alternative forms of
+        payment that are configured for a restaurant. Alternate
+        payment types are forms of payment that are not standard in the
+        Toast POS and that are configured for a particular restaurant.
+        For example, a third-party service that processes payments
+        might be configured as an alternate payment type. If a
+        `lastModified` date is specified, returns all objects that were
+        created or modified after that date.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration
+            applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after
+            a specific date and time. For example:
+            `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `AlternatePaymentType` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/AlternatePaymentType"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects 
+                that the endpoint will return. You can use this value 
+                to retrieve that page of response data. To return 
+                the next page of objects you supply this value in the 
+                `pageToken` parameter of the next request to the 
+                endpoint. For more information, see 
+                <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the 
+                `Toast-Next-Page-Token` field if there is no following 
+                page of response data objects. For example, the 
+                endpoint will not return a `Toast-Next-Page-Token` 
+                header field if all the data objects fit in one 
+                response or if you have reached the last page of 
+                response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/breakTypes/{guid}:
+    get:
+      tags:
+        - Break Types
+      operationId: breakTypesGuidGet
+      summary: |
+        Get a break type
+      description: |
+        Returns a `BreakType`
+        object containing information about a break type configured for 
+        a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the break is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the break config.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `BreakType` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BreakType"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/breakTypes:
+    get:
+      tags:
+        - Break Types
+      operationId: breakTypesGet
+      summary: |
+        Get break types
+      description: |
+        Returns an array of `BreakType`
+        objects containing information about breaks configured for a
+        restaurant. If a `lastModified` date is specified, returns
+        all objects that were created or modified after that date.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration
+            applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after
+            a specific date and time. For example:
+            `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `BreakType` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/BreakType"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects 
+                that the endpoint will return. You can use this value 
+                to retrieve that page of response data. To return 
+                the next page of objects you supply this value in the 
+                `pageToken` parameter of the next request to the 
+                endpoint. For more information, see 
+                <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the 
+                `Toast-Next-Page-Token` field if there is no following 
+                page of response data objects. For example, the 
+                endpoint will not return a `Toast-Next-Page-Token` 
+                header field if all the data objects fit in one 
+                response or if you have reached the last page of 
+                response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/cashDrawers/{guid}:
+    get:
+      tags:
+        - Cash Drawers
+      operationId: cashDrawersGuidGet
+      summary: |
+        Get a cash drawer
+      description: |
+        Returns a `CashDrawer` object containing information about a cash drawer configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the cash drawer is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the cash drawer.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `CashDrawer` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CashDrawer"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/cashDrawers:
+    get:
+      tags:
+        - Cash Drawers
+      operationId: cashDrawersGet
+      summary: |
+        Get cash drawers
+      description: |
+        Returns an array of `CashDrawer` objects containing information about cash drawers configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `CashDrawer` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/CashDrawer"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/diningOptions/{guid}:
+    get:
+      tags:
+        - Dining Options
+      operationId: diningOptionsGuidGet
+      summary: |
+        Get a dining option
+      description: |
+        Returns a `DiningOption` object containing information about a dining option configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the dining option is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the dining option.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `DiningOption` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiningOption"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/diningOptions:
+    get:
+      tags:
+        - Dining Options
+      operationId: diningOptionsGet
+      summary: |
+        Get dining options
+      description: |
+        Returns an array of `DiningOption` objects containing information about dining options configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `DiningOption` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/DiningOption"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/menuGroups/{guid}:
+    get:
+      tags:
+        - Menu Groups
+      operationId: menuGroupsGuidGet
+      summary: |
+        Get a menu group
+      description: |
+        Returns a `MenuGroup` object containing information about a menu group configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the menu group is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the menu group.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `MenuGroup` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MenuGroup"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/menuGroups:
+    get:
+      tags:
+        - Menu Groups
+      operationId: menuGroupsGet
+      summary: |
+        Get menu groups
+      description: |
+        Returns an array of `MenuGroup` objects containing information about menu groups configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `MenuGroup` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/MenuGroup"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/menuItems/{guid}:
+    get:
+      tags:
+        - Menu Items
+      operationId: menuItemsGuidGet
+      summary: |
+        Get a menu item
+      description: |
+        Returns a `MenuItem` object containing information about a menu item configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the menu item is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the menu item.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `MenuItem` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MenuItem"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/menuItems:
+    get:
+      tags:
+        - Menu Items
+      operationId: menuItemsGet
+      summary: |
+        Get menu items
+      description: |
+        Returns an array of `MenuItem` objects containing information about menu items configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `MenuItem` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/MenuItem"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/printers/{guid}:
+    get:
+      tags:
+        - Printers
+      operationId: printersGuidGet
+      summary: |
+        Get a printer
+      description: |
+        Returns a `Printer` object containing information about a printer configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the printer is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the printer.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `Printer` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Printer"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/printers:
+    get:
+      tags:
+        - Printers
+      operationId: printersGet
+      summary: |
+        Get printers
+      description: |
+        Returns an array of `Printer` objects containing information about printers configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `Printer` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/Printer"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/tables/{guid}:
+    get:
+      tags:
+        - Tables
+      operationId: tablesGuidGet
+      summary: |
+        Get a table
+      description: |
+        Returns a `Table` object containing information about a table configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the table is configured for.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the table.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `Table` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Table"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/tables:
+    get:
+      tags:
+        - Tables
+      operationId: tablesGet
+      summary: |
+        Get tables
+      description: |
+        Returns an array of `Table` objects containing information about tables configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `Table` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/Table"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
 components:
   securitySchemes:
     oauth2:
@@ -3059,6 +3852,7 @@ components:
             discounts:read: "Allows reading from the discounts API."
             discounts:write: "Allows writing to the discounts API."
             menus.channel:read: "Allows reading from the menus API."
+            config:read: "Allows reading from the configuration API."
   schemas:
     AuthenticationRequest:
       type: object
@@ -4763,3 +5557,218 @@ components:
           description: |
             The unique identifier that the Toast POS assigns to a
             restaurant.
+
+    AlternatePaymentType:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of the alternate payment type.
+
+    BreakType:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: |
+                The name of the work break type, as recognized by
+                restaurant employees.
+            active:
+              type: boolean
+              description: |
+                Indicates whether the break is available and can be taken
+                by restaurant employees.
+            paid:
+              type: boolean
+              description: Indicates whether the break is paid.
+            duration:
+              type: integer
+              description: The duration of the break in minutes.
+            enforceMinimumTime:
+              type: boolean
+              description: |
+                Indicates whether the duration is enforced as the minimum
+                time for the break.
+            trackMissedBreaks:
+              type: boolean
+              description: |
+                True if breaks that are not taken within the specified break
+                interval should be generated in Toast.
+            breakIntervalHrs:
+              type: integer
+              description: |
+                The number of hours between break intervals. Break intervals
+                are specified in hours and minutes. If missed breaks are not
+                tracked, this value may be null.
+            breakIntervalMins:
+              type: integer
+              description: |
+                The number of minutes between break intervals. Break intervals
+                are specified in hours and minutes. If missed breaks are not
+                tracked, this value may be null.
+            trackBreakAcknowledgement:
+              type: boolean
+              description: |
+                Indicates whether break acknowledgements are collected for
+                this type of break. Break acknowledgements will not be
+                collected if `trackMissedBreaks` is false.
+
+    CashDrawer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            printer:
+              type: object
+              description: The Toast GUID or external identifier of a
+                printer device.
+              $ref: "#/components/schemas/ToastReference"
+
+    DiningOption:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of the dining option.
+            behavior:
+              type: string
+              description: |
+                The behavior of the dining option. `TAKE_OUT` and
+                `DELIVERY` require a `customer` to be specified on the
+                order, and `DELIVERY` requires a `deliveryInfo` value.
+              enum:
+                - DINE_IN
+                - TAKE_OUT
+                - DELIVERY
+            curbside:
+              type: boolean
+              description: |
+                Indicates whether the dining option has curbside behavior, and allows the guest to
+                provide identifying information such as a description of their vehicle.
+
+    Discount:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          description: |
+            A discount configured in Toast Web.
+            Discounts are always applied before taxes, but after
+            service charges are calculated.
+          properties:
+            name:
+              type: string
+              description: The human-readable name of the discount.
+            active:
+              type: boolean
+              description: |
+                Indicates whether the discount is available and can be
+                applied by restaurant employees.
+            type:
+              type: string
+              description: |
+                * `PERCENT` - the discount reduces the price by a
+                preconfigured percent.
+                * `FIXED` - the discount reduces the price by a
+                preconfigured currency amount.
+                * `OPEN_PERCENT` - the discount reduces the price by a
+                percent entered by a restaurant employee.
+                * `OPEN_FIXED` - the discount reduces the price by a
+                currency amount entered by a restaurant employee.
+                * `BOGO` - a buy one get one (BOGO) discount.
+                * `FIXED_TOTAL` - a combo discount that reduces the
+                price of all eligible items to a preconfigured currency
+                amount.
+              enum:
+                - PERCENT
+                - FIXED
+                - OPEN_PERCENT
+                - OPEN_FIXED
+                - BOGO
+                - FIXED_TOTAL
+            percentage:
+              type: number
+              format: double
+              description: |
+                Percent discount applied when the `amountType` is
+                `PERCENT`. This value will be greater than 0 and at
+                most 100.
+            amount:
+              type: number
+              format: double
+              description: |
+                The currency amount of the discount when the
+                `amountType` is `FIXED`. This value will be greater
+                than 0.
+            selectionType:
+              type: string
+              description: |
+                * `CHECK` - the discount can be applied to a check.
+                * `BOGO` - a buy one get one (BOGO) discount.
+                * `ITEM` - the discount can be applied to an item
+                selection in a check.
+              enum:
+                - CHECK
+                - ITEM
+                - BOGO
+            nonExclusive:
+              type: boolean
+              description: |
+                Indicates whether you can apply the discount with other
+                discounts. This value is always `false` for item and
+                combo discounts. Set this value for check and BOGO
+                discounts by selecting **Allow with other discounts** in
+                the **Discounts Rules** section of the discounts
+                configuration page of Toast Web.
+            itemPickingPriority:
+              type: string
+              description: |
+                Indicates which menu item selections are discounted
+                when you apply a BOGO discount. An item that is
+                discounted by a BOGO discount is a "get" item.
+
+                * `FIRST` - the BOGO discount applies to the first
+                matching item selection in the check or the discount is
+                not a BOGO discount. The `itemPickingPriority` is
+                always `FIRST` for discounts that are not BOGO
+                discounts.
+
+                * `LEAST_EXPENSIVE` - the BOGO discount applies
+                to the least expensive matching item selection in the check.
+
+                * `MOST_EXPENSIVE` - the BOGO discount applies to the most
+                expensive matching item selection in the check.
+              enum:
+                - FIRST
+                - LEAST_EXPENSIVE
+                - MOST_EXPENSIVE
+
+    Printer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of the printer.
+
+    Table:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of the table.

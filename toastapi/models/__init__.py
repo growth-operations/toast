@@ -14,12 +14,15 @@
 
 
 # import models into model package
+from toastapi.models.alternate_payment_type import AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest
 from toastapi.models.applied_discount import AppliedDiscount
 from toastapi.models.authentication_request import AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse
 from toastapi.models.authentication_token import AuthenticationToken
+from toastapi.models.break_type import BreakType
+from toastapi.models.cash_drawer import CashDrawer
 from toastapi.models.check import Check
 from toastapi.models.config_reference import ConfigReference
 from toastapi.models.customer import Customer
@@ -27,6 +30,8 @@ from toastapi.models.day_schedule import DaySchedule
 from toastapi.models.delivery import Delivery
 from toastapi.models.delivery_info import DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions
+from toastapi.models.dining_option import DiningOption
+from toastapi.models.discount import Discount
 from toastapi.models.employee import Employee
 from toastapi.models.error_message import ErrorMessage
 from toastapi.models.external_reference import ExternalReference
@@ -51,6 +56,7 @@ from toastapi.models.payment_options import PaymentOptions
 from toastapi.models.pre_modifier import PreModifier
 from toastapi.models.pre_modifier_group import PreModifierGroup
 from toastapi.models.prep_times import PrepTimes
+from toastapi.models.printer import Printer
 from toastapi.models.restaurant import Restaurant
 from toastapi.models.restaurant_basic import RestaurantBasic
 from toastapi.models.restaurant_info import RestaurantInfo
@@ -61,6 +67,7 @@ from toastapi.models.schedules import Schedules
 from toastapi.models.selection import Selection
 from toastapi.models.service import Service
 from toastapi.models.shift import Shift
+from toastapi.models.table import Table
 from toastapi.models.takeout_payment_options import TakeoutPaymentOptions
 from toastapi.models.time_entry import TimeEntry
 from toastapi.models.time_entry_break import TimeEntryBreak

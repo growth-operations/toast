@@ -20,6 +20,14 @@ from toastapi.api import (
     DiscountsApi,
     DefaultApi,
     RestaurantsApi,
+    BreakTypesApi,
+    AlternatePaymentTypesApi,
+    CashDrawersApi,
+    DiningOptionsApi,
+    MenuGroupsApi,
+    MenuItemsApi,
+    PrintersApi,
+    TablesApi,
 )
 from toastapi.models.authentication_request import AuthenticationRequest
 
@@ -132,6 +140,18 @@ class Toast:
         self.discounts: DiscountsApi = self._create_retry_wrapper(DiscountsApi)
         self.default: DefaultApi = self._create_retry_wrapper(DefaultApi)
         self.restaurants: RestaurantsApi = self._create_retry_wrapper(RestaurantsApi)
+        self.break_types: BreakTypesApi = self._create_retry_wrapper(BreakTypesApi)
+        self.alternate_payment_types: AlternatePaymentTypesApi = (
+            self._create_retry_wrapper(AlternatePaymentTypesApi)
+        )
+        self.cash_drawers: CashDrawersApi = self._create_retry_wrapper(CashDrawersApi)
+        self.dining_options: DiningOptionsApi = self._create_retry_wrapper(
+            DiningOptionsApi
+        )
+        self.menu_groups: MenuGroupsApi = self._create_retry_wrapper(MenuGroupsApi)
+        self.menu_items: MenuItemsApi = self._create_retry_wrapper(MenuItemsApi)
+        self.printers: PrintersApi = self._create_retry_wrapper(PrintersApi)
+        self.tables: TablesApi = self._create_retry_wrapper(TablesApi)
 
     def _create_retry_wrapper(self, api_class):
         """Create a wrapper class that automatically applies retry logic to all methods."""

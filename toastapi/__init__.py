@@ -18,14 +18,22 @@ __version__ = "1.0.0"
 
 # Define package exports
 __all__ = [
+    "AlternatePaymentTypesApi",
     "AuthenticationApi",
+    "BreakTypesApi",
+    "CashDrawersApi",
+    "DiningOptionsApi",
     "DiscountsApi",
     "EmployeesApi",
     "JobsApi",
+    "MenuGroupsApi",
+    "MenuItemsApi",
     "OrdersApi",
     "PaymentsApi",
+    "PrintersApi",
     "RestaurantsApi",
     "ShiftsApi",
+    "TablesApi",
     "TimeEntriesApi",
     "DefaultApi",
     "ApiResponse",
@@ -37,12 +45,15 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
+    "AlternatePaymentType",
     "ApplicableDiscount",
     "ApplicableDiscountsRequest",
     "AppliedDiscount",
     "AuthenticationRequest",
     "AuthenticationResponse",
     "AuthenticationToken",
+    "BreakType",
+    "CashDrawer",
     "Check",
     "ConfigReference",
     "Customer",
@@ -50,6 +61,8 @@ __all__ = [
     "Delivery",
     "DeliveryInfo",
     "DeliveryPaymentOptions",
+    "DiningOption",
+    "Discount",
     "Employee",
     "ErrorMessage",
     "ExternalReference",
@@ -74,6 +87,7 @@ __all__ = [
     "PreModifier",
     "PreModifierGroup",
     "PrepTimes",
+    "Printer",
     "Restaurant",
     "RestaurantBasic",
     "RestaurantInfo",
@@ -84,6 +98,7 @@ __all__ = [
     "Selection",
     "Service",
     "Shift",
+    "Table",
     "TakeoutPaymentOptions",
     "TimeEntry",
     "TimeEntryBreak",
@@ -96,14 +111,22 @@ __all__ = [
 ]
 
 # import apis into sdk package
+from toastapi.api.alternate_payment_types_api import AlternatePaymentTypesApi as AlternatePaymentTypesApi
 from toastapi.api.authentication_api import AuthenticationApi as AuthenticationApi
+from toastapi.api.break_types_api import BreakTypesApi as BreakTypesApi
+from toastapi.api.cash_drawers_api import CashDrawersApi as CashDrawersApi
+from toastapi.api.dining_options_api import DiningOptionsApi as DiningOptionsApi
 from toastapi.api.discounts_api import DiscountsApi as DiscountsApi
 from toastapi.api.employees_api import EmployeesApi as EmployeesApi
 from toastapi.api.jobs_api import JobsApi as JobsApi
+from toastapi.api.menu_groups_api import MenuGroupsApi as MenuGroupsApi
+from toastapi.api.menu_items_api import MenuItemsApi as MenuItemsApi
 from toastapi.api.orders_api import OrdersApi as OrdersApi
 from toastapi.api.payments_api import PaymentsApi as PaymentsApi
+from toastapi.api.printers_api import PrintersApi as PrintersApi
 from toastapi.api.restaurants_api import RestaurantsApi as RestaurantsApi
 from toastapi.api.shifts_api import ShiftsApi as ShiftsApi
+from toastapi.api.tables_api import TablesApi as TablesApi
 from toastapi.api.time_entries_api import TimeEntriesApi as TimeEntriesApi
 from toastapi.api.default_api import DefaultApi as DefaultApi
 
@@ -119,12 +142,15 @@ from toastapi.exceptions import ApiAttributeError as ApiAttributeError
 from toastapi.exceptions import ApiException as ApiException
 
 # import models into sdk package
+from toastapi.models.alternate_payment_type import AlternatePaymentType as AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount as ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest as ApplicableDiscountsRequest
 from toastapi.models.applied_discount import AppliedDiscount as AppliedDiscount
 from toastapi.models.authentication_request import AuthenticationRequest as AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse as AuthenticationResponse
 from toastapi.models.authentication_token import AuthenticationToken as AuthenticationToken
+from toastapi.models.break_type import BreakType as BreakType
+from toastapi.models.cash_drawer import CashDrawer as CashDrawer
 from toastapi.models.check import Check as Check
 from toastapi.models.config_reference import ConfigReference as ConfigReference
 from toastapi.models.customer import Customer as Customer
@@ -132,6 +158,8 @@ from toastapi.models.day_schedule import DaySchedule as DaySchedule
 from toastapi.models.delivery import Delivery as Delivery
 from toastapi.models.delivery_info import DeliveryInfo as DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions as DeliveryPaymentOptions
+from toastapi.models.dining_option import DiningOption as DiningOption
+from toastapi.models.discount import Discount as Discount
 from toastapi.models.employee import Employee as Employee
 from toastapi.models.error_message import ErrorMessage as ErrorMessage
 from toastapi.models.external_reference import ExternalReference as ExternalReference
@@ -156,6 +184,7 @@ from toastapi.models.payment_options import PaymentOptions as PaymentOptions
 from toastapi.models.pre_modifier import PreModifier as PreModifier
 from toastapi.models.pre_modifier_group import PreModifierGroup as PreModifierGroup
 from toastapi.models.prep_times import PrepTimes as PrepTimes
+from toastapi.models.printer import Printer as Printer
 from toastapi.models.restaurant import Restaurant as Restaurant
 from toastapi.models.restaurant_basic import RestaurantBasic as RestaurantBasic
 from toastapi.models.restaurant_info import RestaurantInfo as RestaurantInfo
@@ -166,6 +195,7 @@ from toastapi.models.schedules import Schedules as Schedules
 from toastapi.models.selection import Selection as Selection
 from toastapi.models.service import Service as Service
 from toastapi.models.shift import Shift as Shift
+from toastapi.models.table import Table as Table
 from toastapi.models.takeout_payment_options import TakeoutPaymentOptions as TakeoutPaymentOptions
 from toastapi.models.time_entry import TimeEntry as TimeEntry
 from toastapi.models.time_entry_break import TimeEntryBreak as TimeEntryBreak
