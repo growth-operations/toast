@@ -174,6 +174,8 @@ Class | Method | HTTP request | Description
 *MenuGroupsApi* | [**menu_groups_guid_get**](docs/MenuGroupsApi.md#menu_groups_guid_get) | **GET** /config/v2/menuGroups/{guid} | Get a menu group 
 *MenuItemsApi* | [**menu_items_get**](docs/MenuItemsApi.md#menu_items_get) | **GET** /config/v2/menuItems | Get menu items 
 *MenuItemsApi* | [**menu_items_guid_get**](docs/MenuItemsApi.md#menu_items_guid_get) | **GET** /config/v2/menuItems/{guid} | Get a menu item 
+*NoSaleReasonsApi* | [**no_sale_reasons_get**](docs/NoSaleReasonsApi.md#no_sale_reasons_get) | **GET** /config/v2/noSaleReasons | Get no sale reasons
+*NoSaleReasonsApi* | [**no_sale_reasons_guid_get**](docs/NoSaleReasonsApi.md#no_sale_reasons_guid_get) | **GET** /config/v2/noSaleReasons/{guid} | Get a no sale reason
 *OrdersApi* | [**orders_bulk_get**](docs/OrdersApi.md#orders_bulk_get) | **GET** /orders/v2/ordersBulk | Get multiple orders
 *OrdersApi* | [**orders_get**](docs/OrdersApi.md#orders_get) | **GET** /orders/v2/orders | Get order identifiers (deprecated)
 *OrdersApi* | [**orders_guid_get**](docs/OrdersApi.md#orders_guid_get) | **GET** /orders/v2/orders/{guid} | Get an order
@@ -186,10 +188,25 @@ Class | Method | HTTP request | Description
 *PaymentsApi* | [**orders_order_guid_checks_check_guid_payments_payment_guid_patch**](docs/PaymentsApi.md#orders_order_guid_checks_check_guid_payments_payment_guid_patch) | **PATCH** /orders/v2/orders/{orderGuid}/checks/{checkGuid}/payments/{paymentGuid} | Update a tip amount
 *PaymentsApi* | [**payments_get**](docs/PaymentsApi.md#payments_get) | **GET** /orders/v2/payments | Get payment identifiers
 *PaymentsApi* | [**payments_guid_get**](docs/PaymentsApi.md#payments_guid_get) | **GET** /orders/v2/payments/{guid} | Get a payment
+*PayoutReasonsApi* | [**payout_reasons_get**](docs/PayoutReasonsApi.md#payout_reasons_get) | **GET** /config/v2/payoutReasons | Get payout reasons
+*PayoutReasonsApi* | [**payout_reasons_guid_get**](docs/PayoutReasonsApi.md#payout_reasons_guid_get) | **GET** /config/v2/payoutReasons/{guid} | Get payout reason by GUID
+*PreModifierGroupsApi* | [**pre_modifier_groups_get**](docs/PreModifierGroupsApi.md#pre_modifier_groups_get) | **GET** /config/v2/preModifierGroups | Get pre modifier groups
+*PreModifierGroupsApi* | [**pre_modifier_groups_guid_get**](docs/PreModifierGroupsApi.md#pre_modifier_groups_guid_get) | **GET** /config/v2/preModifierGroups/{guid} | Get a pre-modifier group
+*PreModifiersApi* | [**pre_modifiers_get**](docs/PreModifiersApi.md#pre_modifiers_get) | **GET** /config/v2/preModifiers | Get pre-modifiers
+*PriceGroupsApi* | [**price_groups_get**](docs/PriceGroupsApi.md#price_groups_get) | **GET** /config/v2/priceGroups | Get price groups
+*PriceGroupsApi* | [**price_groups_guid_get**](docs/PriceGroupsApi.md#price_groups_guid_get) | **GET** /config/v2/priceGroups/{guid} | Get price group by GUID
 *PrintersApi* | [**printers_get**](docs/PrintersApi.md#printers_get) | **GET** /config/v2/printers | Get printers 
 *PrintersApi* | [**printers_guid_get**](docs/PrintersApi.md#printers_guid_get) | **GET** /config/v2/printers/{guid} | Get a printer 
+*RestaurantServicesApi* | [**restaurant_services_get**](docs/RestaurantServicesApi.md#restaurant_services_get) | **GET** /config/v2/restaurantServices | Get restaurant services
+*RestaurantServicesApi* | [**restaurant_services_guid_get**](docs/RestaurantServicesApi.md#restaurant_services_guid_get) | **GET** /config/v2/restaurantServices/{guid} | Get restaurant service by GUID
 *RestaurantsApi* | [**groups_management_group_guid_restaurants_get**](docs/RestaurantsApi.md#groups_management_group_guid_restaurants_get) | **GET** /restaurants/v1/groups/{managementGroupGUID}/restaurants | Get restaurants in a management group
 *RestaurantsApi* | [**restaurants_restaurant_guid_get**](docs/RestaurantsApi.md#restaurants_restaurant_guid_get) | **GET** /restaurants/v1/restaurants/{restaurantGUID} | Get restaurant configuration information
+*RevenueCentersApi* | [**revenue_centers_get**](docs/RevenueCentersApi.md#revenue_centers_get) | **GET** /config/v2/revenueCenters | Get revenue centers
+*RevenueCentersApi* | [**revenue_centers_guid_get**](docs/RevenueCentersApi.md#revenue_centers_guid_get) | **GET** /config/v2/revenueCenters/{guid} | Get revenue center by GUID
+*ServiceAreasApi* | [**service_areas_get**](docs/ServiceAreasApi.md#service_areas_get) | **GET** /config/v2/serviceAreas | Get service areas
+*ServiceAreasApi* | [**service_areas_guid_get**](docs/ServiceAreasApi.md#service_areas_guid_get) | **GET** /config/v2/serviceAreas/{guid} | Get service area by GUID
+*ServiceChargesApi* | [**service_charges_get**](docs/ServiceChargesApi.md#service_charges_get) | **GET** /config/v2/serviceCharges | Get service charges
+*ServiceChargesApi* | [**service_charges_guid_get**](docs/ServiceChargesApi.md#service_charges_guid_get) | **GET** /config/v2/serviceCharges/{guid} | Get service charge by GUID
 *ShiftsApi* | [**shifts_get**](docs/ShiftsApi.md#shifts_get) | **GET** /labor/v1/shifts | Get shifts
 *ShiftsApi* | [**shifts_post**](docs/ShiftsApi.md#shifts_post) | **POST** /labor/v1/shifts | Create a shift
 *ShiftsApi* | [**shifts_shift_id_delete**](docs/ShiftsApi.md#shifts_shift_id_delete) | **DELETE** /labor/v1/shifts/{shiftId} | Delete a shift
@@ -197,8 +214,13 @@ Class | Method | HTTP request | Description
 *ShiftsApi* | [**shifts_shift_id_put**](docs/ShiftsApi.md#shifts_shift_id_put) | **PUT** /labor/v1/shifts/{shiftId} | Update a shift
 *TablesApi* | [**tables_get**](docs/TablesApi.md#tables_get) | **GET** /config/v2/tables | Get tables 
 *TablesApi* | [**tables_guid_get**](docs/TablesApi.md#tables_guid_get) | **GET** /config/v2/tables/{guid} | Get a table 
+*TaxRatesApi* | [**tax_rates_get**](docs/TaxRatesApi.md#tax_rates_get) | **GET** /config/v2/taxRates | Get tax rates
+*TaxRatesApi* | [**tax_rates_guid_get**](docs/TaxRatesApi.md#tax_rates_guid_get) | **GET** /config/v2/taxRates/{guid} | Get tax rate by GUID
 *TimeEntriesApi* | [**time_entries_get**](docs/TimeEntriesApi.md#time_entries_get) | **GET** /labor/v1/timeEntries | Get time entries
 *TimeEntriesApi* | [**time_entries_time_entry_id_get**](docs/TimeEntriesApi.md#time_entries_time_entry_id_get) | **GET** /labor/v1/timeEntries/{timeEntryId} | Get one time entry
+*TipWithholdingApi* | [**tip_withholding_get**](docs/TipWithholdingApi.md#tip_withholding_get) | **GET** /config/v2/tipWithholding | Get tip withholding configuration
+*VoidReasonsApi* | [**void_reasons_get**](docs/VoidReasonsApi.md#void_reasons_get) | **GET** /config/v2/voidReasons | Get void reasons
+*VoidReasonsApi* | [**void_reasons_guid_get**](docs/VoidReasonsApi.md#void_reasons_guid_get) | **GET** /config/v2/voidReasons/{guid} | Get void reason by GUID
 *DefaultApi* | [**menus_get**](docs/DefaultApi.md#menus_get) | **GET** /menus/v3/menus | Get menus
 *DefaultApi* | [**metadata_get**](docs/DefaultApi.md#metadata_get) | **GET** /menus/v3/metadata | Get menu last modified timestamp 
 
@@ -238,15 +260,18 @@ Class | Method | HTTP request | Description
  - [Metadata](docs/Metadata.md)
  - [ModifierGroup](docs/ModifierGroup.md)
  - [ModifierOption](docs/ModifierOption.md)
+ - [NoSaleReason](docs/NoSaleReason.md)
  - [OnlineOrdering](docs/OnlineOrdering.md)
  - [Order](docs/Order.md)
  - [OrderResponse](docs/OrderResponse.md)
  - [OrdersOrderGuidDeliveryInfoPatchRequest](docs/OrdersOrderGuidDeliveryInfoPatchRequest.md)
  - [Payment](docs/Payment.md)
  - [PaymentOptions](docs/PaymentOptions.md)
+ - [PayoutReason](docs/PayoutReason.md)
  - [PreModifier](docs/PreModifier.md)
  - [PreModifierGroup](docs/PreModifierGroup.md)
  - [PrepTimes](docs/PrepTimes.md)
+ - [PriceGroup](docs/PriceGroup.md)
  - [Printer](docs/Printer.md)
  - [Restaurant](docs/Restaurant.md)
  - [RestaurantBasic](docs/RestaurantBasic.md)
@@ -254,19 +279,28 @@ Class | Method | HTTP request | Description
  - [RestaurantModifierGroupReferences](docs/RestaurantModifierGroupReferences.md)
  - [RestaurantModifierOptionReferences](docs/RestaurantModifierOptionReferences.md)
  - [RestaurantPreModifierGroupReferences](docs/RestaurantPreModifierGroupReferences.md)
+ - [RestaurantService](docs/RestaurantService.md)
+ - [RevenueCenter](docs/RevenueCenter.md)
+ - [SalesCategory](docs/SalesCategory.md)
  - [Schedules](docs/Schedules.md)
  - [Selection](docs/Selection.md)
  - [Service](docs/Service.md)
+ - [ServiceArea](docs/ServiceArea.md)
+ - [ServiceCharge](docs/ServiceCharge.md)
+ - [ServiceChargeCriteria](docs/ServiceChargeCriteria.md)
  - [Shift](docs/Shift.md)
  - [Table](docs/Table.md)
  - [TakeoutPaymentOptions](docs/TakeoutPaymentOptions.md)
+ - [TaxRate](docs/TaxRate.md)
  - [TimeEntry](docs/TimeEntry.md)
  - [TimeEntryBreak](docs/TimeEntryBreak.md)
+ - [TipWithholding](docs/TipWithholding.md)
  - [ToastReference](docs/ToastReference.md)
  - [URLs](docs/URLs.md)
  - [UpdatePaymentRequest](docs/UpdatePaymentRequest.md)
  - [VoidOrderRequest](docs/VoidOrderRequest.md)
  - [VoidOrderRequestSelections](docs/VoidOrderRequestSelections.md)
+ - [VoidReason](docs/VoidReason.md)
  - [WeekSchedule](docs/WeekSchedule.md)
 
 

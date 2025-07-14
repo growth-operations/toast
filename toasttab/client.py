@@ -28,6 +28,18 @@ from toastapi.api import (
     MenuItemsApi,
     PrintersApi,
     TablesApi,
+    NoSaleReasonsApi,
+    PayoutReasonsApi,
+    PreModifierGroupsApi,
+    PreModifiersApi,
+    PriceGroupsApi,
+    RestaurantServicesApi,
+    RevenueCentersApi,
+    ServiceAreasApi,
+    ServiceChargesApi,
+    TaxRatesApi,
+    TipWithholdingApi,
+    VoidReasonsApi,
 )
 from toastapi.models.authentication_request import AuthenticationRequest
 
@@ -152,6 +164,36 @@ class Toast:
         self.menu_items: MenuItemsApi = self._create_retry_wrapper(MenuItemsApi)
         self.printers: PrintersApi = self._create_retry_wrapper(PrintersApi)
         self.tables: TablesApi = self._create_retry_wrapper(TablesApi)
+        self.no_sale_reasons: NoSaleReasonsApi = self._create_retry_wrapper(
+            NoSaleReasonsApi
+        )
+        self.payout_reasons: PayoutReasonsApi = self._create_retry_wrapper(
+            PayoutReasonsApi
+        )
+        self.pre_modifier_groups: PreModifierGroupsApi = self._create_retry_wrapper(
+            PreModifierGroupsApi
+        )
+        self.pre_modifiers: PreModifiersApi = self._create_retry_wrapper(
+            PreModifiersApi
+        )
+        self.price_groups: PriceGroupsApi = self._create_retry_wrapper(PriceGroupsApi)
+        self.restaurant_services: RestaurantServicesApi = self._create_retry_wrapper(
+            RestaurantServicesApi
+        )
+        self.revenue_centers: RevenueCentersApi = self._create_retry_wrapper(
+            RevenueCentersApi
+        )
+        self.service_areas: ServiceAreasApi = self._create_retry_wrapper(
+            ServiceAreasApi
+        )
+        self.service_charges: ServiceChargesApi = self._create_retry_wrapper(
+            ServiceChargesApi
+        )
+        self.tax_rates: TaxRatesApi = self._create_retry_wrapper(TaxRatesApi)
+        self.tip_withholding: TipWithholdingApi = self._create_retry_wrapper(
+            TipWithholdingApi
+        )
+        self.void_reasons: VoidReasonsApi = self._create_retry_wrapper(VoidReasonsApi)
 
     def _create_retry_wrapper(self, api_class):
         """Create a wrapper class that automatically applies retry logic to all methods."""

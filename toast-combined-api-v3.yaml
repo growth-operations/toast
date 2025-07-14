@@ -3827,6 +3827,1010 @@ paths:
         - oauth2:
             - config:read
 
+  /config/v2/preModifiers:
+    get:
+      tags:
+        - Pre Modifiers
+      operationId: preModifiersGet
+      summary: Get pre-modifiers
+      description: Returns an array of `PreModifier` objects containing information about PreModifiers configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `PreModifier` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/PreModifier"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/preModifierGroups/{guid}:
+    get:
+      tags:
+        - Pre Modifier Groups
+      operationId: preModifierGroupsGuidGet
+      summary: Get a pre-modifier group
+      description: Returns a `PreModifierGroup` object containing information about a pre modifier group.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the pre-modifier.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `PreModifierGroup` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreModifierGroup"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/preModifierGroups:
+    get:
+      tags:
+        - Pre Modifier Groups
+      operationId: preModifierGroupsGet
+      summary: Get pre modifier groups
+      description: "Returns an array of `PreModifierGroup` objects containing information about PreModifierGroup configured for a restaurant."
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `PreModifierGroup` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/PreModifierGroup"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/noSaleReasons/{guid}:
+    get:
+      tags:
+        - No Sale Reasons
+      operationId: noSaleReasonsGuidGet
+      summary: Get a no sale reason
+      description: Returns a `NoSaleReason` object containing information about a no sale reason.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the no sale reason.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `NoSaleReason` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoSaleReason"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/noSaleReasons:
+    get:
+      tags:
+        - No Sale Reasons
+      operationId: noSaleReasonsGet
+      summary: Get no sale reasons
+      description: Returns an array of `NoSaleReason` objects containing information about no sale reasons configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `NoSaleReason` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/NoSaleReason"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/payoutReasons/{guid}:
+    get:
+      tags:
+        - Payout Reasons
+      summary: Get payout reason by GUID
+      description: |
+        Returns a specific payout reason by its GUID.
+      operationId: payoutReasonsGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the payout reason.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `PayoutReason` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PayoutReason"
+        "404":
+          description: Payout reason not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/payoutReasons:
+    get:
+      tags:
+        - Payout Reasons
+      summary: Get payout reasons
+      description: |
+        Returns an array of payout reasons for the restaurant.
+      operationId: payoutReasonsGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `PayoutReason` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/PayoutReason"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/priceGroups/{guid}:
+    get:
+      tags:
+        - Price Groups
+      summary: Get price group by GUID
+      description: |
+        Returns a specific price group by its GUID.
+      operationId: priceGroupsGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the price group.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `PriceGroup` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceGroup"
+        "404":
+          description: Price group not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/priceGroups:
+    get:
+      tags:
+        - Price Groups
+      summary: Get price groups
+      description: |
+        Returns an array of price groups for the restaurant.
+      operationId: priceGroupsGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `PriceGroup` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/PriceGroup"
+          headers:
+            Toast-Next-Page-Token:
+              description: "A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html."
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/taxRates/{guid}:
+    get:
+      tags:
+        - Tax Rates
+      summary: Get tax rate by GUID
+      description: Returns a specific tax rate by its GUID.
+      operationId: taxRatesGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the tax rate.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `TaxRate` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaxRate"
+        "404":
+          description: Tax rate not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/taxRates:
+    get:
+      tags:
+        - Tax Rates
+      summary: Get tax rates
+      description: Returns an array of tax rates for the restaurant.
+      operationId: taxRatesGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the "pageToken" parameter from the "Toast-Next-Page-Token" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `TaxRate` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/TaxRate"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the "pageToken" parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/serviceAreas/{guid}:
+    get:
+      tags:
+        - Service Areas
+      summary: Get service area by GUID
+      description: Returns a specific service area by its GUID.
+      operationId: serviceAreasGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the service area.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `ServiceArea` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceArea"
+        "404":
+          description: Service area not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/serviceAreas:
+    get:
+      tags:
+        - Service Areas
+      summary: Get service areas
+      description: Returns an array of service areas for the restaurant.
+      operationId: serviceAreasGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the "pageToken" parameter from the "Toast-Next-Page-Token" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `ServiceArea` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/ServiceArea"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the "pageToken" parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/serviceCharges/{guid}:
+    get:
+      tags:
+        - Service Charges
+      summary: Get service charge by GUID
+      description: Returns a specific service charge by its GUID.
+      operationId: serviceChargesGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the service charge.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `ServiceCharge` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceCharge"
+        "404":
+          description: Service charge not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/serviceCharges:
+    get:
+      tags:
+        - Service Charges
+      summary: Get service charges
+      description: Returns an array of service charges for the restaurant.
+      operationId: serviceChargesGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the "pageToken" parameter from the "Toast-Next-Page-Token" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "Returns an array of `ServiceCharge` objects."
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/ServiceCharge"
+          headers:
+            Toast-Next-Page-Token:
+              description: "A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html."
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/revenueCenters/{guid}:
+    get:
+      tags:
+        - Revenue Centers
+      summary: Get revenue center by GUID
+      description: Returns a specific revenue center by its GUID.
+      operationId: revenueCentersGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the revenue center.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `RevenueCenter` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevenueCenter"
+        "404":
+          description: Revenue center not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/revenueCenters:
+    get:
+      tags:
+        - Revenue Centers
+      summary: Get revenue centers
+      description: Returns an array of revenue centers for the restaurant.
+      operationId: revenueCentersGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the "pageToken" parameter from the "Toast-Next-Page-Token" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `RevenueCenter` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/RevenueCenter"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the "pageToken" parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/restaurantServices/{guid}:
+    get:
+      tags:
+        - Restaurant Services
+      summary: Get restaurant service by GUID
+      description: Returns a specific restaurant service by its GUID.
+      operationId: restaurantServicesGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the restaurant service.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `RestaurantService` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantService"
+        "404":
+          description: Restaurant service not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/restaurantServices:
+    get:
+      tags:
+        - Restaurant Services
+      summary: Get restaurant services
+      description: Returns an array of restaurant services for the restaurant.
+      operationId: restaurantServicesGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the "pageToken" parameter from the "Toast-Next-Page-Token" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `RestaurantService` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/RestaurantService"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the "pageToken" parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/tipWithholding:
+    get:
+      tags:
+        - Tip Withholding
+      summary: Get tip withholding configuration
+      description: Returns the tip withholding configuration for the restaurant.
+      operationId: tipWithholdingGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `TipWithholding` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TipWithholding"
+        "404":
+          description: Tip withholding configuration not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/voidReasons/{guid}:
+    get:
+      tags:
+        - Void Reasons
+      summary: Get void reason by GUID
+      description: Returns a specific void reason by its GUID.
+      operationId: voidReasonsGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The GUID of the void reason.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `VoidReason` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoidReason"
+        "404":
+          description: Void reason not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+
+  /config/v2/voidReasons:
+    get:
+      tags:
+        - Void Reasons
+      summary: Get void reasons
+      description: Returns an array of void reasons for the restaurant.
+      operationId: voidReasonsGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the "pageToken" parameter from the "Toast-Next-Page-Token" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `VoidReason` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/VoidReason"
+          headers:
+            Toast-Next-Page-Token:
+              description: A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the "pageToken" parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
+
 components:
   securitySchemes:
     oauth2:
@@ -5772,3 +6776,234 @@ components:
             name:
               type: string
               description: The name of the table.
+
+    PayoutReason:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The short name of this payout reason.
+
+    PriceGroup:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of this price group.
+
+    RestaurantService:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: |
+                The name of this meal service (for example, `Lunch` or
+                `Dinner`).
+
+    RevenueCenter:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          description: A set of ServiceAreas and POS devices for which separate revenue reports can be generated. For instance, a restaurant with a bar might choose to define two RevenueCenters, one for the bar and one for the dining area.
+          properties:
+            name:
+              type: string
+              description: The name of this revenue center.
+            description:
+              type: string
+              description: The description of this revenue center.
+
+    SalesCategory:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          description: A set of items that will be grouped together in sales reports. SalesCategories can be applied at any level, from entire menus to individual menu items.
+          properties:
+            name:
+              type: string
+              description: The name of this sales category.
+
+    ServiceArea:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          description: A representation of a physical service area, a group of tables, in a restaurant.
+          properties:
+            name:
+              type: string
+              description: The name of this service area.
+            revenueCenter:
+              type: object
+              description: The revenue center the service area belongs to.
+              $ref: "#/components/schemas/ExternalReference"
+
+    ServiceCharge:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          description: Any charge applied to a check for something other than menu item. Typical examples include gratuity and delivery fees.
+          properties:
+            name:
+              type: string
+              description: The name of this service charge.
+            amountType:
+              type: string
+              description: The type of service charge.
+              enum:
+                - FIXED
+                - PERCENT
+                - OPEN
+            amount:
+              type: number
+              format: double
+              description: Amount in USD to be applied for `FIXED` type service charges.
+            percent:
+              type: number
+              format: double
+              description: |
+                Percent fee to be applied for `PERCENT` type service
+                charges, based on pre-discount check amount. Must be a
+                number between 0 and 100.
+            criteria:
+              type: object
+              description: A reference to the ServiceChargeCriteria to determine if this service charge is applicable to a given check. See each ServiceChargeCriteria for details.
+              $ref: "#/components/schemas/ServiceChargeCriteria"
+            gratuity:
+              type: boolean
+              description: True if the service charge is a gratuity and is assigned to the owner of the check.
+            taxable:
+              type: boolean
+              description: True if tax should be applied to the service charge.
+            applicableTaxes:
+              type: array
+              description: A reference to the taxes applied to the service charge, if the service charge is taxable.
+              items:
+                $ref: "#/components/schemas/TaxRate"
+            serviceChargeCalculation:
+              type: string
+              description: Defines whether or not the service charge is applied before (PRE) or after (POST) discounts. This field is null for non-percent service charges.
+              enum:
+                - PRE_DISCOUNT
+                - POST_DISCOUNT
+            destination:
+              type: string
+              description: |
+                Final recipient of the funds from this service charge.
+
+                * `RESTAURANT` - The business owner of the restaurant receives the service charge funds.
+                * `SERVER` - Restaurant employees receive the service charge funds e.g. gratuity.
+                * `TOAST` - Toast receives the service charge funds.
+                * `THIRD_PARTY` - A third party receives the service charge funds e.g. fundraising funds go to charity.
+              enum:
+                - RESTAURANT
+                - SERVER
+                - TOAST
+                - THIRD_PARTY
+
+    ServiceChargeCriteria:
+      type: object
+      description: Describes thresholds for when a service charge should be applied to a check.
+      properties:
+        minCheckAmount:
+          type: number
+          format: double
+          description: The service charge is only applicable if the pre-discount check is at least this amount.
+        delivery:
+          type: boolean
+          description: True if the service charge is only applicable for deliveries.
+        maxCheckAmount:
+          type: number
+          format: double
+          description: The service charge is waived if the pre-discount check amount is more than this amount. A `null` value means this criteria is inapplicable.
+        minDeliveryDistance:
+          type: number
+          format: double
+          description: The service charge is only applicable to deliveries that are at least this distance. A `null` value means this criteria is inapplicable.
+        takeout:
+          type: boolean
+          description: Indicates whether the service charge is automatically applied to orders that have the takeout dining option behavior.
+        dineIn:
+          type: boolean
+          description: Indicates whether the service charge is applied to orders that have the dine-in dining option behavior.
+
+    TaxRate:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of this tax rate.
+            isDefault:
+              type: boolean
+              description: True if this tax rate is the default tax rate.
+            rate:
+              type: number
+              format: double
+              description: |
+                The tax rate value.
+
+    TipWithholding:
+      type: object
+      description: |
+        Information about the way tip withholding is configured for
+        a restaurant. Tip withholding is a percentage of employees'
+        credit card tips and service charges that are paid to
+        employees as a gratuity that is kept by a restaurant to
+        cover credit card processing fees.
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            enabled:
+              type: boolean
+              description: |
+                Indicates whether a restaurant location withholds a percent of
+                employees' credit card tips.
+
+                * `true` - the location keeps a percent of employees' credit card
+                tips.
+
+                * `false` - the location does not keep a percent of employees'
+                credit card tips.
+            percentage:
+              type: number
+              description: |
+                The decimal percentage of credit card tips withheld. If tip
+                withholding is not `enabled`, tips will not be withheld in the
+                Toast platform regardless of this value.
+
+    NoSaleReason:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of the no sale reason that appears in the Toast POS.
+
+    VoidReason:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          description: When voiding something through the POS, the user must choose a preconfigured void reason.
+          properties:
+            name:
+              type: string
+              description: The name of this void reason.
