@@ -1,0 +1,7 @@
+library: asyncio
+packageName: toastapi
+projectName: toasttab
+packageVersion: 1.0.0
+packageUrl: https://github.com/growth-operations/toast
+hideGenerationTimestamp: true
+generateSourceCodeOnly: false

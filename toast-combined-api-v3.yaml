@@ -1,0 +1,4765 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Toast API
+  description: >-
+    ## Authentication API
+
+
+    The authentication API returns an authentication token that you can present
+
+    when your integration client software uses other Toast APIs. For more
+
+    information about authentication, see [the Toast Developer
+
+    Guide](https://doc.toasttab.com/doc/devguide/authentication.html).
+
+
+    ## Menus API
+
+
+    Returns information about a restaurant's menus.
+
+
+    _Important:_ Ordering integrations should use menus API V3. Other integration types should continue to use menus API V2 until further notice. See <a href="https://doc.toasttab.com/doc/devguide/apiComparingMenusAPIV2AndV3.html">Comparing menus API V2 and V3</a> for more information.
+
+
+    ## Orders API
+
+
+    The orders API includes operations that create, update, and retrieve information about restaurant
+
+    guest orders.
+
+
+    Information on orders includes the checks, items ordered,
+
+    prices, payments, discounts, and customer data.
+
+
+    You can create a new order. The orders API includes an operation to retrieve the order prices before you `POST` the order.
+
+
+    You can add items to an existing check.
+
+
+    The orders API also allows you to retrieve payment information for the order and add a credit card payment to the order.
+
+    You cannot update an existing payment, but you can update the tip amount.
+
+
+    For delivery orders, you can update the delivery information.
+
+
+    You can retrieve the applicable discounts for an order, and then add a discount to a menu item selection or a check.
+
+
+    The orders API supports email addresses that: 
+      - Are up to 53 characters long. 
+      - Start with the email prefix, ends with the email domain name, where the prefix and domain are separated by an @. 
+      - Use the following supported characters:
+        - a-z
+        - A-Z
+        - 0-9
+        - _ (underscore)
+        - International characters are not supported
+
+    ## Labor API
+
+
+    Toast labor API is a set of REST web services that you can use to 
+
+    manage the employees, jobs, and shifts for your restaurant. The 
+
+    labor API is intended for software engineers, managers, and 
+
+    technical staff who are responsible for integrating third-party 
+
+    systems with the Toast platform.
+
+    ## Restaurants API
+
+
+    Returns information about the configuration of restaurant.
+  termsOfService: https://pos.toasttab.com/api-terms-of-use
+  contact:
+    name: Toast developer support
+externalDocs:
+  description: Authentication developer guide
+  url: https://doc.toasttab.com/doc/devguide/authentication.html
+servers:
+  - url: https://ws-sandbox-api.eng.toasttab.com
+    description: Toast Sandbox API
+  - url: https://oauth.toasttab.com
+    description: Toast Production API
+tags:
+  - name: Authentication
+  - name: Orders
+    description: |
+      Related to orders made by restaurant guests. For example, a restaurant
+      guest orders items from a menu. Toast platform orders include one or
+      more guest check.
+  - name: Payments
+    description: |
+      Related to guests' payments for restaurant orders. Toast platform
+      payments apply to a check in an order.
+  - name: Discounts
+    description: |
+      Related to price reduction applied to restaurant orders. For example, a
+      restaurant might apply a discount for a promotion.
+  - name: Employees
+  - name: Jobs
+  - name: Shifts
+  - name: Time entries
+  - name: Restaurants
+    description: |
+      Related to restaurant configuration and information.
+paths:
+  /authentication/v1/authentication/login:
+    post:
+      tags:
+        - Authentication
+      summary: Get an authentication token
+      description: |
+        Returns an authentication token that your Toast API client can present
+        when using other Toast platform APIs.
+      externalDocs:
+        description: Authentication developer guide
+        url: https://doc.toasttab.com/doc/devguide/authentication.html
+      operationId: authenticationLoginPost
+      requestBody:
+        description: |
+          The authentication credentials for your Toast API client integration
+          software.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthenticationRequest"
+      responses:
+        "200":
+          description: |
+            A JSON `AuthenticationResponse` object that includes an
+            authentication token string.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+        "401":
+          description: |
+            The Toast API client credentials in your request are not valid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /menus/v3/menus:
+    get:
+      operationId: menusGet
+      summary: Get menus
+      description: |
+        Get menus
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Restaurant"
+        "404":
+          description:
+            No published data was found for the restaurant. Ensure that the
+            restaurant GUID is correct and that its data has been published.
+        "503":
+          description: Unable to retrieve menus for the restaurant due to a service outage.
+      security:
+        - oauth2:
+            - menus.channel:read
+  /menus/v3/metadata:
+    get:
+      operationId: metadataGet
+      summary: |
+        Get menu last modified timestamp
+      description: >
+        A lightweight endpoint that allows you to determine if a restaurant's
+        menu data has been updated. Toast support strongly recommends that you
+        do not make a call to the `/menus` endpoint unless the date and time
+        returned by the `/metadata` endpoint is more recent than the
+        `lastUpdated` date and time. While this recommendation applies to all
+        clients of the menus API, it is particularly important for clients that
+        have limited bandwidth.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Metadata"
+      security:
+        - oauth2:
+            - menus.channel:read
+  /orders/v2/payments:
+    get:
+      tags:
+        - Payments
+      summary: Get payment identifiers
+      description: |
+        Returns a list of the GUIDs for each payment made during
+        one restaurant business day.
+
+        The specific hours that make up a business
+        day depend on the business day cutoff in the restaurant configuration,
+        which is available from the restaurants API in the `closeoutHour`
+        property.
+
+        The business day for a restaurant is based on its local time (not UTC
+        or local time for an API client).
+
+        You must include one of the
+        `paidBusinessDate`, `refundBusinessDate`, or `voidBusinessDate` query
+        parameters.
+      operationId: paymentsGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The GUID of the restaurant used as the context of the request.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: paidBusinessDate
+          description: |
+            Returns a list of the payments that were made during
+            one business day.
+            Specify the business day in the format yyyyMMdd.
+            For example, `20170101`.
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: refundBusinessDate
+          description: |
+            Returns a list of the payments that were refunded
+            during one business day.
+            Specify the business day in the format
+            yyyyMMdd. For example, `20170101`.
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: voidBusinessDate
+          description: |
+            Returns a list of the payments that were voided during
+            one business day.
+            Specify the business day in the format yyyyMMdd.
+            For example, `20170101`.
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A JSON array of the GUID identifiers for the payments.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  type: string
+        "400":
+          description: The API cannot process the request.
+      security:
+        - oauth2:
+            - orders:read
+  "/orders/v2/payments/{guid}":
+    get:
+      tags:
+        - Payments
+      summary: Get a payment
+      description:
+        Returns a JSON `Payment` object containing detailed information
+        about a  single payment, specified by its GUID.
+      operationId: paymentsGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The GUID of the restaurant used as the context of the request.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The GUID for the payment you want to return.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Returns a JSON `Payment` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        "400":
+          description: The GUID was malformed.
+        "404":
+          description: The specified payment was not found.
+      security:
+        - oauth2:
+            - orders:read
+  /orders/v2/prices:
+    post:
+      tags:
+        - Orders
+      summary: Get order prices
+      description: |
+        Calculates the check price amounts, tax amounts, and service
+        charges for an `Order` object you supply as a _required message
+        body parameter_.
+
+        The `prices` endpoint validates the order you
+        submit to ensure all referenced data exists and that you include
+        item selections in the expected structure with all required modifier
+        options.
+
+        Some values that would be present in the response data when
+        creating an order are not present in the response data for the `prices`
+        endpoint. For example, the order GUID is not set because the
+        Toast platform does not create persistent data for the order.
+
+        The calculated price can change between requests to the
+        `prices` endpoint with the same `Order` object if enough time
+        passes between the requests. The difference in price is
+        possible because the restaurant configuration can change and
+        because some pricing configuration is based on time and date
+        schedules.
+      operationId: pricesPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The identifier of the restaurant to be used for this price
+            calculation.
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: |
+          A _required_ JSON `Order` object containing information about
+          the checks, item selections, modifier options, and other parts
+          of the order.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        "200":
+          description: |
+            Success. The response body contains a JSON `Order` object with
+            values for check amounts, taxes, service charges, and other parts
+            of the order.
+
+            Because this endpoint only calculates prices,
+            no parts of the order persist in the Toast platform. There are no
+            GUIDs in the response object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: |
+            Either the request contains data that is not supported by
+            the current version of the API as described, or the order
+            contains an item that is negatively priced.
+        "403":
+          description: |
+            The API client does not have access to the restaurant, the
+            API client does not have the `orders:read` scope, or both.
+        "404":
+          description: |
+            An entity referenced in the order does not exist, or
+            belongs to a restaurant that the API client is not
+            authorized to access.
+        "413":
+          description: |
+            The number of checks in the submitted order exceeds the limit.
+        "415":
+          description: |
+            The request did not have `application/json` in the
+            `Content-Type` HTTP header field.
+        "500":
+          description: |
+            An unexpected internal error occurred. The
+            `requestId` that is attached to the error can be referenced by
+            the Toast support team.
+      security:
+        - oauth2:
+            - orders.orders:write
+  "/orders/v2/orders/{guid}":
+    get:
+      tags:
+        - Orders
+      summary: Get an order
+      description:
+        Retrieves detailed information about a single order, specified by
+        its GUID.
+      operationId: ordersGuidGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier of the restaurant where this order was placed.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The GUID for the order to be returned.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: A JSON Order object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: The GUID was malformed.
+        "404":
+          description: The specified order was not found.
+        "500":
+          description: There was a problem serializing the order entity.
+      security:
+        - oauth2:
+            - orders:read
+  /orders/v2/ordersBulk:
+    get:
+      tags:
+        - Orders
+      summary: Get multiple orders
+      description: |
+        Returns an array of `Order` objects containing detailed
+        information about all of the orders opened during a period of time.
+
+        You can return the orders for either a specific period of time
+        or for one business day.
+
+        * Specify both `startDate` and `endDate` to return the orders
+          modified during that period of time.
+
+        * Specify the `businessDate` to return the orders promised
+          during that business day.
+      operationId: ordersBulkGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The identifier for the restaurant that processed the orders.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          description: >
+            The inclusive start date and time. The results include orders with a
+            modified
+
+            date and time that occur at or after the `startDate`,
+
+            but before the `endDate`.
+
+
+            Use ISO-8601 format for the date and time, including a decimal fraction of
+
+            a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date
+
+            and time value.
+
+
+            The date must be after
+
+            2015-12-01T00:00:00.000+0000.
+          in: query
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - name: endDate
+          description: >
+            The exclusive end date and time. The results exclude any orders that
+            have
+
+            a modified date and time that occurs at or after `endDate`.
+
+
+            Use ISO-8601 format for the date and time, including a decimal
+
+            fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL
+
+            encode the date and time value.
+
+
+            The `endDate` date and time
+
+            must be later than the `startDate` parameter value.
+          in: query
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - name: businessDate
+          description: |
+            The business date that same-day orders opened or that
+            scheduled orders are promised, in the format `yyyymmdd`.
+
+            The business day of an order is determined by the time the
+            order is opened or promised in the local time zone, and the
+            restaurant's business day cutoff time, which is available
+            from  the `General` object of the restaurants API in the
+            `closeoutHour` property.
+          in: query
+          schema:
+            type: string
+          required: false
+        - name: pageSize
+          description: >
+            The maximum number of objects to return in the array. If the
+
+            number of objects selected by your request is greater than
+
+            the `pageSize`, the API uses response pagination for the
+
+            remaining objects.
+
+
+            The maximum `pageSize` is `100`.
+
+
+            For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html).
+          in: query
+          schema:
+            type: integer
+          required: false
+        - name: page
+          description: >
+            The sequence number of the set of objects to return in
+
+            paginated response data.
+
+
+            For example, if you set the
+
+            `pageSize` parameter to `10`, and you set `page` to `2`, the
+
+            API returns a set of objects that starts with the eleventh
+
+            object.
+
+
+            For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html).
+          in: query
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: |
+            A JSON array of `Order` objects for each order processed
+            during the period of time that you specify in your request.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "400":
+          description: |
+            The request contains data that is not supported by the API.
+        "500":
+          description: |
+            An unexpected internal error occurred. The
+            `requestId` that is attached to this error can be referenced by
+            the Toast support team.
+      security:
+        - oauth2:
+            - orders:read
+  "/orders/v2/orders/{orderGuid}/checks/{checkGuid}/payments":
+    post:
+      tags:
+        - Payments
+      summary: Post payments
+      description: >
+        Adds one or more payments to a check in an existing order. Include
+
+        information about the payments in an array of `Payment` objects in the
+
+        message body. Specify the Toast platform GUID of the order
+
+        and check in REST path parameters.
+
+
+        For more information, see <a
+
+        href="https://doc.toasttab.com/doc/devguide/apiAddingPaymentsToACheck.html">
+
+        the _Toast Developer Guide_</a>.
+      operationId: ordersChecksPaymentsPost
+      parameters:
+        - name: orderGuid
+          description: |
+            The Toast platform identifier of the order that you are
+            adding payments to.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: checkGuid
+          description: |
+            The Toast platform identifier of the check that you are
+            adding payments to.
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          An array of JSON `Payment` objects containing information about the
+          payments you are adding.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Payment"
+      responses:
+        "200":
+          description: |
+            A JSON `Order` object that includes the payments that you added.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: The API cannot process the request.
+      security:
+        - oauth2:
+            - orders.payments:write
+  "/orders/v2/orders/{orderGuid}/checks/{checkGuid}/payments/{paymentGuid}":
+    patch:
+      tags:
+        - Payments
+      summary: Update a tip amount
+      description: >
+        Updates the tip amount in an existing payment for a check in an
+
+        order. Include the new `tipAmount` value in a `Payment` object
+
+        in the message body.
+
+
+        This endpoint does not allow any other
+
+        `Payment` object value for a `PATCH` request.
+
+
+        Specify the Toast
+
+        platform GUID of the order, check, and payment in REST path
+
+        parameters.
+
+
+        For more information, see <a
+
+        href="https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html">
+
+        the _Toast Developer Guide_</a>.
+      operationId: ordersOrderGuidChecksCheckGuidPaymentsPaymentGuidPatch
+      parameters:
+        - name: orderGuid
+          description: |
+            The Toast platform identifier of the order that you are
+            updating a tip in.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: checkGuid
+          description: |
+            The Toast platform identifier of the check that you are
+            updating a tip in.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: paymentGuid
+          description: |
+            The Toast platform identifier of the payment that you are
+            updating a tip in.
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: |
+          A JSON `Payment` object
+          containing the `tipAmount` value that will replace any
+          existing tip amount for the payment.
+
+          Do not include any
+          value other than `tipAmount`.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePaymentRequest"
+      responses:
+        "200":
+          description: |
+            A JSON `Order` object
+            that includes the tip amount that you updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: The API cannot process the request.
+      security:
+        - oauth2:
+            - orders.payments:write
+  "/orders/v2/orders/{orderGuid}/checks/{checkGuid}/selections":
+    post:
+      tags:
+        - Orders
+      summary: Add items to a check
+      description: >
+        Adds one or more items to an existing check in an order.
+
+
+        Include information about the items in an array of `Selection` objects in the
+
+        message body.
+
+
+        Specify the Toast platform GUID of the order and
+
+        check in REST path parameters.
+
+
+        For more information, see 
+
+        <a href="https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html">the 
+
+        _Toast Developer Guide_</a>.
+      operationId: ordersOrderGuidChecksCheckGuidSelectionsPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier of the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: orderGuid
+          description: |
+            The Toast platform identifier of the order that you are
+            adding items to.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: checkGuid
+          description: |
+            The Toast platform identifier of the check that you are
+            adding items to.
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          An array of JSON `Selection` objects that identify the menu items
+          you are adding.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Selection"
+      responses:
+        "200":
+          description: >
+            Success. The response body contains the full order JSON, including
+            the `Selection` objects with the items from the original check and
+            the newly added ones you included.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: |
+            The request contains data that is not supported by the API.
+        "404":
+          description: |
+            An entity referenced in the order does not exist at the restaurant.
+        "500":
+          description: >
+            An unexpected internal error occurred. The `requestId` that is
+            attached to this error can be referenced by the Toast support team.
+      security:
+        - oauth2:
+            - orders.items:write
+  "/orders/v2/orders/{orderGuid}/checks/{checkGuid}/appliedDiscounts":
+    post:
+      tags:
+        - Discounts
+      summary: Add check-level discounts
+      description: >
+        Adds one or more check-level discounts to a check in an
+
+        existing order. Include an array of `Discount` objects in the
+
+        message body.
+
+
+        For more information, see 
+
+        <a href="https://doc.toasttab.com/doc/devguide/apiDiscountingOrders.html#apiAddingDiscountsToChecks">
+
+        the _Toast Developer Guide_</a>.
+      operationId: ordersChecksAppliedDiscountsPost
+      parameters:
+        - name: orderGuid
+          description: |
+            The Toast platform identifier of the order that you are
+            adding a discount to.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: checkGuid
+          description: |
+            The Toast platform identifier of the check that you are
+            adding a discount to.
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          A JSON array of `AppliedDiscount` objects that identify the
+          discounts you are adding.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/AppliedDiscount"
+      responses:
+        "200":
+          description: |
+            A JSON `Order` object that includes the discount you added.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: The API cannot process the request.
+      security:
+        - oauth2:
+            - orders.discounts:write
+  "/orders/v2/orders/{orderGuid}/checks/{checkGuid}/selections/{selectionGuid}/appliedDiscounts":
+    post:
+      tags:
+        - Discounts
+      summary: Add item-level discounts
+      description: >
+        Adds one or more item-level discounts to menu item selections
+
+        in a check in an existing order. Include an array of `Discount` objects in the
+
+        message body.
+
+
+        For more information, see <a
+
+        href="https://doc.toasttab.com/doc/devguide/apiDiscountingOrders.html#apiAddingDiscountsToChecks">
+
+        the _Toast Developer Guide_</a>.
+      operationId: ordersChecksSelectionsAppliedDiscountsPost
+      parameters:
+        - name: orderGuid
+          description: |
+            The Toast platform identifier of the order that you are
+            adding a discount to.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: checkGuid
+          description: |
+            The Toast platform identifier of the check that you are
+            adding a discount to.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: selectionGuid
+          description: |
+            The Toast platform identifier of the menu item selection
+            that you are adding a discount to.
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          A JSON array of `AppliedDiscount` objects that identify the
+          discounts you are adding.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/AppliedDiscount"
+      responses:
+        "200":
+          description: |
+            A JSON `Order` object that includes the discount you added.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: The API cannot process the request.
+      security:
+        - oauth2:
+            - orders.discounts:write
+  "/orders/v2/orders/{orderGuid}/deliveryInfo":
+    patch:
+      tags:
+        - Orders
+      summary: Update delivery information
+      description: >
+        Updates the delivery information of an order that uses the `DELIVERY`
+        dining option.
+
+        You can use this endpoint to update the delivery time, dispatch time, the
+
+        employee who is delivering the order, the delivery state, or a
+
+        combination of the four.
+
+
+        Specify the Toast platform GUID of the
+
+        order in the `PATCH` path parameters. Returns a JSON
+
+        `Order` object if successful.
+
+
+        For more information, see 
+
+        <a href="https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html">
+
+        the _Toast Developer Guide_</a>.
+      operationId: ordersOrderGuidDeliveryInfoPatch
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier of the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: orderGuid
+          description: |
+            The Toast platform identifier of the order that you are
+            updating the delivery information for.
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          A JSON `deliveryInfo` object
+
+          containing the delivery information you want to update for an order.
+
+
+          You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or
+
+          `DeliveryEmployee`.
+
+
+          These are the only values you can update with this endpoint.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deliveredDate:
+                  type: string
+                  format: date-time
+                  description: |
+                    The date on which the order was delivered.
+                dispatchedDate:
+                  type: string
+                  format: date-time
+                  description: >
+                    The date on which the order was dispatched. If
+                    `dispatchedDate` is not specified, it is set to the current
+                    system time.
+                deliveryState:
+                  type: string
+                  description: |
+                    The delivery state of the order.
+                  enum:
+                    - PENDING
+                    - IN_PROGRESS
+                    - PICKED_UP
+                    - DELIVERED
+                deliveryEmployee:
+                  type: string
+                  format: UUID
+                  description: >
+                    The Toast platform identifier of the employee who is
+                    delivering the order.
+      responses:
+        "200":
+          description:
+            Success. The response body contains the full order JSON, including
+            information you updated in the `deliveryInfo` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: |
+            The request contains data that is not supported by the API.
+      security:
+        - oauth2:
+            - orders.delivery_info:write
+  "/orders/v2/orders/{orderGuid}/void":
+    post:
+      tags:
+        - Orders
+      summary: Void an order
+      description: >
+        Voids an order, and (if specified) its selections and payments. Only
+        Orders with `OTHER` payment types can be voided.
+
+
+        A request body that contains the `selections` and `payments` objects with each `voidAll` value set to `true` is required to void an order. The response body is the modified Order object.
+
+
+        For more information, see [Void an order](https://doc.toasttab.com/doc/devguide/apiVoidOrder.html).
+      operationId: voidOrder
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier of the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: orderGuid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The GUID of the order to be voided.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                selections:
+                  type: object
+                  properties:
+                    voidAll:
+                      type: boolean
+                      default: false
+                payments:
+                  type: object
+                  properties:
+                    voidAll:
+                      type: boolean
+                      default: false
+      responses:
+        "200":
+          description: Modified order object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: |
+            Malformed order GUID or other validation errors.
+        "404":
+          description: Order not found.
+      security:
+        - oauth2:
+            - orders:void
+            - orders.channel:void
+  /orders/v2/orders:
+    post:
+      tags:
+        - Orders
+      summary: Post an order
+      description:
+        Submits an order to the server. Returns a JSON `Order` object if
+        successful.
+      operationId: ordersPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant where this order was placed.
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing information about an order.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+              example:
+                entityType: Order
+                diningOption:
+                  guid: 18855a26-40d4-4a8f-b484-c6af211dd597
+                  entityType: DiningOption
+                marketplaceFacilitatorTaxInfo:
+                  facilitatorCollectAndRemitTaxOrder: true
+                checks:
+                  - entityType: Check
+                    displayNumber: pdesjardins-api-1627646263
+                    selections:
+                      - entityType: MenuItemSelection
+                        itemGroup:
+                          guid: 881472e6-dd94-48c6-b5c6-25e51a864208
+                          entityType: MenuGroup
+                        item:
+                          entityType: MenuItem
+                          guid: 9c59d4ab-8242-450f-8f36-b16e1b3ab802
+                        quantity: 1
+                        modifiers: []
+                    customer:
+                      entityType: Customer
+                      firstName: Severe
+                      lastName: Thibault
+                      phone: 555-555-5555
+                      email: severe@example.com
+                    payments:
+                      - otherPayment:
+                          guid: 0dc19214-d29e-4ab9-a773-27e5812999c7
+                        type: OTHER
+                        amount: 8.5
+                        tipAmount: "0"
+                deliveryInfo:
+                  address1: 401 Park Drive
+                  address2: Suite 801
+                  city: Boston
+                  state: MA
+                  zipCode: "02215"
+                  latitude: 42.3446671
+                  longitude: -71.1023575
+                  notes: Please ring the doorbell.
+      responses:
+        "200":
+          description:
+            A JSON `Order` object that has been persisted in Toast. The
+            returned Order contains generated property values for the check
+            amounts, taxes, service charges, and GUIDs for persisted entities.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+              examples:
+                example:
+                  summary: Example Order Response
+                  value:
+                    orders:
+                      - guid: 89488287-f259-435b-a654-0bc391596af0
+                        entityType: Order
+                        externalId: null
+                        revenueCenter: null
+                        server:
+                          guid: c89d1e72-1888-469f-a24b-506c66eafab7
+                          entityType: RestaurantUser
+                          externalId: null
+                        lastModifiedDevice:
+                          id:
+                        source: API
+                        voidDate: null
+                        duration: null
+                        businessDate: 20210730
+                        paidDate: null
+                        restaurantService: null
+                        voided: false
+                        estimatedFulfillmentDate: 2021-07-30T12:12:46.235+0000
+                        table: null
+                        requiredPrepTime: PT15M
+                        approvalStatus: NEEDS_APPROVAL
+                        deliveryInfo:
+                          address1: 401 Park Drive
+                          address2: Suite 801
+                          city: Boston
+                          state: MA
+                          zipCode: "02215"
+                          latitude: 42.3446671
+                          longitude: -71.1023575
+                          notes: Please ring the doorbell.
+                          deliveredDate: null
+                          dispatchedDate: null
+                          deliveryEmployee: null
+                          deliveryState: null
+                        serviceArea: null
+                        curbsidePickupInfo: null
+                        numberOfGuests: 1
+                        diningOption:
+                          guid: 18855a26-40d4-4a8f-b484-c6af211dd597
+                          entityType: DiningOption
+                          externalId: null
+                        openedDate: 2021-07-30T11:57:46.235+0000
+                        voidBusinessDate: null
+                        checks:
+                          - guid: cbcb6fd5-d973-4e44-9b91-2abcee5ea6cd
+                            entityType: Check
+                            externalId: null
+                            displayNumber: pdesjardins-api-1627646263
+                            payments:
+                              - guid: 88642b2d-c359-4b96-bb8e-9cb3f5c2ac6a
+                                entityType: OrderPayment
+                                externalId: null
+                                originalProcessingFee: null
+                                server: null
+                                cashDrawer: null
+                                lastModifiedDevice:
+                                  id:
+                                refundStatus: NONE
+                                type: OTHER
+                                voidInfo: null
+                                checkGuid: cbcb6fd5-d973-4e44-9b91-2abcee5ea6cd
+                                otherPayment:
+                                  guid: 0dc19214-d29e-4ab9-a773-27e5812999c7
+                                  entityType: AlternatePaymentType
+                                  externalId: null
+                                paidDate: 2021-07-30T11:57:46.237+0000
+                                orderGuid: 89488287-f259-435b-a654-0bc391596af0
+                                cardEntryMode: null
+                                paymentStatus: CAPTURED
+                                amount: 8.5
+                                tipAmount: 0
+                                amountTendered: null
+                                cardType: null
+                                houseAccount: null
+                                mcaRepaymentAmount: null
+                                createdDevice:
+                                  id:
+                                paidBusinessDate: 20210730
+                                last4Digits: null
+                                refund: null
+                            appliedDiscounts: []
+                            lastModifiedDevice:
+                              id:
+                            voidDate: null
+                            paidDate: null
+                            appliedLoyaltyInfo: null
+                            voided: false
+                            paymentStatus: OPEN
+                            amount: 5
+                            tabName: null
+                            taxExempt: false
+                            openedDate: 2021-07-30T11:57:46.235+0000
+                            totalAmount: 5
+                            selections:
+                              - guid: 2c8b6ece-c503-4f85-aed7-6a8c6526ba0d
+                                entityType: MenuItemSelection
+                                externalId: null
+                                deferred: false
+                                preDiscountPrice: 5
+                                voidReason: null
+                                optionGroup: null
+                                displayName: 蟹餅  CRAB CAKES
+                                appliedDiscounts: []
+                                modifiers: []
+                                seatNumber: -1
+                                voidDate: null
+                                fulfillmentStatus: NEW
+                                optionGroupPricingMode: null
+                                salesCategory:
+                                  guid: c0915e46-341e-4ec0-b46e-cb87fab729fd
+                                  entityType: SalesCategory
+                                  externalId: null
+                                selectionType: NONE
+                                price: 5
+                                voided: false
+                                appliedTaxes: []
+                                itemGroup:
+                                  guid: 881472e6-dd94-48c6-b5c6-25e51a864208
+                                  entityType: MenuGroup
+                                  externalId: null
+                                item:
+                                  guid: 9c59d4ab-8242-450f-8f36-b16e1b3ab802
+                                  entityType: MenuItem
+                                  externalId: null
+                                taxInclusion: NOT_INCLUDED
+                                quantity: 1
+                                receiptLinePrice: 5
+                                unitOfMeasure: NONE
+                                refundDetails: null
+                                tax: 0
+                                diningOption:
+                                  guid: 18855a26-40d4-4a8f-b484-c6af211dd597
+                                  entityType: DiningOption
+                                  externalId: null
+                                voidBusinessDate: null
+                                createdDate: 2021-07-30T11:57:46.269+0000
+                                preModifier: null
+                                modifiedDate: 2021-07-30T11:57:46.269+0000
+                            voidBusinessDate: null
+                            createdDate: 2021-07-30T11:57:46.282+0000
+                            deleted: false
+                            createdDevice:
+                              id:
+                            closedDate: null
+                            deletedDate: null
+                            modifiedDate: 2021-07-30T11:57:46.282+0000
+                            taxAmount: 0
+                            appliedServiceCharges: []
+                            customer:
+                              guid: 970e92e6-33b3-4caa-876b-2c6ef528ef4e
+                              entityType: Customer
+                              firstName: Severe
+                              lastName: Thibault
+                              phone: "5555555555"
+                              email: severe@example.com
+                        deleted: false
+                        createdDevice:
+                          id:
+                        createdDate: 2021-07-30T11:57:46.286+0000
+                        closedDate: null
+                        deletedDate: null
+                        modifiedDate: 2021-07-30T11:57:46.286+0000
+                        promisedDate: null
+                        pricingFeatures:
+                          - TAXESV2
+        "400":
+          description:
+            Either the request contains data that is not supported by the
+            current version of the API as described (e.g. specifying credit card
+            as the payment type.), or the order contains an item that is
+            negatively priced.
+        "404":
+          description:
+            An entity referenced in the order does not exist, or belongs to a
+            restaurant the authenticated client is not authorized to access.
+        "413":
+          description: The number of checks in the submitted order exceeds the limit.
+        "415":
+          description:
+            The request did not have "application/json" in the Content-Type
+            header.
+        "500":
+          description:
+            An unexpected internal error occurred. There is a requestId
+            attached to this error that can be referenced by Toast.
+      security:
+        - oauth2:
+            - orders.orders:write
+    get:
+      tags:
+        - Orders
+      summary: Get order identifiers (deprecated)
+      deprecated: true
+      description: |
+        Returns a list of the GUIDs of all orders opened during a period of
+        time. You can return the list of orders for either a period of up to
+        one hour or for one business day.
+        * Specify both `startDate` and `endDate` to return the list of orders
+          modified during a period of up to one hour.
+        * Specify the `businessDate` to return the list of orders promised
+          for delivery during a business day.
+      operationId: ordersGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant to retrieve orders from.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          description: >-
+            \
+
+            The inclusive start date and time. The results exclude orders with an earlier modified date and time.
+
+            Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.
+
+            The date must be after 2015-12-01T00:00:00.000+0000.
+          in: query
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - name: endDate
+          description: >
+
+            The exclusive end date and time. The results exclude orders with an equal
+
+            or later modified date and time.
+
+
+            Use ISO-8601 format for the date and time, including a decimal fraction of a
+
+            second. For example,
+
+            `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.
+
+
+            The `endDate` date and time must be later than the `startDate`
+
+            parameter value.
+          in: query
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - name: businessDate
+          description: >
+            The business date that same-day orders opened or that
+
+            scheduled orders are promised, in the format `yyyyMMdd`.
+
+
+            The business day of an order is determined by the time the order is opened or
+
+            promised in the local time zone, and by the restaurant's business day
+
+            cutoff time, which is available from  the `General` object of the
+
+            restaurants API in the `closeoutHour` property.
+          in: query
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: A JSON array of the GUID identifiers for orders.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  type: string
+        "400":
+          description:
+            The request contains data that is not supported by the current
+            version of the API as described. For example, specifying credit card
+            as the payment type.
+        "500":
+          description:
+            An unexpected internal error occurred. The `requestId` that is
+            attached to this error can be referenced by Toast.
+      security:
+        - oauth2:
+            - orders:read
+  /orders/v2/applicableDiscounts:
+    post:
+      tags:
+        - Discounts
+      summary: Get applicable discounts
+      description: |
+        Returns an array of `ApplicableDiscount`
+        objects that contain information about the discounts that apply
+        to the checks and menu item selections in an order.
+
+        Each `ApplicableDiscount` object contains information that you can
+        use to determine which items and checks are eligible for the
+        discount.
+
+        If you include a `promoCode` value in the
+        `ApplicableDiscount` object, the `applicableDiscounts` endpoint
+        returns the only the discounts that are associated with that
+        promotional code.
+      operationId: applicableDiscountsPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier of the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: |
+          A JSON `ApplicableDiscountsRequest` object containing
+          information about an order, and an optional `promoCode`.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplicableDiscountsRequest"
+      responses:
+        "200":
+          description: A JSON array of `ApplicableDiscount` objects.
+          content:
+            application/json:
+              schema:
+                title: ApplicableDiscounts
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApplicableDiscount"
+        "400":
+          description: Invalid arguments
+        "500":
+          description:
+            An unexpected internal error occurred. The `requestId` that is
+            attached to this error can be referenced by Toast.
+      security:
+        - oauth2:
+            - orders.orders:write
+  /labor/v1/employees:
+    get:
+      tags:
+        - Employees
+      summary: Get employees
+      description: |
+        Returns an array of `Employee` objects containing information 
+        about restaurant employees.
+      operationId: employeesGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: employeeIds
+          description: |
+            An optional identifier that filters return values for a 
+            specific employee. The identifier can be a Toast platform 
+            GUID or an external identifier. If present, the `employees` 
+            resource will only return the employees you specify. You 
+            can include multiple `employeeIds` query parameters 
+            (maximum 100). If not present, the resource returns each 
+            employee for the restaurant.
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: |
+            JSON objects for all employees in the restaurant
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  $ref: "#/components/schemas/Employee"
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.employees:read
+    post:
+      tags:
+        - Employees
+      summary: Add an employee
+      description: |
+        Creates a restaurant employee record.
+      operationId: employeesPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          An `Employee` object containing information about the 
+          employee, including the employee's name and email address.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                entityType: RestaurantUser
+                email: email
+                firstName: first name
+                chosenName: optional chosen name
+                lastName: last name
+                externalId: optional external ID
+                externalEmployeeId: optional external employee ID
+                jobReferences":
+                  - guid: f290a951-2042-4f3d-b861-d89e9e583876
+                    entityType: RestaurantJob
+                wageOverrides:
+                  - jobReference:
+                      guid: f290a951-2042-4f3d-b861-d89e9e583876
+                      entityType: RestaurantJob
+                    wage: 10
+      responses:
+        "200":
+          description: Returns the created employee.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "400":
+          description: |
+            The request contains data that is not supported by the 
+            current version of the API as described.
+        "415":
+          description: |
+            The request did not have "application/json" in the 
+            Content-Type header.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a requestId 
+            attached to this error that can be referenced by Toast 
+            support.
+      security:
+        - oauth2:
+            - labor.employees:write
+  "/labor/v1/employees/{employeeId}":
+    get:
+      tags:
+        - Employees
+      summary: Get information about one employee
+      description: |
+        Returns an `Employee` object containing information about one 
+        restaurant employee.
+      operationId: employeesEmployeeIdGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: employeeId
+          description: |
+            The Toast platform GUID or external identifier for the 
+            employee to be returned.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: |
+            Returns the employee information.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "400":
+          description: |
+            The GUID or external identifier was malformed.
+        "404":
+          description: |
+            The GUID or external identifier does not match any 
+            employees at the current restaurant.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.employees:read
+    delete:
+      tags:
+        - Employees
+      summary: Delete an employee
+      description: |
+        Deletes a restaurant employee record by marking the record as 
+        deleted. A deleted employee cannot log in at the restaurant or 
+        open new time entries.
+
+        If you `GET` an employee record that has been deleted, its 
+        `deleted` value is `true` and its `deletedDate` value contains 
+        the date and time the record was deleted. 
+
+        If you delete an employee that has already been deleted then 
+        the result is successful (200) and no change is made.
+
+        The deleted record appears in the list of deleted employees for 
+        the restaurant in Toast Web. From the 
+        list of deleted employees, you can enable a deleted record so 
+        that the employee can use it again. Information about deleted 
+        employees remains available in reports.
+
+        You cannot delete employees who have open time entries (time 
+        entries that do not have an out date value).
+      operationId: employeesEmployeeIdDelete
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: employeeId
+          description: |
+            The Toast platform GUID or external identifier for the 
+            employee to be deleted.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: |
+            The employee has been deleted. Returns an `Employee` object 
+            containing information about the deleted restaurant 
+            employee.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "400":
+          description: |
+            The GUID or external identifier was malformed.
+        "404":
+          description: |
+            The GUID or external identifier does not match any
+            employees at the current restaurant.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.employees:write
+    patch:
+      tags:
+        - Employees
+      summary: Update employee information
+      description: >
+        Updates the first name, chosen name, last name, external employee ID,
+        and/or 
+
+        passcode of a restaurant employee. The `PATCH` operation cannot 
+
+        update any other employee information.
+      operationId: employeesEmployeeIdPatch
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: employeeId
+          description: |
+            The Toast platform GUID or external identifier for the 
+            employee to be returned.
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          A JSON object containing the employee information that you 
+          are updating. You can update an employee's:
+
+          * `firstName` - First name.
+
+          * `chosenName` - Chosen name.
+
+          * `lastName` - Last name.
+
+          * `externalEmployeeId` - External employee identifier.
+
+          * `passcode` - The passcode for access to Toast POS devices.
+
+          All values are optional. You must include at least one 
+          value. Each value that you include must contain information 
+          (not null). If you include the `passcode` value to update 
+          an employee's passcode you must include the employee's 
+          current passcode in the `currentPasscode` value.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                firstName: Mynewfirstname
+                chosenName: Mynewchosenname
+                lastName: Mynewlastname
+                externalEmployeeId: "1234567890"
+                passcode: "1234"
+                currentPasscode: "1111"
+      responses:
+        "200":
+          description: |
+            Returns the updated Toast platform employee record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "400":
+          description: |
+            The Toast platform GUID or external identifier was 
+            malformed, or the body of the request was malformed.
+        "404":
+          description: |
+            The Toast platform GUID or external identifier does not 
+            match any employees at the current restaurant.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.employees:write
+  "/labor/v1/employees/{employeeId}/externalId":
+    parameters:
+      - name: employeeId
+        description: |
+          The Toast platform GUID of the employee record.
+        in: path
+        schema:
+          type: string
+        required: true
+    post:
+      tags:
+        - Employees
+      summary: Add an external identifier
+      description: |
+        Adds an external identifier for an existing employee. Include 
+        the string value of the new external identifier in the message 
+        body.
+
+        You cannot change an existing external identifier with another 
+        `POST` request; use `PUT` instead. The Toast platform uses this 
+        external identifier as one of the unique, persistent 
+        identifiers for an employee record.
+      operationId: employeesEmployeeIdExternalIdPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          The JSON string value of the `externalId` for the employee 
+          record. Wrap the value in double quotation marks to make it 
+          valid JSON syntax.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example: MyToastNamingAuthority:9876543210
+      responses:
+        "200":
+          description: |
+            Returns the updated employee record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+      security:
+        - oauth2:
+            - labor.employees:write
+    put:
+      tags:
+        - Employees
+      summary: Add or replace an external identifier
+      description: |
+        Adds or replaces the external identifier for an
+        existing employee. Include the string value of the new external
+        identifier in the message body.
+
+        The Toast platform uses this external identifier as one of the 
+        unique, persistent identifiers for an employee record. 
+        _Changing the external identifier for an existing employee 
+        might affect reporting and other Toast platform functions that 
+        select employees using the `externalId` value._
+      operationId: employeesEmployeeIdExternalIdPut
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          The JSON string value of the `externalId` for the employee 
+          record. Wrap the value in double quotation marks to make it 
+          valid JSON syntax.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example: MyToastNamingAuthority:9876543210
+      responses:
+        "200":
+          description: |
+            Returns the updated employee record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+      security:
+        - oauth2:
+            - labor.employees:write
+  "/labor/v1/employees/{employeeId}/unarchive":
+    parameters:
+      - name: employeeId
+        description: |
+          The Toast platform GUID of the employee record.
+        in: path
+        schema:
+          type: string
+        required: true
+    put:
+      tags:
+        - Employees
+      summary: Unarchive an employee
+      description: |
+        Unarchives an employee record that was previously archived.
+
+        * Unarchived employees can sign into the Toast POS.
+        * Unarchived employees can sign in to Toast Web. 
+        * When you unarchive an employee, the employee has all 
+          jobs that were previously assigned to them.
+        * If an employee had a swipe card for signing into the 
+          Toast POS, the swipe card _is not_ re-associated with 
+          the employee when you unarchive them.
+
+        If you unarchive an employee who will take a different 
+        role than the one they had when they were archived, you 
+        must update the employee's jobs list and verify that the 
+        employee should continue to sign into Toast Web.
+      operationId: employeesEmployeeIdUnarchivePut
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: |
+            Returns the updated employee record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "400":
+          description: |
+            Employee being unarchived is not currently archived.
+      security:
+        - oauth2:
+            - labor.employees:write
+  "/labor/v1/employees/{employeeId}/jobs":
+    parameters:
+      - name: employeeId
+        description: |
+          The Toast platform GUID of the employee record.
+        in: path
+        schema:
+          type: string
+        required: true
+    put:
+      tags:
+        - Employees
+      summary: Replace a jobs list
+      description: |
+        Replaces the list of jobs for an employee. Include a JSON  
+        array of job identifiers in the message body.
+
+        If a job is defined at the restaurant group or subgroup level, 
+        this operation adds or removes that job for the the employee at 
+        _all restaurant locations_ in the group or subgroup.
+      operationId: employeesEmployeeIdJobsPut
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          An array of JSON objects containing identifiers for jobs. 
+          The identifiers can be either Toast platform GUIDs or 
+          external identifiers.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                - guid: dd8cea7a-add5-4508-b8fe-ffd0b584e4da
+                - externalId: MyToastNamingAuthority:9876543210
+      responses:
+        "200":
+          description: |
+            Returns the updated employee record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+      security:
+        - oauth2:
+            - labor.employees:write
+  "/labor/v1/employees/{employeeId}/wageOverrides":
+    parameters:
+      - name: employeeId
+        description: |
+          The Toast platform GUID of the employee record.
+        in: path
+        schema:
+          type: string
+        required: true
+    put:
+      tags:
+        - Employees
+      summary: Replace wage overrides
+      description: |
+        Replaces the list of wage overrides for the jobs that are 
+        assigned to an employee. Include a JSON  array of 
+        `JobWageOverride` objects in the message body. Include the new 
+        wage for the employee in the `wage` value. Specify the wage in 
+        U.S. dollars.
+
+        You must include all existing wage overrides in the message 
+        body. Any wage overrides that are not present in the array are 
+        removed from the employee record.
+      operationId: employeesEmployeeIdWageOverridesPut
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          An array of JSON `JobWageOverride` objects.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                - jobReference:
+                    guid: 8d3bba92-10e4-4345-9ae6-ed94c09dc332
+                  wage: 15.75
+      responses:
+        "200":
+          description: |
+            The wage overrides for the employee are replaced. Returns 
+            the updated employee record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+      security:
+        - oauth2:
+            - labor.employees:write
+  /labor/v1/shifts:
+    get:
+      tags:
+        - Shifts
+      summary: Get shifts
+      description: |
+        Returns an array of `Shift` objects that contain information 
+        about schedule shifts for restaurant employees.
+      operationId: shiftsGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: shiftIds
+          description: |
+            An optional identifier that filters return values for a
+            specific shift. The identifier can be a Toast platform GUID
+            or an external identifier. If present, the shifts
+            resource will only return the shifts you specify. You
+            can include multiple `shiftIds` query parameters (maximum
+            100).
+          in: query
+          schema:
+            type: string
+          required: false
+        - name: startDate
+          description: |
+            Optional start date and time of time period to match 
+            shifts. A shift matches the time period if the shift 
+            `inDate` is after (inclusive) the specified `startDate` and 
+            the shift `outDate` is before the `endDate` (exclusive). 
+            These parameters are required if the `shiftIds` parameter 
+            is not defined. The specified period cannot be longer than 
+            one month.
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          description: |
+            Optional end date and time of time period to match shifts. 
+            A shift matches the time period if the shift `inDate` is 
+            after (inclusive) the specified `startDate` and the shift 
+            `outDate` is before the `endDate` (exclusive). These 
+            parameters are required if the `shiftIds` parameter is not 
+            defined. The specified period cannot be longer than one 
+            month.
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: |
+            Returns the specified shifts in an unordered list.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  $ref: "#/components/schemas/Shift"
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor:read
+    post:
+      tags:
+        - Shifts
+      summary: Create a shift
+      description: |
+        Creates a schedule shift for a restaurant employee.
+      operationId: shiftsPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          A `Shift` object containing information about the shift, 
+          including the job identifier, the employee identifier, and 
+          the start and end times.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                externalId: MyToastNamingAuthority:1234
+                entityType: Shift
+                jobReference:
+                  guid: 678758d1-6aa8-494c-be55-0614f761d160
+                  externalId: ""
+                  entityType: RestaurantJob
+                employeeReference:
+                  guid: 7030407f-761c-4d92-86d9-4e84bc700d0f
+                  externalId: ""
+                  entityType: RestaurantUser
+                inDate: 2015-10-10T06:00:00.000+0000
+                outDate: 2015-10-10T12:00:00.000+0000
+      responses:
+        "200":
+          description: |
+            Creates a shift record and returns information about it.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shift"
+        "400":
+          description: |
+            The request contains data that is not supported by the 
+            current version of the API as described.
+        "415":
+          description: |
+            The request did not have "application/json" in the 
+            `Content-Type` header.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.shifts:write
+  "/labor/v1/shifts/{shiftId}":
+    get:
+      tags:
+        - Shifts
+      summary: Get a shift
+      description: |
+        Returns a `Shift` object containing of information about one 
+        schedule shift for a restaurant employee.
+      operationId: shiftsShiftIdGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: shiftId
+          description: |
+            The Toast platform GUID or an external identifier for the 
+            shift.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: |
+            Returns the specified shifts in an unordered list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shift"
+        "400":
+          description: |
+            The GUID or external identifier was malformed.
+        "404":
+          description: |
+            The GUID or external identifier does not match any shifts
+            at the current restaurant.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor:read
+    put:
+      tags:
+        - Shifts
+      summary: Update a shift
+      description: |
+        Updates an existing schedule shift record for a restaurant 
+        employee. A `PUT` request completely replaces the information 
+        in the existing record.
+      operationId: shiftsShiftIdPut
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: shiftId
+          description: |
+            The shift identifier, either the Toast platform GUID or an 
+            external identifier.
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          The shift information. The `externalId` identifier is not 
+          allowed for`PUT` requests.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                entityType: Shift
+                jobReference:
+                  guid: 678758d1-6aa8-494c-be55-0614f761d160
+                  externalId: ""
+                  entityType: RestaurantJob
+                employeeReference:
+                  guid: 7030407f-761c-4d92-86d9-4e84bc700d0f
+                  externalId: ""
+                  entityType: RestaurantUser
+                inDate: 2015-10-10T06:00:00.000+0000
+                outDate: 2015-10-10T12:00:00.000+0000
+      responses:
+        "200":
+          description: |
+            Returns the updated `Shift`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shift"
+        "400":
+          description: |
+            The request contains data that is not supported by the 
+            current version of the API as described.
+        "404":
+          description: |
+            The GUID or external identifier does not match any shifts
+            at the current restaurant.
+        "415":
+          description: |
+            The request did not have `application/json` in the 
+            `Content-Type` header.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.shifts:write
+    delete:
+      tags:
+        - Shifts
+      summary: Delete a shift
+      description: |
+        Marks an existing schedule shift record for a restaurant 
+        employee as deleted. If the shift record was already deleted, 
+        then the operation will succeed (HTTP 200 response code) and no 
+        change will be made.
+      operationId: shiftsShiftIdDelete
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: shiftId
+          description: |
+            The shift identifier, either the Toast platform GUID or an 
+            external identifier.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: |
+            Returns the specified shift, with the deleted flag set to 
+            `true`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shift"
+        "400":
+          description: |
+            The Toast platform GUID or external identifier was 
+            malformed.
+        "404":
+          description: |
+            The Toast platform GUID or external identifier does not 
+            match any shifts at the current restaurant.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor.shifts:write
+  /labor/v1/jobs:
+    get:
+      tags:
+        - Jobs
+      summary: Get jobs
+      description: |
+        Returns an array of `Job` objects containing information about 
+        the employee jobs configured at a restaurant.
+      operationId: jobsGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: jobIds
+          description: |
+            An optional array of one or more job identifiers, either 
+            the Toast platform GUID or an external identifier assigned 
+            by the client. 100 max. If not provided, all jobs known to 
+            the Toast platform for this restaurant will be returned.
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: |
+            Returns the specified jobs.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  $ref: "#/components/schemas/Job"
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor:read
+  "/labor/v1/jobs/{jobId}":
+    get:
+      tags:
+        - Jobs
+      summary: Get one job
+      description: |
+        Returns a `Job` object containing information about one 
+        employee job at a restaurant.
+      operationId: jobsJobIdGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: jobId
+          description: |
+            The Toast platform GUID or an external identifier for the 
+            job.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: |
+            Returns the specified job.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+        "400":
+          description: |
+            The Toast platform GUID or external identifier was 
+            malformed.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor:read
+  "/labor/v1/jobs/{jobId}/externalId":
+    parameters:
+      - name: jobId
+        description: |
+          The Toast platform GUID or external identifier of the job 
+          record.
+        in: path
+        schema:
+          type: string
+        required: true
+    post:
+      tags:
+        - Jobs
+      summary: Add an external identifier
+      description: |
+        Adds an external identifier for an existing job. Include the 
+        string value of the new external identifier in the message 
+        body.
+
+        You cannot change an existing external identifier with another 
+        `POST` request. The Toast platform uses this external 
+        identifier as one of the unique, persistent identifiers for a 
+        job record.
+      operationId: jobsJobIdExternalIdPost
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          The JSON string value of the `externalId` for the job 
+          record. Wrap the value in double quotation marks to make it 
+          valid JSON syntax.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example: MyToastNamingAuthority:9876543210
+      responses:
+        "200":
+          description: |
+            Returns the updated job record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+      security:
+        - oauth2:
+            - labor.jobs:write
+    put:
+      tags:
+        - Jobs
+      summary: Add or replace an external identifier
+      description: |
+        Adds or replaces the external identifier for an existing job. 
+        Include the string value of the new external identifier in the 
+        message body.
+
+        The Toast platform uses this external identifier as one of the 
+        unique, persistent identifiers for a job record. _Changing the 
+        external identifier for an existing job might affect reporting 
+        and other Toast platform functions that select jobs using the 
+        `externalId` value._
+      operationId: jobsJobIdExternalIdPut
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: Content-Type
+          description: |
+            The Internet Assigned Numbers Authority (IANA) media type 
+            of the message body data. The value must be 
+            `application/json`.
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          The JSON string value of the `externalId` for the job 
+          record. Wrap the value in double quotation marks to make it 
+          valid JSON syntax.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example: MyToastNamingAuthority:9876543210
+      responses:
+        "200":
+          description: |
+            Returns the updated job record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+      security:
+        - oauth2:
+            - labor.jobs:write
+  /labor/v1/timeEntries:
+    get:
+      tags:
+        - Time entries
+      summary: Get time entries
+      description: |
+        Returns an array of `TimeEntry` objects that contain 
+        information about employee shift events. The information 
+        includes shift start times, end times, and the start and end 
+        times of break periods.
+
+        *  Include one or more `timeEntryId` query parameters set to 
+           the GUIDs for specific time entries.
+
+        *  Include both a `startDate` and an `endDate` query parameter 
+           to get time entries for a specific time period.
+
+        *  Include both a `modifiedStartDate` and a `modifiedEndDate` 
+           query parameter to get the time entries that were modified 
+           during a specific time period.
+
+        *  Includes a `businessDate` query parameter to get the time 
+           entries with an `inDate` during a specific business date.
+
+        Valid requests include one or more `timeEntryId` parameters, 
+        both a `startDate` and an `endDate`, both a `modifiedStartDate` 
+        and a `modifiedEndDate`, or a `businessDate`.
+      operationId: timeEntriesGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: timeEntryIds
+          description: |
+            Optional array of one or more time entry identifiers, 
+            either the Toast platform GUID or an external identifier. 
+            100 max.
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: startDate
+          description: |
+            Optional start date and time of time period to match time 
+            entries. A time entry matches the time period if its 
+            clock-in `inDate` is after (inclusive) the specified 
+            `startDate` and before (exclusive) the `endDate`. The 
+            specified period cannot be longer than one month.
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          description: |
+            Optional end date and time of time period to match time 
+            entries. A time entry matches the time period if its 
+            clock-in `inDate` is after (inclusive) the specified 
+            `startDate` and before (exclusive) the `endDate`. The 
+            specified period cannot be longer than one month.
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: modifiedStartDate
+          description: |
+            Start date and time of the time period to match modified 
+            time entries. A time entry matches the time period if that 
+            entry was modified after (inclusive) the 
+            `modifiedStartDate`. If you include this parameter, you 
+            must also include the `modifiedEndDate` parameter.  The 
+            specified period cannot be longer than one month.
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: modifiedEndDate
+          description: |
+            End date and time of the time period to match modified time 
+            entries. A time entry matches the time period if that entry 
+            was modified before (exclusive) the `modifiedEndDate`. If 
+            you include this parameter, you must also include the 
+            `modifiedStartDate` parameter.  The specified period cannot 
+            be longer than one month.
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: businessDate
+          description: |
+            Optional date to match time entries. A time entry matches 
+            the business date if its clock-in `inDate` is during the 
+            business date. The cutoff from one `businessDate` to the 
+            next is the `closeoutHour` for the restaurant.
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: includeMissedBreaks
+          description: |
+            Optional flag to indicate whether missed breaks should be 
+            returned in the breaks array for the time entries.
+          in: query
+          schema:
+            type: boolean
+        - name: includeArchived
+          description: >
+            Controls whether the response includes archived time entries, when
+
+            using the `startDate` and `endDate` parameters.
+
+
+            **Important**: this parameter _has no effect_ if you use the
+
+            `modifiedStartDate` and `modifiedEndDate` parameters or the
+
+            `businessDate` parameter to select time entries.
+
+
+            * Querying by modified date range _always_ returns archived time entries.
+
+            * Querying by businessDate _never_ returns archived time entries.
+
+
+            This parameter is optional and the default value is `false`.
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: |
+            Returns the specified time entries.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeEntry"
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor:read
+  "/labor/v1/timeEntries/{timeEntryId}":
+    get:
+      tags:
+        - Time entries
+      summary: Get one time entry
+      description: |
+        Returns a `TimeEntry` object containing information about one 
+        employee shift. The information includes the shift start time, 
+        end time, and the start and end times of break periods.
+      operationId: timeEntriesTimeEntryIdGet
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast platform GUID of the restaurant that is the 
+            context for this operation.
+          in: header
+          schema:
+            type: string
+          required: true
+        - name: timeEntryId
+          description: |
+            The Toast platform GUID or an external identifier for the 
+            time entry.
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: includeMissedBreaks
+          description: |
+            Optional flag to indicate whether missed breaks should be 
+            returned in the breaks array for the time entries.
+          in: query
+          schema:
+            type: boolean
+        - name: includeArchived
+          description: |
+            Controls whether the response includes an archived time entry.
+            Optional.
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: |
+            Returns the specified time entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        "400":
+          description: |
+            The GUID or external identifier was malformed.
+        "500":
+          description: |
+            An unexpected internal error occurred. There is a 
+            `requestId` attached to this error that can be referenced 
+            by Toast support.
+      security:
+        - oauth2:
+            - labor:read
+
+  /restaurants/v1/restaurants/{restaurantGUID}:
+    get:
+      tags:
+        - Restaurants
+      operationId: restaurantsRestaurantGuidGet
+      summary: Get restaurant configuration information
+      description: |
+        Returns a `RestaurantInfo` object
+        that contains detailed information about the configuration of a
+        restaurant.
+      parameters:
+        - name: restaurantGUID
+          description: |
+            The Toast GUID of the restaurant that you want to get 
+            information about.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast GUID of the restaurant that you want to get 
+            information about.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: includeArchived
+          description: |
+            Set `includeArchived` to `true` if the API should return information
+            about the restaurant even if it is archived. The `General` object in
+            the response includes an `archived` value that your integration can
+            use to determine whether a restaurant is archived or not. A common
+            reason for a restaurant being archived is if it was created in
+            error. Set `includeArchived` to `false` if the API should _not_
+            return information about the restaurant if it is archived. Defaults
+            to `false` if omitted.
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: |
+            A `RestaurantInfo` object that contains detailed 
+            information about the configuration of a restaurant.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantInfo"
+        "404":
+          description: |
+            If the restaurant GUID you provided is invalid, the API will return
+            an HTTP 404 response. The API will also return an HTTP 404 response
+            if you provided the GUID of an archived restaurant and you have not
+            set the `includeArchived` query parameter to `true`.
+      security:
+        - oauth2:
+            - restaurants:read
+
+  /restaurants/v1/groups/{managementGroupGUID}/restaurants:
+    get:
+      tags:
+        - Restaurants
+      operationId: groupsManagementGroupGuidRestaurantsGet
+      summary: Get restaurants in a management group
+      description: |
+        Returns an array of `Restaurant` objects that are a part of the 
+        restaurant management group you specify in the 
+        `managementGroupGUID` path parameter. Each `Restaurant` object 
+        contains the unique Toast platform identifier for the restaurant in 
+        its `guid` value.
+      parameters:
+        - name: managementGroupGUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: |
+            The GUID of the restaurant management group.
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast GUID of one restaurant location in the management 
+            group.
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: |
+            An array of `Restaurant` objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RestaurantBasic"
+      security:
+        - oauth2:
+            - restaurants:read
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: |
+        Access to Toast APIs, specific endpoints, 
+        and specific API endpoint operations is 
+        controlled by the scopes that are associated 
+        with your API account. 
+        A full reference for Toast API scopes and 
+        their capabilities can be found in the
+        [_Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiScopes.html).
+      flows:
+        clientCredentials:
+          tokenUrl: https://toast-api-server/authentication/v1/authentication/login
+          scopes:
+            restaurants:read: "Allows reading from the restaurants API."
+            labor:read: "Allows reading from the labor API."
+            orders:read: "Allows reading from the orders API."
+            orders:write: "Allows writing to the orders API."
+            payments:read: "Allows reading from the payments API."
+            payments:write: "Allows writing to the payments API."
+            discounts:read: "Allows reading from the discounts API."
+            discounts:write: "Allows writing to the discounts API."
+            menus.channel:read: "Allows reading from the menus API."
+  schemas:
+    AuthenticationRequest:
+      type: object
+      description: |
+        Authentication credentials for your Toast API integration client software.
+      required:
+        - clientId
+        - clientSecret
+        - userAccessType
+      properties:
+        clientId:
+          description: |
+            The identifier string for your Toast API client. You receive the
+            identifier string from the Toast integrations team.
+          type: string
+          example: VKuhk4NaLedOcjZpJM8grvdrsFi3MlcM
+        clientSecret:
+          description: |
+            The secret string that corresponds to your Toast API client. You
+            receive the secret string from the Toast integrations team.
+          type: string
+          example: eS960aiKdvgbSDcLUCk68HR2CJKwwHNO2HKfgxjCWxoj27KIp6jFAi2XOOc_oCuv
+        userAccessType:
+          description: |
+            Always include the `userAccessType` value and set it to
+            `TOAST_MACHINE_CLIENT`.
+          type: string
+          example: TOAST_MACHINE_CLIENT
+    AuthenticationResponse:
+      type: object
+      description: |
+        A wrapper object for the response to a successful Toast API authentication
+        request.
+      properties:
+        token:
+          description: |
+            An `AuthenticationToken` object containing information about a Toast
+            platform API session, including an authentication token string that
+            your Toast API client software can present when using other Toast
+            platform APIs.
+          $ref: "#/components/schemas/AuthenticationToken"
+        status:
+          description:
+            The value `SUCCESS` indicates that your authentication request was
+            successful.
+          type: string
+          example: SUCCESS
+    AuthenticationToken:
+      type: object
+      description: |
+        Information about a Toast platform API session, including an
+        authentication token string that your Toast API client software can
+        present when using other Toast platform APIs.
+      properties:
+        tokenType:
+          description: |
+            The OAuth 2 authentication scheme used for the authentication token.
+            Toast API authentication uses the bearer authentication scheme.
+          type: string
+          example: Bearer
+        scope:
+          description: |
+            The scope value in the authentication token request response is
+            `null`. The `accessToken` JSON Web Token (JWT) contains the list of
+            [scopes for your Toast API
+            client](https://dev.toasttab.com/doc/devguide/apiScopes.html).
+          type: string
+        expiresIn:
+          description: |
+            The number of seconds that the authentication token is valid.
+          type: integer
+          example: 86400
+        accessToken:
+          description: |
+            A JSON Web Token (JWT) string that contains an authentication token.
+            You [present this string when you make
+            requests](https://dev.toasttab.com/doc/devguide/authentication.html#using-authentication-token)
+            to other Toast API resources. The JWT includes information about your
+            Toast API client.
+          type: string
+        idToken:
+          description: |
+            For internal use only.
+          type: string
+        refreshToken:
+          description: |
+            For internal use only.
+          type: string
+    ErrorMessage:
+      type: object
+      description: |
+        An object that contains information about one or more errors that the
+        Toast platform encountered when processing your API request.
+      properties:
+        status:
+          description: |
+            The HTTP status code of the response.
+          type: string
+        code:
+          description: |
+            A numeric identifier for the error condition.
+          type: integer
+        message:
+          description: |
+            A description of the error condition.
+          type: string
+        messageKey:
+          description: |
+            Reserved for future use.
+          type: string
+        fieldName:
+          description: |
+            Reserved for future use.
+          type: string
+        link:
+          description: |
+            The URL of a resource that provides more information about the error
+            condition.
+          type: string
+        requestId:
+          description: |
+            The unique identifier of the HTTP request that your client sent to the Toast API.
+          type: string
+        developerMessage:
+          description: |
+            Additional detail about the error condition, if it is available.
+          type: string
+        errors:
+          description: |
+            A JSON array of `ErrorMessage` objects.
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorMessage"
+        canRetry:
+          description: |
+            Reserved for future use.
+          type: string
+    Metadata:
+      type: object
+      description: |
+        Information about the last date and time that this restaurant's menu data was updated.
+      properties:
+        restaurantGuid:
+          description: |
+            A unique identifier for this restaurant, assigned by the Toast POS system.
+          type: string
+          format: uuid
+        lastUpdated:
+          description: |
+            The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href="https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html">Dates and timestamps</a> section of the Toast Developer Guide.
+          type: string
+    Restaurant:
+      type: object
+      description: |
+        Information about the restaurant whose menu data has been retrieved.
+      properties:
+        restaurantGuid:
+          description: |
+            A unique identifier for this restaurant, assigned by the Toast POS system.
+          type: string
+          format: uuid
+        lastUpdated:
+          description: |
+            The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href="https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html">Dates and timestamps</a> section of the Toast Developer Guide.
+          type: string
+        restaurantTimeZone:
+          description: |
+            The name of the restaurant's time zone in the IANA time zone database https://www.iana.org/time-zones. For example, "America/New_York".
+          type: string
+        menus:
+          type: array
+          description: |
+            An array of `Menu` objects that represent the published menus used by this restaurant.
+          items:
+            $ref: "#/components/schemas/Menu"
+        modifierGroupReferences:
+          description: |
+            A map of `ModifierGroup` objects that define the modifier groups used by this restaurant. Each `ModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
+            ...
+          properties:
+            identifier:
+              type: integer
+          additionalProperties:
+            $ref: "#/components/schemas/ModifierGroup"
+        modifierOptionReferences:
+          description: |
+            A map of `ModifierOption` objects that define the modifier options used by this restaurant. Each `ModifierOption` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
+            ...
+          properties:
+            identifier:
+              type: integer
+          additionalProperties:
+            $ref: "#/components/schemas/ModifierOption"
+        preModifierGroupReferences:
+          description: |
+            A map of `PreModifierGroup` objects that define the premodifier groups used by this restaurant. Each `PreModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
+            ...
+          properties:
+            identifier:
+              type: integer
+          additionalProperties:
+            $ref: "#/components/schemas/PreModifierGroup"
+    Menu:
+      type: object
+      description: |
+        Information about a menu configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this menu, for example, "Food" or "Drinks".
+          type: string
+        guid:
+          description: |
+            A unique identifier for this menu, assigned by the Toast POS system.
+          type: string
+        description:
+          description: |
+            An optional short description for this menu.
+          type: string
+        menuGroups:
+          type: array
+          description: |
+            An array of the `MenuGroup` objects contained in this menu.
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MenuGroup"
+    MenuGroup:
+      type: object
+      description: |
+        Information about a menu group configured for this restaurant, including an array of menu items contained in the group.
+      properties:
+        name:
+          description: |
+            A descriptive name for this menu group, for example, "Appetizers" or "Sandwiches".
+          type: string
+        guid:
+          description: |
+            A unique identifier for this menu group, assigned by the Toast POS system.
+          type: string
+        menuItems:
+          type: array
+          description: |
+            An array of the `MenuItem` objects contained in this menu group.
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MenuItem"
+    MenuItem:
+      type: object
+      description: |
+        Information about a menu item configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this menu item.
+          type: string
+        guid:
+          description: |
+            A unique identifier for this menu item, assigned by the Toast POS system.
+          type: string
+        price:
+          description: |
+            The price of this menu item.
+          type: number
+          format: double
+    ModifierGroup:
+      type: object
+      description: |
+        Information about a modifier group configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this modifier group.
+          type: string
+        guid:
+          description: |
+            A unique identifier for this modifier group, assigned by the Toast POS system.
+          type: string
+        referenceId:
+          description: |
+            A reference identifier for this modifier group.
+          type: integer
+        modifierOptionReferences:
+          type: array
+          description: |
+            An array of reference IDs for the modifier options in this group.
+          items:
+            type: integer
+    ModifierOption:
+      type: object
+      description: |
+        Information about a modifier option configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this modifier option.
+          type: string
+        guid:
+          description: |
+            A unique identifier for this modifier option, assigned by the Toast POS system.
+          type: string
+        referenceId:
+          description: |
+            A reference identifier for this modifier option.
+          type: integer
+        price:
+          description: |
+            The price of this modifier option.
+          type: number
+          format: double
+    PreModifierGroup:
+      type: object
+      description: |
+        Information about a pre-modifier group configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this pre-modifier group.
+          type: string
+        guid:
+          description: |
+            A unique identifier for this pre-modifier group, assigned by the Toast POS system.
+          type: string
+        referenceId:
+          description: |
+            A reference identifier for this pre-modifier group.
+          type: integer
+        preModifiers:
+          type: array
+          description: |
+            An array of pre-modifier options in this group.
+          items:
+            $ref: "#/components/schemas/PreModifier"
+    PreModifier:
+      type: object
+      description: |
+        Information about a pre-modifier option configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this pre-modifier option.
+          type: string
+        guid:
+          description: |
+            A unique identifier for this pre-modifier option, assigned by the Toast POS system.
+          type: string
+        fixedPrice:
+          description: |
+            The fixed price of this pre-modifier option.
+          type: number
+          format: double
+        displayMode:
+          description: |
+            The display mode for this pre-modifier option.
+          type: string
+          enum:
+            - PREFIX
+            - SUFFIX
+    Order:
+      type: object
+      description: |
+        A Toast platform order is composed of one or more checks. Each check has 
+        one or more menu item selections.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          required:
+            - diningOption
+            - checks
+          properties:
+            openedDate:
+              description: |
+                The business date of the order.
+              type: string
+              format: date-time
+              example: 2025-02-07T08:00:00.000-0800
+            modifiedDate:
+              type: string
+              format: date-time
+              description: The most recent date that the order, or a check or menu item selection in the order, was modified.
+              example: 2025-02-07T08:00:00.000-0800
+            promisedDate:
+              description: |
+                For scheduled orders, the date and time that the order is scheduled to be fulfilled.
+              type: string
+              format: date-time
+              example: 2025-05-01T08:00:00.000-0800
+            diningOption:
+              description: The restaurant-configured dining option that applies to this order.
+              type: object
+              $ref: "#/components/schemas/ExternalReference"
+            checks:
+              type: array
+              description: |
+                The checks for this order. Most orders have one check.
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/Check"
+            deliveryInfo:
+              description: Delivery information related to orders with a `DELIVERY` dining option.
+              type: object
+              $ref: "#/components/schemas/DeliveryInfo"
+            numberOfGuests:
+              type: integer
+              description: |
+                The number of restaurant guests that are associated with the
+                order.
+            voided:
+              type: boolean
+              description: Set to `true` if this order was voided. Response only.
+            voidDate:
+              type: string
+              format: date-time
+              description: The date on which this order was voided. Response only.
+            paidDate:
+              type: string
+              format: date-time
+              description: The most recent date on which this order received payment.
+            businessDate:
+              type: integer
+              description: The business date (yyyyMMdd) on which the order was fulfilled. Response only.
+            server:
+              description: The restaurant employee, or server, who is assigned to the order.
+              type: object
+              $ref: "#/components/schemas/ExternalReference"
+            createdDate:
+              description: The date and time that the Toast platform received the order.
+              type: string
+              format: date-time
+    OrderResponse:
+      type: object
+      properties:
+        orders:
+          type: array
+          minItems: 0
+          maxItems: 1
+          items:
+            $ref: "#/components/schemas/Order"
+    Check:
+      type: object
+      description: Represents a single check within an order.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          required:
+            - selections
+          properties:
+            createdDate:
+              description: The date and time that the Toast platform received the check.
+              type: string
+              format: date-time
+            openedDate:
+              description: The date on which this check was opened.
+              type: string
+              format: date-time
+            selections:
+              type: array
+              items:
+                $ref: "#/components/schemas/Selection"
+            customer:
+              description: |
+                A `Customer` object that holds information about a restaurant guest
+                that is associated with the check.
+              $ref: "#/components/schemas/Customer"
+            amount:
+              type: number
+              format: double
+              description: The total calculated price of the check including discounts and service charges.
+            taxAmount:
+              type: number
+              format: double
+              description: The calculated tax amount.
+            totalAmount:
+              type: number
+              format: double
+              description: The total calculated price of this check including discounts and taxes.
+            payments:
+              type: array
+              description: Payments made on this check.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/Payment"
+            appliedDiscounts:
+              type: array
+              description: The discounts applied to this check.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/AppliedDiscount"
+            voided:
+              type: boolean
+              description: True if this check is voided. Response only.
+            voidDate:
+              type: string
+              format: date-time
+              description: The date when this check was voided. Response only.
+            paidDate:
+              type: string
+              format: date-time
+              description: The most recent date when this check received payment.
+    Selection:
+      type: object
+      description: |
+        A `Selection` object can represent either a primary item or a modifier selection.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          required:
+            - item
+            - quantity
+          properties:
+            item:
+              type: object
+              description: A reference to the selected menu item.
+              $ref: "#/components/schemas/ConfigReference"
+            itemGroup:
+              type: object
+              description: A reference to the menu group from which the item was selected.
+              $ref: "#/components/schemas/ConfigReference"
+            optionGroup:
+              type: object
+              description: A reference to the modifier group from which the menu item was selected.
+              $ref: "#/components/schemas/ConfigReference"
+            quantity:
+              type: number
+              format: double
+              description: Quantity ordered.
+            seatNumber:
+              type: integer
+              description: |
+                Indicates which guest seat at a restaurant table ordered
+                a menu item selection.
+            price:
+              type: number
+              format: double
+              description: The price of this selection.
+            voided:
+              type: boolean
+              description: True if this selection is voided.
+            voidDate:
+              type: string
+              format: date-time
+              description: The date when this selection was voided.
+            modifiers:
+              type: array
+              description: Modifier selections for this item.
+              items:
+                $ref: "#/components/schemas/Selection"
+    Payment:
+      type: object
+      description: Defines a payment.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          required:
+            - type
+            - amount
+            - tipAmount
+          properties:
+            paidDate:
+              description: The date on which the payment was made.
+              type: string
+              format: date-time
+            type:
+              type: string
+              description: |
+                The payment method.
+              enum:
+                - CASH
+                - CREDIT
+                - GIFTCARD
+                - HOUSE_ACCOUNT
+                - REWARDCARD
+                - LEVELUP
+                - TOAST_SV
+                - OTHER
+                - UNDETERMINED
+            amount:
+              type: number
+              format: double
+              description: The amount of this payment, excluding tips.
+            tipAmount:
+              type: number
+              format: double
+              description: The amount tipped on this payment.
+            amountTendered:
+              type: number
+              format: double
+              description: The amount tendered for this payment.
+            cardType:
+              type: string
+              description: The type of credit card that was used. Response only.
+              enum:
+                - VISA
+                - MASTERCARD
+                - AMEX
+                - DISCOVER
+                - JCB
+                - DINERS
+                - CIT
+                - MAESTRO
+                - LASER
+                - SOLO
+                - INTERAC
+                - EFTPOS
+                - UNKNOWN
+            last4Digits:
+              type: string
+              description: The last 4 digits of the credit card that was used. Response only.
+            server:
+              description: The restaurant employee, or server, who is associated with the payment. Response only.
+              type: object
+              $ref: "#/components/schemas/ExternalReference"
+            refundStatus:
+              type: string
+              description: |
+                Indicates whether the payment was refunded. Response only.
+              enum:
+                - NONE
+                - PARTIAL
+                - FULL
+            paymentStatus:
+              type: string
+              description: |
+                The status of this payment when the type is `CREDIT`. Response only.
+              enum:
+                - OPEN
+                - PROCESSING
+                - AUTHORIZED_AT_RISK
+                - AUTHORIZED
+                - ERROR
+                - ERROR_NETWORK
+                - DENIED
+                - PROCESSING_VOID
+                - VOIDED_AT_RISK
+                - CANCELLED
+                - CAPTURE_IN_PROGRESS
+                - CAPTURED
+                - VOIDED
+            otherPayment:
+              description: Required when the payment type is `OTHER`. A reference to an alternative payment method.
+              $ref: "#/components/schemas/ExternalReference"
+    AppliedDiscount:
+      type: object
+      description: |
+        A discount applied to a check or item.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of the applied discount.
+            discountAmount:
+              type: number
+              format: double
+              description: The discount amount. This amount is subtracted from the check or item.
+            discount:
+              type: object
+              description: A GUID reference to the discount configured for the restaurant.
+              $ref: "#/components/schemas/ToastReference"
+            approver:
+              type: object
+              description: The user who approved the discount. Response only.
+              $ref: "#/components/schemas/ExternalReference"
+            discountType:
+              type: string
+              description: |
+                The behavior of this discount.
+              enum:
+                - BOGO
+                - PERCENT
+                - FIXED
+                - OPEN_PERCENT
+                - OPEN_FIXED
+                - FIXED_TOTAL
+            discountPercent:
+              type: number
+              format: double
+              description: The percent value (0-100) of the applied discount when the `discountType` is `PERCENT` or `OPEN_PERCENT`.
+    Customer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          required:
+            - firstName
+            - lastName
+            - email
+            - phone
+          properties:
+            firstName:
+              type: string
+              description: |
+                The first name, or given name, of the guest.
+            lastName:
+              type: string
+              description: |
+                The last name, or surname, of the guest.
+            phone:
+              type: string
+              description: |
+                The telephone number of the guest.
+            email:
+              type: string
+              description: |
+                The email address corresponding to the guest who placed the order.
+    DeliveryInfo:
+      type: object
+      description: Information related to delivery orders. Required if the dining option behavior is `DELIVERY`.
+      required:
+        - address1
+        - city
+        - state
+        - zipCode
+      properties:
+        address1:
+          type: string
+          description: |
+            The first line of the street address of the delivery destination.
+        address2:
+          type: string
+          description: |
+            The second line of the street address of the delivery destination.
+        city:
+          type: string
+          description: |
+            The name of the city or town of the delivery destination.
+        state:
+          type: string
+          format: ISO 3166-2
+          description: |
+            The postal abbreviation of the state or province of the
+            delivery destination.
+        zipCode:
+          type: string
+          description: |
+            The postal or zip code of the delivery destination.
+        latitude:
+          type: number
+          format: double
+          description: |
+            The north/south geographic coordinate of the delivery
+            destination, in decimal format.
+        longitude:
+          type: number
+          format: double
+          description: |
+            The east/west geographic coordinate of the delivery
+            destination, in decimal format.
+        notes:
+          description: |
+            Additional instructions or information about the delivery.
+          type: string
+        deliveredDate:
+          type: string
+          format: date-time
+          description: |
+            The date and time that the delivery employee indicated in the Toast POS app that
+            the order was delivered. Response only.
+        dispatchedDate:
+          type: string
+          format: date-time
+          description: |
+            The date and time that the restaurant indicated in the Toast POS app that the
+            order was available for delivery and assigned to a delivery
+            employee.
+        deliveryEmployee:
+          description: |
+            The Toast GUID of the employee who delivers the order.
+          type: object
+          $ref: "#/components/schemas/ExternalReference"
+        deliveryState:
+          description: |
+            An internal representation of the state of a delivery order.
+          type: string
+          enum:
+            - PENDING
+            - IN_PROGRESS
+            - PICKED_UP
+            - DELIVERED
+    Employee:
+      type: object
+      description: A restaurant employee
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            createdDate:
+              type: string
+              format: date-time
+              description: |
+                Date created, in UTC format (read-only).
+            modifiedDate:
+              type: string
+              format: date-time
+              description: |
+                Date modified, in UTC format (read-only).
+            firstName:
+              type: string
+              description: |
+                Optional, first name of the employee.
+            chosenName:
+              type: string
+              description: |
+                Optional, chosen name of the employee.
+            lastName:
+              type: string
+              description: |
+                Optional, last name of the employee.
+            email:
+              type: string
+              description: |
+                Employee's email address.
+            phoneNumber:
+              type: string
+              description: |
+                Employee's phone number
+            passcode:
+              type: string
+              description: |
+                An optional numeric security code that a new employee can 
+                use to begin a session in a Toast POS device.
+            externalEmployeeId:
+              type: string
+              description: |
+                Optional, employee's external ID in the Toast platform.
+            deleted:
+              type: boolean
+              description: |
+                If the employee is deleted in the Toast platform.
+            jobReferences:
+              type: array
+              description: |
+                An array of external references to jobs assigned to this 
+                employee.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/ExternalReference"
+            wageOverrides:
+              type: array
+              description: |
+                An optional array of per job wage overrides.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/JobWageOverride"
+    Job:
+      type: object
+      description: A restaurant job.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            createdDate:
+              type: string
+              format: date-time
+              description: |
+                Date created, in UTC format (read-only).
+            modifiedDate:
+              type: string
+              format: date-time
+              description: |
+                Date modified, in UTC format (read-only).
+            title:
+              type: string
+              description: |
+                Title of the job.
+            deleted:
+              type: boolean
+              description: |
+                If the job is deleted in the Toast platform.
+            wageFrequency:
+              type: string
+              description: |
+                An enumerated type specifying how to interpret the 
+                default wage for this job.
+              enum:
+                - HOURLY
+                - SALARY
+            defaultWage:
+              type: number
+              format: double
+              description: |
+                The default wage of the job.
+            tipped:
+              type: boolean
+              description: |
+                Indicates whether the job receives gratuities (tips).
+            code:
+              type: string
+              description: |
+                A reference identifier for the job.
+    JobWageOverride:
+      type: object
+      description: |
+        The overriding job wage, for an employee that has a wage that 
+        differs from the job's default wage.
+      required:
+        - wage
+        - jobReference
+      properties:
+        wage:
+          type: number
+          format: double
+          description: |
+            Required currency value of the employee's overriding job wage.
+        jobReference:
+          type: object
+          description: |
+            Required external reference to the job to which this wage 
+            applies overridden
+          $ref: "#/components/schemas/ExternalReference"
+    Shift:
+      type: object
+      description: |
+        A scheduled shift in the Toast platform used to enforce employee 
+        clock-in and clock outs.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            createdDate:
+              type: string
+              format: date-time
+              description: |
+                Date created, in UTC format (read-only).
+            modifiedDate:
+              type: string
+              format: date-time
+              description: |
+                Date modified, in UTC format (read-only).
+            deleted:
+              type: boolean
+              description: |
+                If the shift is deleted in the Toast platform.
+            jobReference:
+              type: object
+              description: |
+                External reference to the job assigned to this shift.
+              $ref: "#/components/schemas/ExternalReference"
+            employeeReference:
+              type: object
+              description: |
+                External reference to the employee assigned to this shift.
+              $ref: "#/components/schemas/ExternalReference"
+            inDate:
+              type: string
+              format: date-time
+              description: |
+                Timestamp of the beginning of the shift. This is when the 
+                employee can clock in. Expressed in the UTC time zone.
+            outDate:
+              type: string
+              format: date-time
+              description: |
+                Timestamp of the end of the shift. This is when the 
+                employee can clock out. Expressed in the UTC time zone.
+    TimeEntry:
+      type: object
+      description: |
+        A `TimeEntry` captures the actual time an employee worked or took 
+        a break.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            createdDate:
+              type: string
+              format: date-time
+              description: |
+                Date created, in UTC format (read-only).
+            modifiedDate:
+              type: string
+              format: date-time
+              description: |
+                Date modified, in UTC format (read-only).
+            deleted:
+              type: boolean
+              description: |
+                If the time entry is deleted in the Toast platform.
+            jobReference:
+              type: object
+              description: |
+                Optional, external reference to the job the employee 
+                assumed when clocking into the Toast platform.
+              $ref: "#/components/schemas/ExternalReference"
+            employeeReference:
+              type: object
+              description: |
+                External reference to the employee that created this time 
+                entry.
+              $ref: "#/components/schemas/ExternalReference"
+            shiftReference:
+              type: object
+              description: |
+                Optional, external reference to the scheduled shift 
+                associated with this time entry.
+              $ref: "#/components/schemas/ExternalReference"
+            inDate:
+              type: string
+              format: date-time
+              description: |
+                The date and time that an employee clocked in to a work
+                shift.
+            outDate:
+              type: string
+              format: date-time
+              description: |
+                The date and time that an employee closed a work shift.
+            autoClockedOut:
+              type: boolean
+              description: |
+                Indicates whether the Toast platform automatically clocked the
+                employee out of their shift at the end of the restaurant business
+                day.
+            businessDate:
+              type: string
+              description: |
+                The business date of `inDate`, in the format of 
+                "yyyymmdd".
+            regularHours:
+              type: number
+              format: double
+              description: |
+                Regular hours worked by the employee for this time entry, 
+                excluding breaks.
+            overtimeHours:
+              type: number
+              format: double
+              description: |
+                Any overtime hours taken by this employee during this 
+                time entry.
+            hourlyWage:
+              type: number
+              format: double
+              description: |
+                Optional, historical `hourlyWage`; that is, the wage in 
+                effect when the time entry was made.
+            breaks:
+              type: array
+              description: |
+                An optional array of time entry breaks, each break 
+                defining a clock-in date, clock-out date, and whether or 
+                not the break was paid.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/TimeEntryBreak"
+            declaredCashTips:
+              type: number
+              format: double
+              description: |
+                The currency amount of tips paid in cash during the time
+                entry.
+            nonCashTips:
+              type: number
+              format: double
+              description: |
+                The currency amount of tips paid using non-cash tender
+                during the time entry.
+    TimeEntryBreak:
+      type: object
+      description: |
+        Information about a period of time that an employee is not
+        working during a shift.
+      properties:
+        guid:
+          description: |
+            The GUID maintained by the Toast platform.
+          type: string
+        breakType:
+          type: object
+          description: |
+            Optional, Toast platform reference to the break type 
+            associated with this time entry.
+          $ref: "#/components/schemas/ToastReference"
+        paid:
+          type: boolean
+          description: |
+            Indicates whether the employee was paid for the break.
+        inDate:
+          type: string
+          format: date-time
+          description: |
+            The date and time that the employee started the break period,
+            in UTC.
+        outDate:
+          type: string
+          format: date-time
+          description: |
+            The date and time that the employee ended the break period
+            and returned to work, in UTC.
+        missed:
+          type: boolean
+          description: |
+            Indicates whether the break was a missed break.
+    ExternalReference:
+      type: object
+      description: A wrapper object with fields that allow reference to a Toast platform entity by Toast GUID or a partner's identifier.
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            externalId:
+              description: External identifier string that is prefixed by the naming authority.
+              type: string
+    ToastReference:
+      type: object
+      description: A wrapper object with fields that allow reference to a Toast entity by Toast GUID.
+      required:
+        - guid
+        - entityType
+      properties:
+        guid:
+          description: The GUID maintained by the Toast platform.
+          type: string
+        entityType:
+          description: The type of object this is. Response only.
+          type: string
+    ConfigReference:
+      type: object
+      description: |
+        A wrapper object containing identifier values for Toast platform entities.
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            multiLocationId:
+              description: |
+                A consistent identifier for Toast platform entities.
+              type: string
+            externalId:
+              description: |
+                An external identifier that is prefixed by a naming
+                authority.
+              type: string
+    ApplicableDiscountsRequest:
+      type: object
+      description: |
+        A wrapper object that contains an `Order` object and an optional
+        promotional code.
+      required:
+        - order
+      properties:
+        order:
+          type: object
+          $ref: "#/components/schemas/Order"
+          description: |
+            An `Order` object that
+            contains information about the order that you want to get discounts
+            for.
+        promoCode:
+          description: |
+            An optional promotional code.
+          type: string
+    ApplicableDiscount:
+      type: object
+      description: |
+        A wrapper object that contains information about a discount that you
+        can apply to an order, and which checks or menu item selections
+        you can apply it to.
+      required:
+        - discount
+      properties:
+        discount:
+          description: |
+            A `ToastReference` object containing the identifiers of the discount.
+            Response only.
+          type: object
+          $ref: "#/components/schemas/ToastReference"
+        applicableChecks:
+          description: |
+            If the discount is applicable to a check, this value holds an
+            array of `ExternalReference` objects containing the identifiers of the checks.
+          type: array
+          items:
+            $ref: "#/components/schemas/ExternalReference"
+        applicableSelections:
+          description: |
+            If the discount is applicable to a menu item selection, this
+            value holds an array of `ExternalReference` objects containing
+            the identifiers of the menu items.
+          type: array
+          items:
+            $ref: "#/components/schemas/ExternalReference"
+    UpdatePaymentRequest:
+      type: object
+      description: |
+        A wrapper object containing payment fields that you can update.
+      properties:
+        tipAmount:
+          description: |
+            The amount tipped on a payment.
+          type: number
+          format: double
+          example: 3.25
+
+    # Restaurants API Schemas
+    General:
+      type: object
+      description: |
+        General information about a restaurant location.
+      properties:
+        name:
+          type: string
+          description: |
+            The guest-facing name of the restaurant. For example, the
+            `name` of a restaurant might be `Tommy's Burgers`.
+        locationName:
+          type: string
+          description: A name used externally to differentiate multiple locations, like Neighborhood, Square, City, or Hotel.
+        locationCode:
+          type: string
+          description: A code used internally to differentiate multiple locations, typically a 3 or 4 letter code.
+        description:
+          type: string
+          description: A description of the restaurant, such as information about the atmosphere and food.
+        timeZone:
+          type: string
+          description: |
+            The name of the restaurant's time zone in the <a 
+            href="https://www.iana.org/time-zones">IANA time zone 
+            database</a>. For example, `America/New_York`.
+        closeoutHour:
+          type: integer
+          description: |
+            The hour of the day that separates one business day from the
+            next, also known as the "business day cutoff time". This is 
+            in the time zone of the restaurant. The `closeoutHour` is set 
+            to a value from 0-12 (midnight to noon) in the Business Day 
+            Cutoff field in Toast Web.
+        managementGroupGuid:
+          type: string
+          description: The unique identifier of the restaurant group for
+            the restaurant.
+        currencyCode:
+          type: string
+          description: The ISO-4217 currency code used in this restaurant
+        firstBusinessDate:
+          type: integer
+          description: |
+            The first business date (yyyyMMdd) is the day a restaurant began using the Toast platform. The
+            `firstBusinessDate` is also the first day on which time entries can be created for employees.
+        archived:
+          type: boolean
+          description: |
+            Returns `true` if the restaurant has been archived from the Toast platform, otherwise returns `false`. A
+            common reason for archiving a restaurant is if the restaurant was created in error.
+          default: false
+
+    Location:
+      type: object
+      description: Information about the physical location of a restaurant.
+      properties:
+        address1:
+          type: string
+          description: The first line of the street address of the
+            restaurant.
+        address2:
+          type: string
+          description: The second line of the street address of the
+            restaurant.
+        city:
+          type: string
+          description: The city or town of the restaurant.
+        stateCode:
+          type: string
+          description: |
+            Deprecated. Get the state or province of a restaurant in the
+            `administrativeArea` value.
+
+            The abbreviation of the state or province of the restaurant.
+        administrativeArea:
+          type: string
+          description: |
+            The name of the geographical division (for example, state, province,
+            or county) that the restaurant is located in.
+        zipCode:
+          type: string
+          description: The ZIP or postal code of the restaurant.
+        country:
+          type: string
+          description: The nation of the restaurant.
+        phone:
+          type: string
+        phoneCountryCode:
+          type: string
+          description: |
+            A numeric code corresponding to one or more countries,
+            used as a telephone number prefix when making 
+            international telephone calls.
+        latitude:
+          type: number
+          format: double
+          description: The north/south geographic coordinate of the
+            restaurant, in decimal degrees.
+        longitude:
+          type: number
+          format: double
+          description: The east/west geographic coordinate of the
+            restaurant, in decimal degrees.
+
+    URLs:
+      type: object
+      description: Web addresses for the restaurant.
+      properties:
+        website:
+          type: string
+          description: The primary website for the restaurant.
+        facebook:
+          type: string
+          description: A Facebook™ page for the restaurant.
+        twitter:
+          type: string
+          description: A Twitter™ handle for the restaurant.
+        orderOnline:
+          type: string
+          description: A URL for the online ordering site for the
+            restaurant.
+        purchaseGiftCard:
+          type: string
+          description: A URL for the gift card purchasing site for the
+            restaurant.
+        checkGiftCard:
+          type: string
+          description: A URL for a site at which guests can find balances
+            and other information about gift cards.
+
+    Image:
+      type: object
+      description: Information about an image.
+      properties:
+        width:
+          type: integer
+          format: int32
+          description: The width of the image, in pixels.
+        height:
+          type: integer
+          format: int32
+          description: The height of the image, in pixels.
+        url:
+          type: string
+        heightWidthRatio:
+          type: number
+          format: float
+          description: The ratio of height to width
+
+    Hours:
+      type: object
+      description: |
+        The period of time that the restaurant offers a service. For
+        example, a service might be named "lunch" and it might be offered
+        between `10:00:00.000` and `16:00:00.000`.
+      properties:
+        startTime:
+          type: string
+          description: The time of day that the service begins.
+        endTime:
+          type: string
+          description: The time of day that the service ends.
+
+    Service:
+      type: object
+      description: |
+        A time-based division of the operation of the restaurant. For
+        example, a service might be named `lunch` and it might be
+        available between specific hours during the day.
+      properties:
+        name:
+          type: string
+        hours:
+          $ref: "#/components/schemas/Hours"
+        overnight:
+          type: boolean
+          description: |
+            Indicates whether any portion of the period of time that a
+            service is available occurs after 00:00 (midnight) and before
+            the business day cutoff time for the restaurant which is 
+            available in the `closeoutHour` property. An
+            overnight shift spans two calendar dates but occurs during
+            one business day.
+
+    DaySchedule:
+      type: object
+      description: |
+        Information about the services and hours that are scheduled for a
+        restaurant during a type of day. For example, a restaurant might
+        have different services available on a type of day named
+        `weekday` than it does on a type of day named `weekend`.
+      properties:
+        scheduleName:
+          type: string
+          description: The name of the type of day. For example, `weekday`.
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/Service"
+          description: |
+            An array of `Service` objects that are available during the
+            type of day.
+        openTime:
+          type: string
+          description: |
+            The time of day that the first service for the type of day
+            begins. For example, the first service might begin at
+            `06:00:00.000`.
+        closeTime:
+          type: string
+          description: |
+            The time of day that the last service for the type of day
+            ends. For example, the last service might end at
+            `02:00:00.000`.
+
+    WeekSchedule:
+      type: object
+      description: |
+        The day schedule used for each day of the week. A day schedule is 
+        the set of services (for example, "lunch") that a restaurant 
+        offers and the hours that it offers each one. If a day of the 
+        week value in this object is `null`, the restaurant is closed on 
+        that day. Values for each day of the week are identifiers for day 
+        schedules in the map of `DaySchedule` objects in the 
+        `daySchedules` value of the `Schedules` object.
+      properties:
+        monday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+        tuesday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+        wednesday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+        thursday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+        friday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+        saturday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+        sunday:
+          type: string
+          description: |
+            A key identifier for the `DaySchedule` object
+            that represents the services and hours for the restaurant on
+            this day of the week.
+
+    Schedules:
+      type: object
+      description: |
+        Information about the services and hours that are scheduled for a
+        restaurant during different types of days. For example, a restaurant
+        might have different services available on weekdays than it does on
+        weekends.
+      properties:
+        weekSchedule:
+          $ref: "#/components/schemas/WeekSchedule"
+        daySchedules:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/DaySchedule"
+          description: |
+            A map of `DaySchedule` objects that define the services and
+            hours for different types of days. Each `DaySchedule` object
+            is presented as a key/value pair. A pair's key matches the
+            `scheduleName` of the object contained in the pair's value.
+
+    Delivery:
+      type: object
+      description: |
+        Information about the delivery configuration for the restaurant.
+      properties:
+        enabled:
+          type: boolean
+          description: |
+            Indicates whether the restaurant has enabled the Toast delivery
+            module. This value is `true` if the module has ever been
+            enabled. The value _does not_ indicate that a restaurant is
+            accepting delivery orders or that the restaurant is using the
+            Toast delivery feature.
+        radius:
+          type: number
+          format: double
+          description: |
+            The radius, in miles, of the delivery area for the restaurant.
+        coordinates:
+          type: string
+          description: |
+            The delivery area coordinates for the restaurant, encoded as a
+            polyline using the Google polyline algorithm
+            (https://github.com/mapbox/polyline). The delivery area
+            coordinates are a JSON array of decimal degree latitude and
+            longitude pairs. For example,
+            `[[42.36083,-71.14798],[42.34028,-71.15673],[42.3272,-71.14386]]`.
+
+    OnlineOrdering:
+      type: object
+      description: |
+        Information about the web-based ordering configuration for the
+        restaurant.
+      properties:
+        enabled:
+          type: boolean
+          description: |
+            Indicates whether the restaurant has enabled the Toast online 
+            ordering module. This value is `true` if the module has ever 
+            been enabled. The value _does not_ indicate that a restaurant 
+            is accepting online orders or that the restaurant is using 
+            the Toast online ordering feature.
+        scheduling:
+          type: boolean
+          description: |
+            Indicates whether the online ordering function for the
+            restaurant allows guests to place orders that will be
+            fulfilled in the future. If this value is `false`, orders
+            will be fulfilled as soon as possible.
+        specialRequests:
+          type: boolean
+          description: |
+            Indicates whether the online ordering function for the
+            restaurant allows guests to include written notes with
+            additional instructions for their orders.
+        specialRequestsMessage:
+          type: string
+          description: |
+            A written message that is shown to guests when they
+            include additional instructions with an order. For example,
+            the message might be "no substitutions."
+        paymentOptions:
+          $ref: "#/components/schemas/PaymentOptions"
+          description: |
+            Information about the forms of payment that the restaurant
+            accepts for online orders.
+
+    PaymentOptions:
+      type: object
+      description: |
+        Information about the forms of payment that the restaurant will
+        accept for orders.
+      properties:
+        delivery:
+          $ref: "#/components/schemas/DeliveryPaymentOptions"
+        takeout:
+          $ref: "#/components/schemas/TakeoutPaymentOptions"
+        ccTip:
+          type: boolean
+          description: enables credit card tips
+
+    DeliveryPaymentOptions:
+      type: object
+      description: |
+        Information about the forms of payment that the restaurant will
+        accept for delivery orders.
+      properties:
+        cash:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts cash payment for
+            delivery orders that are placed online.
+        ccSameDay:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts online credit card
+            payment for delivery orders that are delivered on the same
+            day.
+        ccFuture:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts online credit card
+            payment for delivery orders that are to be delivered on a day
+            after the guest places the order.
+
+    TakeoutPaymentOptions:
+      type: object
+      description: |
+        Information about the forms of payment that the restaurant will
+        accept for orders that a guest picks up in person.
+      properties:
+        cash:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts cash payment for
+            takeout orders that are placed online.
+        ccSameDay:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts online credit card
+            payment for takeout orders that the guest will pick up on
+            the same day.
+        ccFuture:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts online credit card
+            payment for takeout orders that the guest will pick up on
+            a day after the guest places the order.
+        ccInStore:
+          type: boolean
+          description: |
+            Indicates whether the restaurant accepts credit card payment
+            at the time the guest picks up a takeout order.
+
+    PrepTimes:
+      type: object
+      description: |
+        Information about the scheduled availability of the dining
+        options that are provided by the restaurant.
+      properties:
+        deliveryPrepTime:
+          type: integer
+          format: int32
+          description: |
+            The amount of time, in minutes, that it takes to prepare an
+            online delivery order.
+        deliveryTimeAfterOpen:
+          type: integer
+          format: int32
+          description: |
+            The amount of time, in minutes, that it takes for delivery
+            service to become available after the restaurant opens.
+        deliveryTimeBeforeClose:
+          type: integer
+          format: int32
+          description: |
+            The amount of time, in minutes, before the restaurant closing
+            time that delivery service becomes unavailable.
+        takeoutPrepTime:
+          type: integer
+          format: int32
+          description: |
+            The amount of time, in minutes, that it takes to prepare an
+            online takeout order.
+        takeoutTimeAfterOpen:
+          type: integer
+          format: int32
+          description: |
+            The amount of time, in minutes, that it takes for takeout
+            service to become available after the restaurant opens.
+        takeoutTimeBeforeClose:
+          type: integer
+          format: int32
+          description: |
+            The amount of time, in minutes, before the restaurant closing
+            time that takeout service becomes unavailable.
+        takeoutThrottlingTime:
+          type: integer
+          description: |
+            The amount of time, in minutes, that an online takeout order
+            is delayed before the Toast POS fires it in the kitchen.
+        deliveryThrottlingTime:
+          type: integer
+          description: |
+            The amount of time, in minutes, that an online delivery order
+            is delayed before the Toast POS fires it in the kitchen.
+
+    RestaurantInfo:
+      type: object
+      description: |
+        Information about the configuration of a restaurant in the Toast
+        POS.
+      properties:
+        guid:
+          type: string
+        general:
+          $ref: "#/components/schemas/General"
+        urls:
+          $ref: "#/components/schemas/URLs"
+        location:
+          $ref: "#/components/schemas/Location"
+        schedules:
+          $ref: "#/components/schemas/Schedules"
+        delivery:
+          $ref: "#/components/schemas/Delivery"
+        onlineOrdering:
+          $ref: "#/components/schemas/OnlineOrdering"
+        prepTimes:
+          $ref: "#/components/schemas/PrepTimes"
+
+    RestaurantBasic:
+      type: object
+      description: |
+        The Toast POS GUID for a restaurant
+      properties:
+        guid:
+          type: string
+          description: |
+            The unique identifier that the Toast POS assigns to a
+            restaurant.
