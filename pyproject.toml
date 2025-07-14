@@ -1,6 +1,6 @@
 [project]
 name = "toastapi"
-version = "1.0.1"
+version = "1.0.2"
 description = "Toast API"
 authors = [
   {name = "Toast developer support",email = "team@openapitools.org"},

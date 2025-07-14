@@ -10,34 +10,36 @@ from typing import Optional, Callable
 from toastapi.api_client import ApiClient
 from toastapi.configuration import Configuration
 from toastapi.api import (
+    AlternatePaymentTypesApi,
     AuthenticationApi,
-    OrdersApi,
+    BreakTypesApi,
+    CashDrawersApi,
+    DefaultApi,
+    DiningOptionsApi,
+    DiscountsApi,
     EmployeesApi,
     JobsApi,
-    ShiftsApi,
-    TimeEntriesApi,
-    PaymentsApi,
-    DiscountsApi,
-    DefaultApi,
-    RestaurantsApi,
-    BreakTypesApi,
-    AlternatePaymentTypesApi,
-    CashDrawersApi,
-    DiningOptionsApi,
     MenuGroupsApi,
     MenuItemsApi,
-    PrintersApi,
-    TablesApi,
+    MenusV2Api,
+    MenusV3Api,
     NoSaleReasonsApi,
+    OrdersApi,
+    PaymentsApi,
     PayoutReasonsApi,
     PreModifierGroupsApi,
     PreModifiersApi,
     PriceGroupsApi,
+    PrintersApi,
     RestaurantServicesApi,
+    RestaurantsApi,
     RevenueCentersApi,
     ServiceAreasApi,
     ServiceChargesApi,
+    ShiftsApi,
+    TablesApi,
     TaxRatesApi,
+    TimeEntriesApi,
     TipWithholdingApi,
     VoidReasonsApi,
 )
@@ -160,6 +162,8 @@ class Toast:
         self.dining_options: DiningOptionsApi = self._create_retry_wrapper(
             DiningOptionsApi
         )
+        self.menus_v2: MenusV2Api = self._create_retry_wrapper(MenusV2Api)
+        self.menus_v3: MenusV3Api = self._create_retry_wrapper(MenusV3Api)
         self.menu_groups: MenuGroupsApi = self._create_retry_wrapper(MenuGroupsApi)
         self.menu_items: MenuItemsApi = self._create_retry_wrapper(MenuItemsApi)
         self.printers: PrintersApi = self._create_retry_wrapper(PrintersApi)
