@@ -11,6 +11,8 @@ from toastapi.api.employees_api import EmployeesApi
 from toastapi.api.jobs_api import JobsApi
 from toastapi.api.menu_groups_api import MenuGroupsApi
 from toastapi.api.menu_items_api import MenuItemsApi
+from toastapi.api.menus_v2_api import MenusV2Api
+from toastapi.api.menus_v3_api import MenusV3Api
 from toastapi.api.no_sale_reasons_api import NoSaleReasonsApi
 from toastapi.api.orders_api import OrdersApi
 from toastapi.api.payments_api import PaymentsApi
@@ -30,5 +32,4 @@ from toastapi.api.tax_rates_api import TaxRatesApi
 from toastapi.api.time_entries_api import TimeEntriesApi
 from toastapi.api.tip_withholding_api import TipWithholdingApi
 from toastapi.api.void_reasons_api import VoidReasonsApi
-from toastapi.api.default_api import DefaultApi
 

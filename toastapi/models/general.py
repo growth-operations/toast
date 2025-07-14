@@ -24,18 +24,18 @@ from typing_extensions import Self
 
 class General(BaseModel):
     """
-    General information about a restaurant location. 
+    General information about a restaurant location.
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="The guest-facing name of the restaurant. For example, the `name` of a restaurant might be `Tommy's Burgers`. ")
-    location_name: Optional[StrictStr] = Field(default=None, description="A name used externally to differentiate multiple locations, like Neighborhood, Square, City, or Hotel.", alias="locationName")
-    location_code: Optional[StrictStr] = Field(default=None, description="A code used internally to differentiate multiple locations, typically a 3 or 4 letter code.", alias="locationCode")
-    description: Optional[StrictStr] = Field(default=None, description="A description of the restaurant, such as information about the atmosphere and food.")
-    time_zone: Optional[StrictStr] = Field(default=None, description="The name of the restaurant's time zone in the <a  href=\"https://www.iana.org/time-zones\">IANA time zone  database</a>. For example, `America/New_York`. ", alias="timeZone")
-    closeout_hour: Optional[StrictInt] = Field(default=None, description="The hour of the day that separates one business day from the next, also known as the \"business day cutoff time\". This is  in the time zone of the restaurant. The `closeoutHour` is set  to a value from 0-12 (midnight to noon) in the Business Day  Cutoff field in Toast Web. ", alias="closeoutHour")
+    name: Optional[StrictStr] = Field(default=None, description="The guest-facing name of the restaurant.")
+    location_name: Optional[StrictStr] = Field(default=None, description="A name used externally to differentiate multiple locations.", alias="locationName")
+    location_code: Optional[StrictStr] = Field(default=None, description="A code used internally to differentiate multiple locations.", alias="locationCode")
+    description: Optional[StrictStr] = Field(default=None, description="A description of the restaurant.")
+    time_zone: Optional[StrictStr] = Field(default=None, description="The name of the restaurant's time zone in the IANA time zone database.", alias="timeZone")
+    closeout_hour: Optional[StrictInt] = Field(default=None, description="The hour of the day that separates one business day from the next.", alias="closeoutHour")
     management_group_guid: Optional[StrictStr] = Field(default=None, description="The unique identifier of the restaurant group for the restaurant.", alias="managementGroupGuid")
-    currency_code: Optional[StrictStr] = Field(default=None, description="The ISO-4217 currency code used in this restaurant", alias="currencyCode")
-    first_business_date: Optional[StrictInt] = Field(default=None, description="The first business date (yyyyMMdd) is the day a restaurant began using the Toast platform. The `firstBusinessDate` is also the first day on which time entries can be created for employees. ", alias="firstBusinessDate")
-    archived: Optional[StrictBool] = Field(default=False, description="Returns `true` if the restaurant has been archived from the Toast platform, otherwise returns `false`. A common reason for archiving a restaurant is if the restaurant was created in error. ")
+    currency_code: Optional[StrictStr] = Field(default=None, description="The ISO-4217 currency code used in this restaurant.", alias="currencyCode")
+    first_business_date: Optional[StrictInt] = Field(default=None, description="The first business date (yyyyMMdd) the restaurant began using Toast.", alias="firstBusinessDate")
+    archived: Optional[StrictBool] = Field(default=None, description="Returns `true` if the restaurant has been archived from the Toast platform.")
     __properties: ClassVar[List[str]] = ["name", "locationName", "locationCode", "description", "timeZone", "closeoutHour", "managementGroupGuid", "currencyCode", "firstBusinessDate", "archived"]
 
     model_config = ConfigDict(
@@ -98,7 +98,7 @@ class General(BaseModel):
             "managementGroupGuid": obj.get("managementGroupGuid"),
             "currencyCode": obj.get("currencyCode"),
             "firstBusinessDate": obj.get("firstBusinessDate"),
-            "archived": obj.get("archived") if obj.get("archived") is not None else False
+            "archived": obj.get("archived")
         })
         return _obj
 

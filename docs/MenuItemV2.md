@@ -1,0 +1,43 @@
+# MenuItemV2
+
+Information about a menu item configured for this restaurant. 
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**name** | **str** | A descriptive name for this menu item, for example, \&quot;Caesar Salad\&quot; or \&quot;Turkey Sandwich\&quot;.  | [optional] 
+**kitchen_name** | **str** | The name of the menu item as it appears on kitchen tickets. The &#x60;kitchenName&#x60; can include both numbers and letters. This value contains an empty string if a kitchen name has not been configured for the menu item.  | [optional] 
+**guid** | **str** | A unique identifier for this menu item, assigned by the Toast POS system.  | [optional] 
+**multi_location_id** | **str** | An identifier that is used to identify and consolidate menu entities that are versions of each other. | [optional] 
+**master_id** | **int** | This value is deprecated. Instead of masterId, use multiLocationId. | [optional] 
+**description** | **str** | An optional short description of this menu item.  | [optional] 
+**pos_name** | **str** | The button label name that appears for this menu entity in the Toast POS app. | [optional] 
+**pos_button_color_light** | **str** | The color of the menu entity&#39;s button on the Toast POS app, when the app is running in light mode. | [optional] 
+**pos_button_color_dark** | **str** | The color of the menu entity&#39;s button on the Toast POS app, when the app is running in dark mode. | [optional] 
+**image** | **str** | The URL to an image that has been uploaded for this menu entity. | [optional] 
+**visibility** | **List[str]** | An array of strings that indicate where this menu entity is visible. | [optional] 
+**price** | **float** | The price of this menu item.  In Toast Web, menu items may have prices assigned to them individually, or they may inherit them from a parent menu group. The &#x60;price&#x60; value reflects the menu item&#39;s fully resolved pricing configuration in the following ways:    * For base prices, the &#x60;price&#x60; value is populated with the specified base price.      * For menu-specific prices, the &#x60;price&#x60; value is resolved based on the current menu. For example, consider a menu item that is included in both Lunch and Dinner menus and is priced at $10 for the Lunch menu and $12 for the Dinner menu. In the fully resolved JSON returned by the menus API, this menu item would appear twice, once as a child of the Lunch menu with a &#x60;price&#x60; value of $10, and again as a child of the Dinner menu with a &#x60;price&#x60; value of $12.      If this same menu item is added to a Breakfast menu but a menu-specific price is not defined for the Breakfast menu, then the &#x60;price&#x60; value for the instance of the menu item that appears in the Breakfast menu JSON is populated with the base price from the menu-specific price configuration. Menu-specific price configurations include a base price that functions as a default price when a menu-specific price cannot be resolved.    * For location-specific prices, the &#x60;price&#x60; value is resolved based on the current location. For example, consider a menu item that costs $15 in the Boston location and $20 in the New York location. When you retrieve menu data for the Boston location, this menu item&#39;s &#x60;price&#x60; value is $15. When you retrieve menu data for the New York location, the menu item&#39;s &#x60;price&#x60; value is $20.      * For time-specific prices, the &#x60;price&#x60; value is populated with the base price that is specified as part of the time-specific price configuration. This base price functions as a default price for the menu item during times of the day when a time-specific price has not been defined. For example, consider a menu item that costs $8 from noon to 2pm and $10 during the rest of the day. The &#x60;price&#x60; value for this item would be $10. You must use the &#x60;pricingStrategy&#x60; and &#x60;pricingRules&#x60; values for this menu item to calculate the price of the item during time periods for which a time-specific price has been defined.      * For size prices, the &#x60;price&#x60; value is null. You must use this menu item&#39;s &#x60;pricingStrategy&#x60; and &#x60;pricingRules&#x60; values to calculate the price of the item for different sizes.      * For open prices, the &#x60;price&#x60; value is null.       If the menu item is priced using a price level, the &#x60;price&#x60; value reflects the pricing strategy used for that price level, using the same logic described above. For example, consider a price level that applies a size price to the menu items it is assigned to. In this scenario, the &#x60;price&#x60; value is null and you must use the menu item&#39;s &#x60;pricingStrategy&#x60; and &#x60;pricingRules&#x60; values to calculate the price of the item for different sizes.    For more information on menu item pricing and pricing strategies, see the &lt;a href&#x3D;\&quot;https://doc.toasttab.com/doc/platformguide/adminToastPosPricingFeatures.html\&quot;&gt;Menu Pricing&lt;/a&gt; section in the Toast Platform Guide.  | [optional] 
+**pricing_strategy** | **str** | A string that represents the pricing strategy used for this menu item.  You use the &#x60;pricingStrategy&#x60; value, in conjunction with the &#x60;pricingRules&#x60; value, to calculate the price for a menu item that uses the Time Specific Price or Size Price pricing strategy.  In Toast Web, menu items may have pricing strategies assigned to them individually, or they may inherit them from a parent menu group. The &#x60;pricingStrategy&#x60; value indicates the menu item&#39;s fully resolved pricing strategy. If the menu item is priced using the:   * Base Price pricing strategy, then the &#x60;pricingStrategy&#x60; value is BASE_PRICE.   * Menu Specific Price pricing strategy, then the &#x60;pricingStrategy&#x60; value is MENU_SPECIFIC_PRICE.   * Time Specific Price pricing strategy, then the &#x60;pricingStrategy&#x60; value is TIME_SPECIFIC_PRICE.   * Size Price pricing strategy, then the &#x60;pricingStrategy&#x60; value is SIZE_PRICE.   * Open Price pricing strategy, then the &#x60;pricingStrategy&#x60; value is OPEN_PRICE.  If the menu item is priced using the Location Specific Price pricing strategy, then the &#x60;pricingStrategy&#x60; value indicates which pricing strategy is used at the current location. For example, consider a menu item that uses a menu-specific price at the Boston location and a base price at the New York location. When you retrieve the menu data for the Boston location, the &#x60;pricingStrategy&#x60; for the menu item is MENU_SPECIFIC_PRICE. When you retrieve menu data for the New York location, the &#x60;pricingStrategy&#x60; for the menu item is BASE_PRICE.  If the menu item is priced using a price level, then the &#x60;pricingStrategy&#x60; value indicates which pricing strategy is used for that price level. For example, if the \&quot;Draft Beer\&quot; pricing level uses a time-specific price, then the &#x60;pricingStrategy&#x60; value for a menu item that is assigned the \&quot;Draft Beer\&quot; pricing level is TIME_SPECIFIC_PRICE.  If the &#x60;pricingStrategy&#x60; value is BASE_PRICE or MENU_SPECIFIC_PRICE, you can retrieve the menu item&#39;s price from its &#x60;price&#x60; value.  If the &#x60;pricingStrategy&#x60; value is TIME_SPECIFIC_PRICE or SIZE_PRICE, you must use the rules provided in _this menu item&#39;s_ &#x60;pricingRules&#x60; value to calculate the price for it.  | [optional] 
+**pricing_rules** | [**MenuItemV2PricingRules**](MenuItemV2PricingRules.md) |  | [optional] 
+
+## Example
+
+```python
+from toastapi.models.menu_item_v2 import MenuItemV2
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of MenuItemV2 from a JSON string
+menu_item_v2_instance = MenuItemV2.from_json(json)
+# print the JSON string representation of the object
+print(MenuItemV2.to_json())
+
+# convert the object into a dict
+menu_item_v2_dict = menu_item_v2_instance.to_dict()
+# create an instance of MenuItemV2 from a dict
+menu_item_v2_from_dict = MenuItemV2.from_dict(menu_item_v2_dict)
+```
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

@@ -1,19 +1,21 @@
-# toastapi.DefaultApi
+# toastapi.MenusV2Api
 
 All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**menus_get**](DefaultApi.md#menus_get) | **GET** /menus/v3/menus | Get menus
-[**metadata_get**](DefaultApi.md#metadata_get) | **GET** /menus/v3/metadata | Get menu last modified timestamp 
+[**menus_v2_get**](MenusV2Api.md#menus_v2_get) | **GET** /menus/v2/menus | Get menus (V2)
+[**menus_v2_metadata_get**](MenusV2Api.md#menus_v2_metadata_get) | **GET** /menus/v2/metadata | Get menu last modified timestamp (V2)
 
 
-# **menus_get**
-> Restaurant menus_get(toast_restaurant_external_id)
+# **menus_v2_get**
+> RestaurantV2 menus_v2_get(toast_restaurant_external_id)
+
+Get menus (V2)
 
 Get menus
 
-Get menus
+_Important:_ Ordering integrations should use menus API V3. Other integration types should continue to use menus API V2 until further notice. See <a href="https://doc.toasttab.com/doc/devguide/apiComparingMenusAPIV2AndV3.html">Comparing menus API V2 and V3</a> for more information.
 
 
 ### Example
@@ -22,7 +24,7 @@ Get menus
 
 ```python
 import toastapi
-from toastapi.models.restaurant import Restaurant
+from toastapi.models.restaurant_v2 import RestaurantV2
 from toastapi.rest import ApiException
 from pprint import pprint
 
@@ -42,16 +44,16 @@ configuration.access_token = os.environ["ACCESS_TOKEN"]
 # Enter a context with an instance of the API client
 async with toastapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = toastapi.DefaultApi(api_client)
+    api_instance = toastapi.MenusV2Api(api_client)
     toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
 
     try:
-        # Get menus
-        api_response = await api_instance.menus_get(toast_restaurant_external_id)
-        print("The response of DefaultApi->menus_get:\n")
+        # Get menus (V2)
+        api_response = await api_instance.menus_v2_get(toast_restaurant_external_id)
+        print("The response of MenusV2Api->menus_v2_get:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling DefaultApi->menus_get: %s\n" % e)
+        print("Exception when calling MenusV2Api->menus_v2_get: %s\n" % e)
 ```
 
 
@@ -65,7 +67,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Restaurant**](Restaurant.md)
+[**RestaurantV2**](RestaurantV2.md)
 
 ### Authorization
 
@@ -86,10 +88,10 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **metadata_get**
-> Metadata metadata_get(toast_restaurant_external_id)
+# **menus_v2_metadata_get**
+> MetadataV2 menus_v2_metadata_get(toast_restaurant_external_id)
 
-Get menu last modified timestamp 
+Get menu last modified timestamp (V2)
 
 A lightweight endpoint that allows you to determine if a restaurant's menu data has been updated. Toast support strongly recommends that you do not make a call to the `/menus` endpoint unless the date and time returned by the `/metadata` endpoint is more recent than the `lastUpdated` date and time. While this recommendation applies to all clients of the menus API, it is particularly important for clients that have limited bandwidth.
 
@@ -100,7 +102,7 @@ A lightweight endpoint that allows you to determine if a restaurant's menu data 
 
 ```python
 import toastapi
-from toastapi.models.metadata import Metadata
+from toastapi.models.metadata_v2 import MetadataV2
 from toastapi.rest import ApiException
 from pprint import pprint
 
@@ -120,16 +122,16 @@ configuration.access_token = os.environ["ACCESS_TOKEN"]
 # Enter a context with an instance of the API client
 async with toastapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = toastapi.DefaultApi(api_client)
+    api_instance = toastapi.MenusV2Api(api_client)
     toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
 
     try:
-        # Get menu last modified timestamp 
-        api_response = await api_instance.metadata_get(toast_restaurant_external_id)
-        print("The response of DefaultApi->metadata_get:\n")
+        # Get menu last modified timestamp (V2)
+        api_response = await api_instance.menus_v2_metadata_get(toast_restaurant_external_id)
+        print("The response of MenusV2Api->menus_v2_metadata_get:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling DefaultApi->metadata_get: %s\n" % e)
+        print("Exception when calling MenusV2Api->menus_v2_metadata_get: %s\n" % e)
 ```
 
 
@@ -143,7 +145,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Metadata**](Metadata.md)
+[**MetadataV2**](MetadataV2.md)
 
 ### Authorization
 

@@ -124,7 +124,12 @@ tags:
   - name: Menu Groups
   - name: Menu Items
   - name: Modifier Groups
-  - name: Menus
+  - name: Menus V3
+    description: |
+      Related to menus API V3. This is the recommended version for ordering integrations.
+  - name: Menus V2
+    description: |
+      Related to menus API V2. Other integration types should continue to use menus API V2 until further notice.
   - name: No Sale Reasons
   - name: Payout Reasons
   - name: Pre Modifier Groups
@@ -180,7 +185,9 @@ paths:
                 $ref: "#/components/schemas/ErrorMessage"
   /menus/v3/menus:
     get:
-      operationId: menusGet
+      tags:
+        - Menus V3
+      operationId: menusV3Get
       summary: Get menus
       description: |
         Get menus
@@ -210,7 +217,9 @@ paths:
             - menus.channel:read
   /menus/v3/metadata:
     get:
-      operationId: metadataGet
+      tags:
+        - Menus V3
+      operationId: menusV3MetadataGet
       summary: |
         Get menu last modified timestamp
       description: >
@@ -4834,6 +4843,66 @@ paths:
         - oauth2:
             - config:read
 
+  /menus/v2/menus:
+    get:
+      operationId: menusV2Get
+      summary: Get menus (V2)
+      description: |
+        Get menus
+
+        _Important:_ Ordering integrations should use menus API V3. Other integration types should continue to use menus API V2 until further notice. See <a href="https://doc.toasttab.com/doc/devguide/apiComparingMenusAPIV2AndV3.html">Comparing menus API V2 and V3</a> for more information.
+      tags:
+        - Menus V2
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantV2"
+        "404":
+          description: No published data was found for the restaurant. Ensure that the restaurant GUID is correct and that its data has been published.
+        "503":
+          description: Unable to retrieve menus for the restaurant due to a service outage.
+      security:
+        - oauth2:
+            - menus:read
+
+  /menus/v2/metadata:
+    get:
+      operationId: menusV2MetadataGet
+      summary: Get menu last modified timestamp (V2)
+      description: |
+        A lightweight endpoint that allows you to determine if a restaurant's menu data has been updated. Toast support strongly recommends that you do not make a call to the `/menus` endpoint unless the date and time returned by the `/metadata` endpoint is more recent than the `lastUpdated` date and time. While this recommendation applies to all clients of the menus API, it is particularly important for clients that have limited bandwidth.
+      tags:
+        - Menus V2
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: The identifier for the restaurant.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetadataV2"
+      security:
+        - oauth2:
+            - menus:read
+
 components:
   securitySchemes:
     oauth2:
@@ -4859,6 +4928,7 @@ components:
             discounts:read: "Allows reading from the discounts API."
             discounts:write: "Allows writing to the discounts API."
             menus.channel:read: "Allows reading from the menus API."
+            menus:read: "Allows reading from menus API V2."
             config:read: "Allows reading from the configuration API."
   schemas:
     AuthenticationRequest:
@@ -6054,59 +6124,6 @@ components:
           format: double
           example: 3.25
 
-    # Restaurants API Schemas
-    General:
-      type: object
-      description: |
-        General information about a restaurant location.
-      properties:
-        name:
-          type: string
-          description: |
-            The guest-facing name of the restaurant. For example, the
-            `name` of a restaurant might be `Tommy's Burgers`.
-        locationName:
-          type: string
-          description: A name used externally to differentiate multiple locations, like Neighborhood, Square, City, or Hotel.
-        locationCode:
-          type: string
-          description: A code used internally to differentiate multiple locations, typically a 3 or 4 letter code.
-        description:
-          type: string
-          description: A description of the restaurant, such as information about the atmosphere and food.
-        timeZone:
-          type: string
-          description: |
-            The name of the restaurant's time zone in the <a 
-            href="https://www.iana.org/time-zones">IANA time zone 
-            database</a>. For example, `America/New_York`.
-        closeoutHour:
-          type: integer
-          description: |
-            The hour of the day that separates one business day from the
-            next, also known as the "business day cutoff time". This is 
-            in the time zone of the restaurant. The `closeoutHour` is set 
-            to a value from 0-12 (midnight to noon) in the Business Day 
-            Cutoff field in Toast Web.
-        managementGroupGuid:
-          type: string
-          description: The unique identifier of the restaurant group for
-            the restaurant.
-        currencyCode:
-          type: string
-          description: The ISO-4217 currency code used in this restaurant
-        firstBusinessDate:
-          type: integer
-          description: |
-            The first business date (yyyyMMdd) is the day a restaurant began using the Toast platform. The
-            `firstBusinessDate` is also the first day on which time entries can be created for employees.
-        archived:
-          type: boolean
-          description: |
-            Returns `true` if the restaurant has been archived from the Toast platform, otherwise returns `false`. A
-            common reason for archiving a restaurant is if the restaurant was created in error.
-          default: false
-
     Location:
       type: object
       description: Information about the physical location of a restaurant.
@@ -7010,3 +7027,611 @@ components:
             name:
               type: string
               description: The name of this void reason.
+
+    # Menus V2 API Schemas
+    MetadataV2:
+      type: object
+      description: |
+        Information about the last date and time that this restaurant's menu data was updated.
+      properties:
+        restaurantGuid:
+          description: |
+            A unique identifier for this restaurant, assigned by the Toast POS system.
+          type: string
+          format: uuid
+        lastUpdated:
+          description: |
+            The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href="https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html">Dates and timestamps</a> section of the Toast Developer Guide.
+          type: string
+
+    RestaurantV2:
+      type: object
+      description: |
+        Information about the restaurant whose menu data has been retrieved.
+      properties:
+        restaurantGuid:
+          description: |
+            A unique identifier for this restaurant, assigned by the Toast POS system.
+          type: string
+          format: uuid
+        lastUpdated:
+          description: |
+            The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href="https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html">Dates and timestamps</a> section of the Toast Developer Guide.
+          type: string
+        restaurantTimeZone:
+          description: |
+            The name of the restaurant's time zone in the IANA time zone database https://www.iana.org/time-zones. For example, "America/New_York".
+          type: string
+        menus:
+          type: array
+          description: |
+            An array of `Menu` objects that represent the published menus used by this restaurant.
+          items:
+            $ref: "#/components/schemas/MenuV2"
+        modifierGroupReferences:
+          description: |
+            A map of `ModifierGroup` objects that define the modifier groups used by this restaurant. Each `ModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
+            ```
+              "modifierGroupReferences": {
+                ...
+                "3": {
+                  "referenceId": 3,
+                  "name": "Toppings",
+                  "guid": "58b79986-f88f-411d-ba18-14b1e2441e9d",
+                    ...
+                  },
+                  ...
+                  "modifierOptionReferences": [
+                    10,
+                    11
+                  ],
+                  ...
+                },
+                ...
+              },
+            ```
+
+            Other menu entities refer to modifier groups using their `referenceId`. Having a key that matches the `referenceId` allows you to locate the correct modifier group in the `modifierGroupReferences` map. For more information on the `referenceId` value, see the <a href="https://doc.toasttab.com/doc/devguide/apiUnderstandingGuidsEntityIdentifiersAndMultilocationIds_V2.html">Understanding GUIDs, referenceIds, and multilocationIds</a> section of the Toast Developer Guide.
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ModifierGroupV2"
+        modifierOptionReferences:
+          description: |
+            A map of `ModifierOption` objects that define the modifier options used by this restaurant. Each `ModifierOption` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
+            ```
+            "modifierOptionReferences": {
+              ...
+              "10": {
+                "referenceId": 10,
+                "name": "Mushrooms",
+                "guid": "fa24fee9-76c4-40ba-ae3c-7dfccafdd8d3",
+                ...
+              },
+              "11": {
+                "referenceId": 11,
+                "name": "Onions",
+                "guid": "afee6be7-8280-4c69-a170-9fdf4c76bf7b",
+                ...
+              },
+              ...
+            }
+            ```
+
+            Other menu entities refer to modifier options using their `referenceId`. Having a key that matches the `referenceId` allows you to locate the correct modifier option in the `modifierOptionReferences` map. For more information on the `referenceId` value, see the <a href="https://doc.toasttab.com/doc/devguide/apiUnderstandingGuidsEntityIdentifiersAndMultilocationIds_V2.html">Understanding GUIDs, referenceIds, and multilocationIds</a> section of the Toast Developer Guide.
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ModifierOptionV2"
+        preModifierGroupReferences:
+          description: |
+            A map of `PreModifierGroup` objects that define the premodifier groups used by this restaurant. Each `PreModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
+            ```
+            "preModifierGroupReferences": {
+              "22": {
+                "referenceId": 22,
+                "guid": "07a1a94d-6f7b-46d5-a916-a07fa16bb8e8",
+                "name": "PreModGroup",
+                "preModifiers": [
+                  {
+                    "guid": "ad45e697-9356-468e-b7b4-1b23f4d4b8a5",
+                    "name": "EXTRA",
+                    "fixedPrice": 1.0,
+                    "multiplicationFactor": null,
+                    "displayMode": "PREFIX"
+                  },
+                  {
+                    "guid": "483dd4cf-acea-4373-ae76-5f7efd0d529d",
+                    "name": "NO",
+                    "fixedPrice": 0.0,
+                    "multiplicationFactor": null,
+                    "displayMode": "PREFIX"
+                  }
+                ]
+              },
+            },            
+            ```
+
+            Other menu entities refer to premodifier groups using their `referenceId`. Having a key that matches the `referenceId` allows you to locate the correct premodifier group in the `preModifierGroupReferences` map. For more information on the `referenceId` value, see the <a href="https://doc.toasttab.com/doc/devguide/apiUnderstandingGuidsEntityIdentifiersAndMultilocationIds_V2.html">Understanding GUIDs, referenceIds, and multilocationIds</a> section of the Toast Developer Guide.
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/PreModifierGroupV2"
+
+    MenuV2:
+      type: object
+      description: |
+        Information about a menu configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this menu, for example, "Food" or "Drinks".
+          type: string
+        guid:
+          description: |
+            A unique identifier for this menu, assigned by the Toast POS system.
+          type: string
+        multiLocationId:
+          $ref: "#/components/schemas/MultiLocationIdV2"
+        masterId:
+          $ref: "#/components/schemas/MasterIdV2"
+        description:
+          description: |
+            An optional short description for this menu.
+          type: string
+        posName:
+          $ref: "#/components/schemas/PosNameV2"
+        posButtonColorLight:
+          $ref: "#/components/schemas/PosButtonColorLightV2"
+        posButtonColorDark:
+          $ref: "#/components/schemas/PosButtonColorDarkV2"
+        highResImage:
+          type: string
+          description: |
+            The URL to a high resolution image that has been uploaded for this menu. The image file must be in JPG, PNG, or SVG format. The `highResImage` value is only available if the Toast Kiosk module has been enabled for this restaurant. This value is null if no high resolution image has been specified.
+          nullable: true
+        image:
+          $ref: "#/components/schemas/ImageV2"
+        visibility:
+          $ref: "#/components/schemas/VisibilityV2"
+        availability:
+          type: object
+          description: |
+            An `Availability` object with information about the days and times this menu is available. If the menu is available 24 hours per day, 7 days per week, this `Availability` object contains a single value, `alwaysAvailable`, that is set to TRUE. If the menu is not available 24 hours per day, 7 days per week, the `alwaysAvailable` value is set to FALSE and the object will also contain a `schedule` value that provides detailed information about the specific days and times this menu is available.
+
+            **_Important_**
+            The orders API does not validate against the availability settings of a menu, meaning it is possible to submit an order for an item on a menu when it is not currently available. For this reason, it is particularly important that you check a menu's `availability` value before placing an order from it.
+          properties:
+            alwaysAvailable:
+              type: boolean
+              description: |
+                Indicates whether this menu is available 24 hours per day, 7 days a week. If `alwaysAvailable` is FALSE, then a `schedule` value is included in the `Availability` object to define the specific times and days a menu is available. If `alwaysAvailable` is TRUE, then the `schedule` value is omitted.
+            schedule:
+              type: array
+              description: |
+                An array of `Schedule` objects that indicate the specific days and times a menu is available. If `alwaysAvailable` is TRUE, then the menu is available 24 hours per day, 7 days per week, and this `schedule` value is omitted from the `Availabilty` object.
+              items:
+                $ref: "#/components/schemas/ScheduleV2"
+        menuGroups:
+          type: array
+          description: |
+            An array of the `MenuGroup` objects contained in this menu.
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MenuGroupV2"
+
+    MenuGroupV2:
+      type: object
+      description: |
+        Information about a menu group configured for this restaurant, including an array of menu items contained in the group.
+      properties:
+        name:
+          description: |
+            A descriptive name for this menu group, for example, "Appetizers" or "Sandwiches".
+          type: string
+        guid:
+          description: |
+            A unique identifier for this menu group, assigned by the Toast POS system.
+          type: string
+        multiLocationId:
+          $ref: "#/components/schemas/MultiLocationIdV2"
+        masterId:
+          $ref: "#/components/schemas/MasterIdV2"
+        description:
+          description: |
+            An optional short description of this menu group.
+          type: string
+        posName:
+          $ref: "#/components/schemas/PosNameV2"
+        posButtonColorLight:
+          $ref: "#/components/schemas/PosButtonColorLightV2"
+        posButtonColorDark:
+          $ref: "#/components/schemas/PosButtonColorDarkV2"
+        image:
+          $ref: "#/components/schemas/ImageV2"
+        visibility:
+          $ref: "#/components/schemas/VisibilityV2"
+        itemTags:
+          type: array
+          description: |
+            An array of `ItemTag` objects that are assigned to this menu group. Item tags are used to assign identifying characteristics, for example, vegetarian, gluten-free, or alcohol.
+          items:
+            $ref: "#/components/schemas/ItemTagV2"
+        menuGroups:
+          type: array
+          description: |
+            An array of the `MenuGroup` objects that are children of this menu group. The array is empty if the menu group has no child menu groups.
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MenuGroupV2"
+        menuItems:
+          type: array
+          description: |
+            An array of the `MenuItem` objects contained in this menu group.
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MenuItemV2"
+
+    MenuItemV2:
+      type: object
+      description: |
+        Information about a menu item configured for this restaurant.
+      properties:
+        name:
+          description: |
+            A descriptive name for this menu item, for example, "Caesar Salad" or "Turkey Sandwich".
+          type: string
+        kitchenName:
+          type: string
+          description: |
+            The name of the menu item as it appears on kitchen tickets. The `kitchenName` can include both numbers and letters. This value contains an empty string if a kitchen name has not been configured for the menu item.
+        guid:
+          description: |
+            A unique identifier for this menu item, assigned by the Toast POS system.
+          type: string
+        multiLocationId:
+          $ref: "#/components/schemas/MultiLocationIdV2"
+        masterId:
+          $ref: "#/components/schemas/MasterIdV2"
+        description:
+          description: |
+            An optional short description of this menu item.
+          type: string
+        posName:
+          $ref: "#/components/schemas/PosNameV2"
+        posButtonColorLight:
+          $ref: "#/components/schemas/PosButtonColorLightV2"
+        posButtonColorDark:
+          $ref: "#/components/schemas/PosButtonColorDarkV2"
+        image:
+          $ref: "#/components/schemas/ImageV2"
+        visibility:
+          $ref: "#/components/schemas/VisibilityV2"
+        price:
+          type: number
+          format: double
+          description: |
+            The price of this menu item.
+
+            In Toast Web, menu items may have prices assigned to them individually, or they may inherit them from a parent menu group. The `price` value reflects the menu item's fully resolved pricing configuration in the following ways:
+
+              * For base prices, the `price` value is populated with the specified base price.
+              
+              * For menu-specific prices, the `price` value is resolved based on the current menu. For example, consider a menu item that is included in both Lunch and Dinner menus and is priced at $10 for the Lunch menu and $12 for the Dinner menu. In the fully resolved JSON returned by the menus API, this menu item would appear twice, once as a child of the Lunch menu with a `price` value of $10, and again as a child of the Dinner menu with a `price` value of $12.
+              
+              If this same menu item is added to a Breakfast menu but a menu-specific price is not defined for the Breakfast menu, then the `price` value for the instance of the menu item that appears in the Breakfast menu JSON is populated with the base price from the menu-specific price configuration. Menu-specific price configurations include a base price that functions as a default price when a menu-specific price cannot be resolved.
+
+              * For location-specific prices, the `price` value is resolved based on the current location. For example, consider a menu item that costs $15 in the Boston location and $20 in the New York location. When you retrieve menu data for the Boston location, this menu item's `price` value is $15. When you retrieve menu data for the New York location, the menu item's `price` value is $20.
+              
+              * For time-specific prices, the `price` value is populated with the base price that is specified as part of the time-specific price configuration. This base price functions as a default price for the menu item during times of the day when a time-specific price has not been defined. For example, consider a menu item that costs $8 from noon to 2pm and $10 during the rest of the day. The `price` value for this item would be $10. You must use the `pricingStrategy` and `pricingRules` values for this menu item to calculate the price of the item during time periods for which a time-specific price has been defined.
+              
+              * For size prices, the `price` value is null. You must use this menu item's `pricingStrategy` and `pricingRules` values to calculate the price of the item for different sizes.
+              
+              * For open prices, the `price` value is null.
+
+              
+              If the menu item is priced using a price level, the `price` value reflects the pricing strategy used for that price level, using the same logic described above. For example, consider a price level that applies a size price to the menu items it is assigned to. In this scenario, the `price` value is null and you must use the menu item's `pricingStrategy` and `pricingRules` values to calculate the price of the item for different sizes.
+
+              For more information on menu item pricing and pricing strategies, see the <a href="https://doc.toasttab.com/doc/platformguide/adminToastPosPricingFeatures.html">Menu Pricing</a> section in the Toast Platform Guide.
+          nullable: true
+        pricingStrategy:
+          type: string
+          enum:
+            - BASE_PRICE
+            - MENU_SPECIFIC_PRICE
+            - TIME_SPECIFIC_PRICE
+            - SIZE_PRICE
+            - OPEN_PRICE
+          description: |
+            A string that represents the pricing strategy used for this menu item.
+
+            You use the `pricingStrategy` value, in conjunction with the `pricingRules` value, to calculate the price for a menu item that uses the Time Specific Price or Size Price pricing strategy.
+
+            In Toast Web, menu items may have pricing strategies assigned to them individually, or they may inherit them from a parent menu group. The `pricingStrategy` value indicates the menu item's fully resolved pricing strategy. If the menu item is priced using the:
+              * Base Price pricing strategy, then the `pricingStrategy` value is BASE_PRICE.
+              * Menu Specific Price pricing strategy, then the `pricingStrategy` value is MENU_SPECIFIC_PRICE.
+              * Time Specific Price pricing strategy, then the `pricingStrategy` value is TIME_SPECIFIC_PRICE.
+              * Size Price pricing strategy, then the `pricingStrategy` value is SIZE_PRICE.
+              * Open Price pricing strategy, then the `pricingStrategy` value is OPEN_PRICE.
+
+            If the menu item is priced using the Location Specific Price pricing strategy, then the `pricingStrategy` value indicates which pricing strategy is used at the current location. For example, consider a menu item that uses a menu-specific price at the Boston location and a base price at the New York location. When you retrieve the menu data for the Boston location, the `pricingStrategy` for the menu item is MENU_SPECIFIC_PRICE. When you retrieve menu data for the New York location, the `pricingStrategy` for the menu item is BASE_PRICE.
+
+            If the menu item is priced using a price level, then the `pricingStrategy` value indicates which pricing strategy is used for that price level. For example, if the "Draft Beer" pricing level uses a time-specific price, then the `pricingStrategy` value for a menu item that is assigned the "Draft Beer" pricing level is TIME_SPECIFIC_PRICE.
+
+            If the `pricingStrategy` value is BASE_PRICE or MENU_SPECIFIC_PRICE, you can retrieve the menu item's price from its `price` value.
+
+            If the `pricingStrategy` value is TIME_SPECIFIC_PRICE or SIZE_PRICE, you must use the rules provided in _this menu item's_ `pricingRules` value to calculate the price for it.
+        pricingRules:
+          type: object
+          description: |
+            A `PricingRules` object with information about how to calculate the price for this menu item. You use a menu item's `pricingRules` value, in conjunction with its `pricingStrategy` value, to calculate a price for a menu item that uses a size-specific or time-specific price.
+
+            The `pricingRules` object takes different forms depending on the pricing strategy configured for the menu item. Use the `pricingStrategy` value to determine which pricing strategy has been used so that you can properly interpret the data in the `pricingRules` object. For the BASE_PRICE, and MENU_SPECIFIC_PRICE pricing strategies, the `pricingRules` object is null because you can retrieve the price from the `price` value without additional calculation. For the OPEN_PRICE pricing strategy, the `pricingRules` object is also null (the price of an open menu item is specified when it is ordered). For the TIME_SPECIFIC_PRICE and SIZE_PRICE pricing strategies, the `PricingRules` object contains additional values that you use to calculate the menu item's price.
+          properties:
+            timeSpecificPricingRules:
+              description: |
+                An array of `TimeSpecificPrice` objects that define the time-specific prices for a menu item or modifier option <a href="https://doc.toasttab.com/doc/platformguide/adminPricingModifierOptions.html#adminUnderstandingAModifierOptionsItemReference">item reference</a> that uses the Time Specific Price pricing strategy. If the menu item or modifier option item reference does not use time-specific prices, this array is empty.
+              type: array
+              items:
+                $ref: "#/components/schemas/TimeSpecificPriceV2"
+            sizeSpecificPricingGuid:
+              description: |
+                The GUID of a Size modifier group that defines sizes and prices for a menu item or a modifier option item reference that uses the Size Price pricing strategy.
+
+                If the menu item or modifier option item reference does not use the Size Price pricing strategy, then `sizeSpecificPricingGuid` is null.
+
+                The Toast POS system automatically creates a Size modifier group when you choose the Size Price pricing strategy for a menu item or modifier option item reference and stores the sizes and prices you specify in it. You use the `sizeSpecificPricingGuid` value to locate the correct Size modifier group to use when pricing a menu item or modifier option item reference that uses size pricing.
+
+                When the `PricingRules` object appears in the context of a modifier group, the `sizeSpecificPricingGuid` value it contains is also used to find matching sizes between menu items and any modifier options that use the Size Price or Size/Sequence Pricing pricing strategies (for example, toppings on a small pizza cost $1 while toppings on a large pizza cost $2). In this scenario, the Toast POS system locates the modifier option size that matches the menu item size and uses the price defined for that size of the modifier option. The sizes for the menu item are defined in the Size modifier group specified by the `sizeSpecificPricingGuid` value. The sizes for the modifier options are defined in objects contained in the `sizeSequencePricingRules` array that is contained in the modifier group's `PricingRules` object. Sizes are considered matching when their names are identical.
+
+                For detailed information on the **Size Price** and **Size/Sequence Price** pricing strategies, see the Pricing Strategies section in the Toast Platform Guide.
+              type: string
+              nullable: true
+            sizeSequencePricingRules:
+              type: array
+              description: |
+                An array of `SizeSequencePricingRule` objects that define the prices for the modifier options in a modifier group that uses the Size Price, Sequence Price, or Size/Sequence Pricing pricing strategy. If the modifier group does not use one of these pricing strategies, this array is empty.
+              items:
+                $ref: "#/components/schemas/SizeSequencePricingRuleV2"
+              nullable: true
+
+    # Additional Menus V2 schemas (simplified for brevity)
+    ModifierGroupV2:
+      type: object
+      description: Information about a modifier group configured for this restaurant.
+      properties:
+        name:
+          type: string
+          description: A descriptive name for this modifier group.
+        guid:
+          type: string
+          description: A unique identifier for this modifier group.
+        referenceId:
+          type: integer
+          description: An integer identifier that is used to refer to this modifier group.
+        pricingStrategy:
+          type: string
+          enum: [NONE, SEQUENCE_PRICE, SIZE_PRICE, SIZE_SEQUENCE_PRICE]
+          description: The pricing strategy used for this modifier group.
+        modifierOptionReferences:
+          type: array
+          items:
+            type: integer
+          description: An array of referenceIds for ModifierOption objects.
+
+    ModifierOptionV2:
+      type: object
+      description: Information about a modifier option configured for this restaurant.
+      properties:
+        referenceId:
+          type: integer
+          description: An integer identifier that is used to refer to this modifier option.
+        name:
+          type: string
+          description: A descriptive name for this modifier option.
+        guid:
+          type: string
+          description: A unique identifier for this modifier option.
+        price:
+          type: number
+          format: double
+          nullable: true
+          description: The price of this modifier option.
+        pricingStrategy:
+          type: string
+          description: A string that indicates how this modifier option has been priced.
+
+    PreModifierGroupV2:
+      type: object
+      description: Information about a pre-modifier group configured for this restaurant.
+      properties:
+        name:
+          type: string
+          description: A descriptive name for this pre-modifier group.
+        guid:
+          type: string
+          description: A unique identifier for this pre-modifier group.
+        preModifiers:
+          type: array
+          items:
+            $ref: "#/components/schemas/PreModifierV2"
+          description: An array of PreModifier objects.
+
+    PreModifierV2:
+      type: object
+      description: Information about a pre-modifier configured for this restaurant.
+      properties:
+        name:
+          type: string
+          description: A descriptive name for this pre-modifier.
+        guid:
+          type: string
+          description: A unique identifier for this pre-modifier.
+        fixedPrice:
+          type: number
+          format: double
+          nullable: true
+          description: An optional fixed price for this pre-modifier.
+        multiplicationFactor:
+          type: number
+          format: double
+          nullable: true
+          description: An optional number that specifies how much the cost is multiplied by.
+        displayMode:
+          type: string
+          enum: [PREFIX, SUFFIX]
+          description: How the pre-modifier is displayed on tickets and receipts.
+
+    ItemTagV2:
+      type: object
+      description: A descriptive term that identifies a characteristic of a menu item or menu group.
+      properties:
+        name:
+          type: string
+          description: A descriptive name for this item tag.
+        guid:
+          type: string
+          description: A unique identifier for this item tag.
+
+    ScheduleV2:
+      type: object
+      description: A multi-use object that defines when a menu is available.
+      properties:
+        days:
+          type: array
+          items:
+            type: string
+            enum:
+              [SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY]
+          description: An array of days of the week.
+        timeRanges:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeRangeV2"
+          description: An array of TimeRange objects.
+
+    TimeRangeV2:
+      type: object
+      description: Represents a time range for when a menu is available.
+      properties:
+        start:
+          type: string
+          description: The start time of the time range.
+        end:
+          type: string
+          description: The end time of the time range.
+
+    TimeSpecificPriceV2:
+      type: object
+      description: Represents the pricing rules for a menu item that uses a time-specific price.
+      properties:
+        timeSpecificPrice:
+          type: number
+          format: double
+          description: The price during the periods defined by the schedule.
+        basePrice:
+          type: number
+          format: double
+          description: The base price used for time periods when a time-specific price has not been defined.
+        schedule:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScheduleV2"
+          description: An array of Schedule objects.
+
+    SizeSequencePricingRuleV2:
+      type: object
+      description: Defines the pricing rules for modifier options that belong to a modifier group.
+      properties:
+        sizeName:
+          type: string
+          nullable: true
+          description: A string that represents the size of a modifier option.
+        sizeGuid:
+          type: string
+          nullable: true
+          description: The GUID of the modifier option where a menu item size has been defined.
+        sequencePrices:
+          type: array
+          items:
+            $ref: "#/components/schemas/SequencePriceV2"
+          description: An array of SequencePrice objects.
+
+    SequencePriceV2:
+      type: object
+      description: Defines the size, sequence, or size/sequence prices for modifier options.
+      properties:
+        sequence:
+          type: integer
+          format: int32
+          description: Specifies the order of the prices.
+        price:
+          type: number
+          format: double
+          description: The price for a modifier option when it is ordered at the specified point in the sequence.
+
+    # Basic type schemas for Menus V2
+    MultiLocationIdV2:
+      type: string
+      description: An identifier that is used to identify and consolidate menu entities that are versions of each other.
+
+    MasterIdV2:
+      type: integer
+      format: int64
+      description: This value is deprecated. Instead of masterId, use multiLocationId.
+
+    PosNameV2:
+      type: string
+      description: The button label name that appears for this menu entity in the Toast POS app.
+
+    PosButtonColorLightV2:
+      type: string
+      description: The color of the menu entity's button on the Toast POS app, when the app is running in light mode.
+
+    PosButtonColorDarkV2:
+      type: string
+      description: The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.
+
+    ImageV2:
+      type: string
+      nullable: true
+      description: The URL to an image that has been uploaded for this menu entity.
+
+    VisibilityV2:
+      type: array
+      items:
+        type: string
+        enum: [POS, KIOSK, GRUBHUB, TOAST_ONLINE_ORDERING, ORDERING_PARTNERS]
+      description: An array of strings that indicate where this menu entity is visible.
+
+    General:
+      type: object
+      description: General information about a restaurant location.
+      properties:
+        name:
+          type: string
+          description: The guest-facing name of the restaurant.
+        locationName:
+          type: string
+          description: A name used externally to differentiate multiple locations.
+        locationCode:
+          type: string
+          description: A code used internally to differentiate multiple locations.
+        description:
+          type: string
+          description: A description of the restaurant.
+        timeZone:
+          type: string
+          description: The name of the restaurant's time zone in the IANA time zone database.
+        closeoutHour:
+          type: integer
+          description: The hour of the day that separates one business day from the next.
+        managementGroupGuid:
+          type: string
+          description: The unique identifier of the restaurant group for the restaurant.
+        currencyCode:
+          type: string
+          description: The ISO-4217 currency code used in this restaurant.
+        firstBusinessDate:
+          type: integer
+          description: The first business date (yyyyMMdd) the restaurant began using Toast.
+        archived:
+          type: boolean
+          description: Returns `true` if the restaurant has been archived from the Toast platform.
