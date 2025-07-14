@@ -81,6 +81,9 @@ info:
 
 
     Returns information about the configuration of restaurant.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
   termsOfService: https://pos.toasttab.com/api-terms-of-use
   contact:
     name: Toast developer support
