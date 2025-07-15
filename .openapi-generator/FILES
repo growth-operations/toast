@@ -3,6 +3,7 @@
 .gitlab-ci.yml
 .travis.yml
 README.md
+docs/AlcoholV2.md
 docs/AlternatePaymentType.md
 docs/AlternatePaymentTypesApi.md
 docs/ApplicableDiscount.md
@@ -18,11 +19,13 @@ docs/CashDrawer.md
 docs/CashDrawersApi.md
 docs/Check.md
 docs/ConfigReference.md
+docs/ContentAdvisoriesV2.md
 docs/Customer.md
 docs/DaySchedule.md
 docs/Delivery.md
 docs/DeliveryInfo.md
 docs/DeliveryPaymentOptions.md
+docs/DimensionUnitOfMeasureV2.md
 docs/DiningOption.md
 docs/DiningOptionsApi.md
 docs/Discount.md
@@ -34,6 +37,7 @@ docs/ExternalReference.md
 docs/General.md
 docs/Hours.md
 docs/Image.md
+docs/ImagesV2.md
 docs/ItemTagV2.md
 docs/Job.md
 docs/JobWageOverride.md
@@ -69,6 +73,7 @@ docs/PaymentOptions.md
 docs/PaymentsApi.md
 docs/PayoutReason.md
 docs/PayoutReasonsApi.md
+docs/PortionV2.md
 docs/PreModifier.md
 docs/PreModifierGroup.md
 docs/PreModifierGroupV2.md
@@ -93,6 +98,7 @@ docs/RestaurantsApi.md
 docs/RevenueCenter.md
 docs/RevenueCentersApi.md
 docs/SalesCategory.md
+docs/SalesCategoryV2.md
 docs/ScheduleV2.md
 docs/Schedules.md
 docs/Selection.md
@@ -126,6 +132,7 @@ docs/VoidOrderRequestSelections.md
 docs/VoidReason.md
 docs/VoidReasonsApi.md
 docs/WeekSchedule.md
+docs/WeightUnitOfMeasureV2.md
 git_push.sh
 pyproject.toml
 requirements.txt
@@ -171,6 +178,7 @@ toastapi/api_response.py
 toastapi/configuration.py
 toastapi/exceptions.py
 toastapi/models/__init__.py
+toastapi/models/alcohol_v2.py
 toastapi/models/alternate_payment_type.py
 toastapi/models/applicable_discount.py
 toastapi/models/applicable_discounts_request.py
@@ -182,11 +190,13 @@ toastapi/models/break_type.py
 toastapi/models/cash_drawer.py
 toastapi/models/check.py
 toastapi/models/config_reference.py
+toastapi/models/content_advisories_v2.py
 toastapi/models/customer.py
 toastapi/models/day_schedule.py
 toastapi/models/delivery.py
 toastapi/models/delivery_info.py
 toastapi/models/delivery_payment_options.py
+toastapi/models/dimension_unit_of_measure_v2.py
 toastapi/models/dining_option.py
 toastapi/models/discount.py
 toastapi/models/employee.py
@@ -195,6 +205,7 @@ toastapi/models/external_reference.py
 toastapi/models/general.py
 toastapi/models/hours.py
 toastapi/models/image.py
+toastapi/models/images_v2.py
 toastapi/models/item_tag_v2.py
 toastapi/models/job.py
 toastapi/models/job_wage_override.py
@@ -221,6 +232,7 @@ toastapi/models/orders_order_guid_delivery_info_patch_request.py
 toastapi/models/payment.py
 toastapi/models/payment_options.py
 toastapi/models/payout_reason.py
+toastapi/models/portion_v2.py
 toastapi/models/pre_modifier.py
 toastapi/models/pre_modifier_group.py
 toastapi/models/pre_modifier_group_v2.py
@@ -238,6 +250,7 @@ toastapi/models/restaurant_service.py
 toastapi/models/restaurant_v2.py
 toastapi/models/revenue_center.py
 toastapi/models/sales_category.py
+toastapi/models/sales_category_v2.py
 toastapi/models/schedule_v2.py
 toastapi/models/schedules.py
 toastapi/models/selection.py
@@ -263,6 +276,7 @@ toastapi/models/void_order_request.py
 toastapi/models/void_order_request_selections.py
 toastapi/models/void_reason.py
 toastapi/models/week_schedule.py
+toastapi/models/weight_unit_of_measure_v2.py
 toastapi/py.typed
 toastapi/rest.py
 tox.ini

@@ -14,6 +14,7 @@
 
 
 # import models into model package
+from toastapi.models.alcohol_v2 import AlcoholV2
 from toastapi.models.alternate_payment_type import AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest
@@ -25,11 +26,13 @@ from toastapi.models.break_type import BreakType
 from toastapi.models.cash_drawer import CashDrawer
 from toastapi.models.check import Check
 from toastapi.models.config_reference import ConfigReference
+from toastapi.models.content_advisories_v2 import ContentAdvisoriesV2
 from toastapi.models.customer import Customer
 from toastapi.models.day_schedule import DaySchedule
 from toastapi.models.delivery import Delivery
 from toastapi.models.delivery_info import DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions
+from toastapi.models.dimension_unit_of_measure_v2 import DimensionUnitOfMeasureV2
 from toastapi.models.dining_option import DiningOption
 from toastapi.models.discount import Discount
 from toastapi.models.employee import Employee
@@ -38,6 +41,7 @@ from toastapi.models.external_reference import ExternalReference
 from toastapi.models.general import General
 from toastapi.models.hours import Hours
 from toastapi.models.image import Image
+from toastapi.models.images_v2 import ImagesV2
 from toastapi.models.item_tag_v2 import ItemTagV2
 from toastapi.models.job import Job
 from toastapi.models.job_wage_override import JobWageOverride
@@ -64,6 +68,7 @@ from toastapi.models.orders_order_guid_delivery_info_patch_request import Orders
 from toastapi.models.payment import Payment
 from toastapi.models.payment_options import PaymentOptions
 from toastapi.models.payout_reason import PayoutReason
+from toastapi.models.portion_v2 import PortionV2
 from toastapi.models.pre_modifier import PreModifier
 from toastapi.models.pre_modifier_group import PreModifierGroup
 from toastapi.models.pre_modifier_group_v2 import PreModifierGroupV2
@@ -81,6 +86,7 @@ from toastapi.models.restaurant_service import RestaurantService
 from toastapi.models.restaurant_v2 import RestaurantV2
 from toastapi.models.revenue_center import RevenueCenter
 from toastapi.models.sales_category import SalesCategory
+from toastapi.models.sales_category_v2 import SalesCategoryV2
 from toastapi.models.schedule_v2 import ScheduleV2
 from toastapi.models.schedules import Schedules
 from toastapi.models.selection import Selection
@@ -106,3 +112,4 @@ from toastapi.models.void_order_request import VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections
 from toastapi.models.void_reason import VoidReason
 from toastapi.models.week_schedule import WeekSchedule
+from toastapi.models.weight_unit_of_measure_v2 import WeightUnitOfMeasureV2
