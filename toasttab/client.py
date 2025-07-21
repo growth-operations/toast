@@ -14,7 +14,6 @@ from toastapi.api import (
     AuthenticationApi,
     BreakTypesApi,
     CashDrawersApi,
-    DefaultApi,
     DiningOptionsApi,
     DiscountsApi,
     EmployeesApi,
