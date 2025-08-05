@@ -7518,7 +7518,9 @@ components:
         weightUnitOfMeasure:
           $ref: "#/components/schemas/WeightUnitOfMeasureV2"
         images:
-          $ref: "#/components/schemas/ImagesV2"
+          type: array
+          items:
+            $ref: "#/components/schemas/ImagesV2"
         guestCount:
           $ref: "#/components/schemas/GuestCountV2"
 

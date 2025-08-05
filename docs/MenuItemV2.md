@@ -42,7 +42,7 @@ Name | Type | Description | Notes
 **dimension_unit_of_measure** | [**DimensionUnitOfMeasureV2**](DimensionUnitOfMeasureV2.md) |  | [optional] 
 **weight** | **float** | The weight of the menu item. | [optional] 
 **weight_unit_of_measure** | [**WeightUnitOfMeasureV2**](WeightUnitOfMeasureV2.md) |  | [optional] 
-**images** | [**ImagesV2**](ImagesV2.md) |  | [optional] 
+**images** | [**List[ImagesV2]**](ImagesV2.md) |  | [optional] 
 **guest_count** | **int** | The number of guests this menu item serves. | [optional] 
 
 ## Example

@@ -71,7 +71,7 @@ class MenuItemV2(BaseModel):
     dimension_unit_of_measure: Optional[DimensionUnitOfMeasureV2] = Field(default=None, alias="dimensionUnitOfMeasure")
     weight: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The weight of the menu item.")
     weight_unit_of_measure: Optional[WeightUnitOfMeasureV2] = Field(default=None, alias="weightUnitOfMeasure")
-    images: Optional[ImagesV2] = None
+    images: Optional[List[ImagesV2]] = None
     guest_count: Optional[StrictInt] = Field(default=None, description="The number of guests this menu item serves.", alias="guestCount")
     __properties: ClassVar[List[str]] = ["name", "kitchenName", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "image", "visibility", "price", "pricingStrategy", "pricingRules", "isDeferred", "isDiscountable", "salesCategory", "taxInfo", "taxInclusion", "itemTags", "plu", "sku", "calories", "contentAdvisories", "unitOfMeasure", "portions", "prepTime", "prepStations", "modifierGroupReferences", "eligiblePaymentAssistancePrograms", "length", "height", "width", "dimensionUnitOfMeasure", "weight", "weightUnitOfMeasure", "images", "guestCount"]
 
@@ -178,9 +178,13 @@ class MenuItemV2(BaseModel):
                 if _item_portions:
                     _items.append(_item_portions.to_dict())
             _dict['portions'] = _items
-        # override the default output from pydantic by calling `to_dict()` of images
+        # override the default output from pydantic by calling `to_dict()` of each item in images (list)
+        _items = []
         if self.images:
-            _dict['images'] = self.images.to_dict()
+            for _item_images in self.images:
+                if _item_images:
+                    _items.append(_item_images.to_dict())
+            _dict['images'] = _items
         # set to None if image (nullable) is None
         # and model_fields_set contains the field
         if self.image is None and "image" in self.model_fields_set:
@@ -274,7 +278,7 @@ class MenuItemV2(BaseModel):
             "dimensionUnitOfMeasure": obj.get("dimensionUnitOfMeasure"),
             "weight": obj.get("weight"),
             "weightUnitOfMeasure": obj.get("weightUnitOfMeasure"),
-            "images": ImagesV2.from_dict(obj["images"]) if obj.get("images") is not None else None,
+            "images": [ImagesV2.from_dict(_item) for _item in obj["images"]] if obj.get("images") is not None else None,
             "guestCount": obj.get("guestCount")
         })
         return _obj
