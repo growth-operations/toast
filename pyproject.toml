@@ -1,11 +1,11 @@
 [project]
 name = "toastapi"
-version = "1.0.4"
+version = "1.0.5"
 description = "Toast API"
 authors = [
   {name = "Toast developer support",email = "team@openapitools.org"},
 ]
-license = {text = "MIT"}
+license = "MIT"
 readme = "README.md"
 keywords = ["OpenAPI", "OpenAPI-Generator", "Toast API"]
 requires-python = ">=3.9"

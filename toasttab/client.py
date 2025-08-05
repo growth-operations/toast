@@ -151,7 +151,6 @@ class Toast:
         self.time_entries: TimeEntriesApi = self._create_retry_wrapper(TimeEntriesApi)
         self.payments: PaymentsApi = self._create_retry_wrapper(PaymentsApi)
         self.discounts: DiscountsApi = self._create_retry_wrapper(DiscountsApi)
-        self.default: DefaultApi = self._create_retry_wrapper(DefaultApi)
         self.restaurants: RestaurantsApi = self._create_retry_wrapper(RestaurantsApi)
         self.break_types: BreakTypesApi = self._create_retry_wrapper(BreakTypesApi)
         self.alternate_payment_types: AlternatePaymentTypesApi = (
