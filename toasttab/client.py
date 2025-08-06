@@ -103,8 +103,8 @@ class Toast:
             environment: The environment to use ('sandbox' or 'production')
             host: Optional custom host URL (overrides environment).
                  Must be one of the valid Toast base URLs:
-                 - https://sandbox-oauth.toasttab.com (sandbox)
-                 - https://oauth.toasttab.com (production)
+                 - https://ws-sandbox-api.eng.toasttab.com (sandbox)
+                 - https://ws-api.toasttab.com (production)
             token: Optional pre-existing auth token
             token_expires_at: Optional token expiration timestamp
             retry_config: Optional retry configuration (defaults to 3 retries, 1s delay)
@@ -119,7 +119,7 @@ class Toast:
             # Validate that the host is one of the valid base URLs
             valid_base_hosts = [
                 "https://ws-sandbox-api.eng.toasttab.com",
-                "https://oauth.toasttab.com",
+                "https://ws-api.toasttab.com",
             ]
             if host not in valid_base_hosts:
                 raise ValueError(
@@ -127,7 +127,7 @@ class Toast:
                 )
             self.host = host
         elif environment.lower() == "production":
-            self.host = "https://oauth.toasttab.com"
+            self.host = "https://ws-api.toasttab.com"
         elif environment.lower() == "sandbox":
             self.host = "https://ws-sandbox-api.eng.toasttab.com"
         else:
