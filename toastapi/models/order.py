@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from toastapi.models.check import Check
@@ -32,20 +32,67 @@ class Order(BaseModel):
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
-    opened_date: Optional[datetime] = Field(default=None, description="The business date of the order. ", alias="openedDate")
+    opened_date: Optional[datetime] = Field(default=None, description="The business date of the order.  For dine-in and as soon as possible (ASAP) orders, `openedDate` should match `createdDate`.  For scheduled orders, `openedDate` should match `promisedDate`.  If you do not provide a value for  `openedDate` value when you `POST` a new order, the business date of the order is set to the restaurant business day that corresponds to the current date and time.  The business date of an order is affected by the business date cutoff time for a restaurant, which is available from the restaurants API in the `closeoutHour` property. ", alias="openedDate")
     modified_date: Optional[datetime] = Field(default=None, description="The most recent date that the order, or a check or menu item selection in the order, was modified.", alias="modifiedDate")
-    promised_date: Optional[datetime] = Field(default=None, description="For scheduled orders, the date and time that the order is scheduled to be fulfilled. ", alias="promisedDate")
+    promised_date: Optional[datetime] = Field(default=None, description="For scheduled orders, the date and time that the order is scheduled to be fulfilled.  For dine-in and as soon as possible (ASAP) orders, `promisedDate` is `null`. ", alias="promisedDate")
+    channel_guid: Optional[StrictStr] = Field(default=None, description="Reserved for future use. ", alias="channelGuid")
     dining_option: Dict[str, Any] = Field(alias="diningOption")
-    checks: Annotated[List[Check], Field(min_length=1)] = Field(description="The checks for this order. Most orders have one check. ")
+    checks: Annotated[List[Check], Field(min_length=1)] = Field(description="The checks for this order. Most orders have one check.  If the check is split, then there are multiple checks. ")
+    table: Optional[Dict[str, Any]] = None
+    service_area: Optional[Dict[str, Any]] = Field(default=None, alias="serviceArea")
+    restaurant_service: Optional[Dict[str, Any]] = Field(default=None, alias="restaurantService")
+    revenue_center: Optional[Dict[str, Any]] = Field(default=None, alias="revenueCenter")
+    source: Optional[StrictStr] = Field(default=None, description="Indicates the way that the order was placed.  Valid values:  * `In Store` * `Online` * `Order-and-Pay-at-Table` * `API` * `Kiosk` * `Caller Id` * `Google` * `Invoice` * `Toast Pickup App` * `Toast Local` * `Branded Online Ordering` * `Catering` * `Catering Online Ordering` * `Toast Tables` * `eCommerce Online ordering` * `Branded Mobile App * `Grubhub` (deprecated)  Response only. ")
+    duration: Optional[StrictInt] = Field(default=None, description="The number of seconds between creation and payment. Response only.")
     delivery_info: Optional[Dict[str, Any]] = Field(default=None, alias="deliveryInfo")
-    number_of_guests: Optional[StrictInt] = Field(default=None, description="The number of restaurant guests that are associated with the order. ", alias="numberOfGuests")
+    required_prep_time: Optional[StrictStr] = Field(default=None, description="The amount of time that it will take to prepare the order. This value overrides the  default `deliveryPrepTime` or `takeoutPrepTime` that normally controls auto-firing for scheduled orders.  You can use `requiredPrepTime` to handle atypical orders that will take more time than usual for a restaurant to prepare.  Express the required preparation time in ISO-8601 duration format. Must be greater than zero and be an  increment of five minutes. For example, the value \"PT15M\" sets the required preparation time for the order to 15 minutes. ", alias="requiredPrepTime")
+    estimated_fulfillment_date: Optional[datetime] = Field(default=None, description="The date and time that the order is expected to be ready for pickup or to be delivered.  This value is only set when the order dining option uses the `DELIVERY` or `TAKE_OUT` dining behavior. For other dining options, the value is `null`.  Response only. ", alias="estimatedFulfillmentDate")
+    number_of_guests: Optional[StrictInt] = Field(default=None, description="The number of restaurant guests that are associated with the order. For example, for a dine-in order, this might be the number of guests at a table. ", alias="numberOfGuests")
     voided: Optional[StrictBool] = Field(default=None, description="Set to `true` if this order was voided. Response only.")
     void_date: Optional[datetime] = Field(default=None, description="The date on which this order was voided. Response only.", alias="voidDate")
-    paid_date: Optional[datetime] = Field(default=None, description="The most recent date on which this order received payment.", alias="paidDate")
+    void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this order was voided. Response only.", alias="voidBusinessDate")
+    paid_date: Optional[datetime] = Field(default=None, description="The most recent date on which this order received payment. If not specified when `POST`ing, it is set to the current system time.", alias="paidDate")
+    closed_date: Optional[datetime] = Field(default=None, description="The most recent date on which the order payment status changed to `CLOSED`.  This status is not returned for the order. The order is simply `CLOSED` when all of the checks on the order are `CLOSED`. ", alias="closedDate")
+    deleted_date: Optional[datetime] = Field(default=None, description="The date and time when the order was deleted.  The `deletedDate` value only applies when the `deleted` value is `true`.  If `deleted` is `false`, the value of `deletedDate` is the UNIX epoch, `1970-01-01T00:00:00.000+0000`. ", alias="deletedDate")
+    deleted: Optional[StrictBool] = Field(default=None, description="Set to `true` if this order is deleted. Response only.  For example, if you combine a check into another order, the original order for the check is deleted. ")
     business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which the order was fulfilled. Response only.", alias="businessDate")
+    applied_packaging_info: Optional[Dict[str, Any]] = Field(default=None, alias="appliedPackagingInfo")
+    approval_status: Optional[StrictStr] = Field(default=None, description="The current state of the order in the restaurant order fulfillment process. For example, the `approvalStatus` can indicate that an order is waiting for a restaurant employee to approve it or that the order is in a restaurant kitchen being fulfilled. Response only.  Valid values:  * `NEEDS_APPROVAL` - The order is created but will not be fulfilled by the restaurant until an employee approves it.  * `APPROVED` - The order is being fulfilled by the restaurant or it was fulfilled in the past. Orders remain in this state indefinitely after they are fulfilled.  * `FUTURE` - The order is expected to be fulfilled by the restaurant at a future date and time. Restaurant employees will receive information about the order at the date and time that it is ready to be fulfilled.  * `NOT_APPROVED` - Restaurant employees received information about the order but did not approve it for fulfillment. An order enters this state after a period of time passes without a restaurant employee approving it. ", alias="approvalStatus")
+    created_device: Optional[Dict[str, Any]] = Field(default=None, alias="createdDevice")
+    created_in_test_mode: Optional[StrictBool] = Field(default=None, description="Indicates whether the order was created while the restaurant was in test mode.  For more information, see [this _Toast Central_ article](https://central.toasttab.com/s/article/Test-Mode-Enable-and-Disable-1492802389999) ", alias="createdInTestMode")
+    curbside_pickup_info: Optional[Dict[str, Any]] = Field(default=None, alias="curbsidePickupInfo")
+    delivery_service_info: Optional[Dict[str, Any]] = Field(default=None, alias="deliveryServiceInfo")
+    display_number: Optional[StrictStr] = Field(default=None, description="Response only. Generally starts at one each day and counts up. Not guaranteed to be unique, can be empty if unset.", alias="displayNumber")
+    excess_food: Optional[StrictBool] = Field(default=None, description="Indicates whether the order was created to track excess food (for example, food waste) rather than a  standard guest order. Response only.  For more information on the differences between guest orders and excess food orders, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiDailyOrderForTrackingExcessFood.html\">Daily order for tracking excess food</a>. ", alias="excessFood")
+    guest_order_status: Optional[StrictStr] = Field(default=None, description="Reserved for future use. ", alias="guestOrderStatus")
+    initial_date: Optional[StrictInt] = Field(default=None, description="Reserved for future use. Do not use the `initialDate` value for integration development.", alias="initialDate")
+    last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
+    marketplace_facilitator_tax_info: Optional[Dict[str, Any]] = Field(default=None, alias="marketplaceFacilitatorTaxInfo")
+    pricing_features: Optional[List[StrictStr]] = Field(default=None, description="Pricing features that this order is using.", alias="pricingFeatures")
     server: Optional[Dict[str, Any]] = None
     created_date: Optional[datetime] = Field(default=None, description="The date and time that the Toast platform received the order.", alias="createdDate")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "openedDate", "modifiedDate", "promisedDate", "diningOption", "checks", "deliveryInfo", "numberOfGuests", "voided", "voidDate", "paidDate", "businessDate", "server", "createdDate"]
+    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "openedDate", "modifiedDate", "promisedDate", "channelGuid", "diningOption", "checks", "table", "serviceArea", "restaurantService", "revenueCenter", "source", "duration", "deliveryInfo", "requiredPrepTime", "estimatedFulfillmentDate", "numberOfGuests", "voided", "voidDate", "voidBusinessDate", "paidDate", "closedDate", "deletedDate", "deleted", "businessDate", "appliedPackagingInfo", "approvalStatus", "createdDevice", "createdInTestMode", "curbsidePickupInfo", "deliveryServiceInfo", "displayNumber", "excessFood", "guestOrderStatus", "initialDate", "lastModifiedDevice", "marketplaceFacilitatorTaxInfo", "pricingFeatures", "server", "createdDate"]
+
+    @field_validator('approval_status')
+    def approval_status_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['NEEDS_APPROVAL', 'APPROVED', 'FUTURE', 'NOT_APPROVED']):
+            raise ValueError("must be one of enum values ('NEEDS_APPROVAL', 'APPROVED', 'FUTURE', 'NOT_APPROVED')")
+        return value
+
+    @field_validator('pricing_features')
+    def pricing_features_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(['TAXESV2', 'TAXESV3']):
+                raise ValueError("each list item must be one of ('TAXESV2', 'TAXESV3')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -111,14 +158,40 @@ class Order(BaseModel):
             "openedDate": obj.get("openedDate"),
             "modifiedDate": obj.get("modifiedDate"),
             "promisedDate": obj.get("promisedDate"),
+            "channelGuid": obj.get("channelGuid"),
             "diningOption": obj.get("diningOption"),
             "checks": [Check.from_dict(_item) for _item in obj["checks"]] if obj.get("checks") is not None else None,
+            "table": obj.get("table"),
+            "serviceArea": obj.get("serviceArea"),
+            "restaurantService": obj.get("restaurantService"),
+            "revenueCenter": obj.get("revenueCenter"),
+            "source": obj.get("source"),
+            "duration": obj.get("duration"),
             "deliveryInfo": obj.get("deliveryInfo"),
+            "requiredPrepTime": obj.get("requiredPrepTime"),
+            "estimatedFulfillmentDate": obj.get("estimatedFulfillmentDate"),
             "numberOfGuests": obj.get("numberOfGuests"),
             "voided": obj.get("voided"),
             "voidDate": obj.get("voidDate"),
+            "voidBusinessDate": obj.get("voidBusinessDate"),
             "paidDate": obj.get("paidDate"),
+            "closedDate": obj.get("closedDate"),
+            "deletedDate": obj.get("deletedDate"),
+            "deleted": obj.get("deleted"),
             "businessDate": obj.get("businessDate"),
+            "appliedPackagingInfo": obj.get("appliedPackagingInfo"),
+            "approvalStatus": obj.get("approvalStatus"),
+            "createdDevice": obj.get("createdDevice"),
+            "createdInTestMode": obj.get("createdInTestMode"),
+            "curbsidePickupInfo": obj.get("curbsidePickupInfo"),
+            "deliveryServiceInfo": obj.get("deliveryServiceInfo"),
+            "displayNumber": obj.get("displayNumber"),
+            "excessFood": obj.get("excessFood"),
+            "guestOrderStatus": obj.get("guestOrderStatus"),
+            "initialDate": obj.get("initialDate"),
+            "lastModifiedDevice": obj.get("lastModifiedDevice"),
+            "marketplaceFacilitatorTaxInfo": obj.get("marketplaceFacilitatorTaxInfo"),
+            "pricingFeatures": obj.get("pricingFeatures"),
             "server": obj.get("server"),
             "createdDate": obj.get("createdDate")
         })

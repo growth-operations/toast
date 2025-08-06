@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 
 # Define package exports
 __all__ = [
@@ -63,6 +63,9 @@ __all__ = [
     "ApplicableDiscount",
     "ApplicableDiscountsRequest",
     "AppliedDiscount",
+    "AppliedPackagingInfo",
+    "AppliedPackagingItem",
+    "AppliedTaxRate",
     "AuthenticationRequest",
     "AuthenticationResponse",
     "AuthenticationToken",
@@ -71,11 +74,14 @@ __all__ = [
     "Check",
     "ConfigReference",
     "ContentAdvisoriesV2",
+    "CurbsidePickupInfo",
     "Customer",
     "DaySchedule",
     "Delivery",
     "DeliveryInfo",
     "DeliveryPaymentOptions",
+    "DeliveryServiceInfo",
+    "Device",
     "DimensionUnitOfMeasureV2",
     "DiningOption",
     "Discount",
@@ -90,6 +96,7 @@ __all__ = [
     "Job",
     "JobWageOverride",
     "Location",
+    "MarketplaceFacilitatorTaxInfo",
     "Menu",
     "MenuGroup",
     "MenuGroupV2",
@@ -209,6 +216,9 @@ from toastapi.models.alternate_payment_type import AlternatePaymentType as Alter
 from toastapi.models.applicable_discount import ApplicableDiscount as ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest as ApplicableDiscountsRequest
 from toastapi.models.applied_discount import AppliedDiscount as AppliedDiscount
+from toastapi.models.applied_packaging_info import AppliedPackagingInfo as AppliedPackagingInfo
+from toastapi.models.applied_packaging_item import AppliedPackagingItem as AppliedPackagingItem
+from toastapi.models.applied_tax_rate import AppliedTaxRate as AppliedTaxRate
 from toastapi.models.authentication_request import AuthenticationRequest as AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse as AuthenticationResponse
 from toastapi.models.authentication_token import AuthenticationToken as AuthenticationToken
@@ -217,11 +227,14 @@ from toastapi.models.cash_drawer import CashDrawer as CashDrawer
 from toastapi.models.check import Check as Check
 from toastapi.models.config_reference import ConfigReference as ConfigReference
 from toastapi.models.content_advisories_v2 import ContentAdvisoriesV2 as ContentAdvisoriesV2
+from toastapi.models.curbside_pickup_info import CurbsidePickupInfo as CurbsidePickupInfo
 from toastapi.models.customer import Customer as Customer
 from toastapi.models.day_schedule import DaySchedule as DaySchedule
 from toastapi.models.delivery import Delivery as Delivery
 from toastapi.models.delivery_info import DeliveryInfo as DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions as DeliveryPaymentOptions
+from toastapi.models.delivery_service_info import DeliveryServiceInfo as DeliveryServiceInfo
+from toastapi.models.device import Device as Device
 from toastapi.models.dimension_unit_of_measure_v2 import DimensionUnitOfMeasureV2 as DimensionUnitOfMeasureV2
 from toastapi.models.dining_option import DiningOption as DiningOption
 from toastapi.models.discount import Discount as Discount
@@ -236,6 +249,7 @@ from toastapi.models.item_tag_v2 import ItemTagV2 as ItemTagV2
 from toastapi.models.job import Job as Job
 from toastapi.models.job_wage_override import JobWageOverride as JobWageOverride
 from toastapi.models.location import Location as Location
+from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilitatorTaxInfo as MarketplaceFacilitatorTaxInfo
 from toastapi.models.menu import Menu as Menu
 from toastapi.models.menu_group import MenuGroup as MenuGroup
 from toastapi.models.menu_group_v2 import MenuGroupV2 as MenuGroupV2

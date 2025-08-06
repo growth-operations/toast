@@ -19,6 +19,9 @@ from toastapi.models.alternate_payment_type import AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest
 from toastapi.models.applied_discount import AppliedDiscount
+from toastapi.models.applied_packaging_info import AppliedPackagingInfo
+from toastapi.models.applied_packaging_item import AppliedPackagingItem
+from toastapi.models.applied_tax_rate import AppliedTaxRate
 from toastapi.models.authentication_request import AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse
 from toastapi.models.authentication_token import AuthenticationToken
@@ -27,11 +30,14 @@ from toastapi.models.cash_drawer import CashDrawer
 from toastapi.models.check import Check
 from toastapi.models.config_reference import ConfigReference
 from toastapi.models.content_advisories_v2 import ContentAdvisoriesV2
+from toastapi.models.curbside_pickup_info import CurbsidePickupInfo
 from toastapi.models.customer import Customer
 from toastapi.models.day_schedule import DaySchedule
 from toastapi.models.delivery import Delivery
 from toastapi.models.delivery_info import DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions
+from toastapi.models.delivery_service_info import DeliveryServiceInfo
+from toastapi.models.device import Device
 from toastapi.models.dimension_unit_of_measure_v2 import DimensionUnitOfMeasureV2
 from toastapi.models.dining_option import DiningOption
 from toastapi.models.discount import Discount
@@ -46,6 +52,7 @@ from toastapi.models.item_tag_v2 import ItemTagV2
 from toastapi.models.job import Job
 from toastapi.models.job_wage_override import JobWageOverride
 from toastapi.models.location import Location
+from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilitatorTaxInfo
 from toastapi.models.menu import Menu
 from toastapi.models.menu_group import MenuGroup
 from toastapi.models.menu_group_v2 import MenuGroupV2
