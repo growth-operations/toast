@@ -2965,7 +2965,6 @@ paths:
       security:
         - oauth2:
             - labor:read
-
   /restaurants/v1/restaurants/{restaurantGUID}:
     get:
       tags:
@@ -3026,7 +3025,6 @@ paths:
       security:
         - oauth2:
             - restaurants:read
-
   /restaurants/v1/groups/{managementGroupGUID}/restaurants:
     get:
       tags:
@@ -3068,7 +3066,6 @@ paths:
       security:
         - oauth2:
             - restaurants:read
-
   /config/v2/alternatePaymentTypes/{guid}:
     get:
       tags:
@@ -3109,7 +3106,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/alternatePaymentTypes:
     get:
       tags:
@@ -3188,7 +3184,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/breakTypes/{guid}:
     get:
       tags:
@@ -3224,7 +3219,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/breakTypes:
     get:
       tags:
@@ -3298,7 +3292,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/cashDrawers/{guid}:
     get:
       tags:
@@ -3332,7 +3325,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/cashDrawers:
     get:
       tags:
@@ -3388,7 +3380,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/diningOptions/{guid}:
     get:
       tags:
@@ -3422,7 +3413,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/diningOptions:
     get:
       tags:
@@ -3478,7 +3468,110 @@ paths:
       security:
         - oauth2:
             - config:read
-
+  /config/v2/discounts:
+    get:
+      tags:
+        - Discounts
+      operationId: discountsGet
+      summary: Get discounts
+      description: |
+        Returns an array of `Discount` objects containing
+        information about the price deductions configured for a
+        restaurant. If a `lastModified` date is specified, returns all
+        objects that were created or modified after that date.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration
+            applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          schema:
+            type: string
+          description: |
+            A string that identifies the set of data objects that the 
+            endpoint will return in its response data. You can use this 
+            parameter to retrieve one page of response data. You 
+            get the value that you supply in the `pageToken` parameter 
+            from the `Toast-Next-Page-Token` header field value of a 
+            previous request to the endpoint. For more information, see 
+            <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after
+            a specific date and time. For example:
+            `2024-06-20T00:00:00.000%2B0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Returns an array of `Discount` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/Discount"
+          headers:
+            Toast-Next-Page-Token:
+              schema:
+                type: string
+              description: |
+                A string that identifies the following set of objects 
+                that the endpoint will return. You can use this value 
+                to retrieve that page of response data. To return 
+                the next page of objects you supply this value in the 
+                `pageToken` parameter of the next request to the 
+                endpoint. For more information, see 
+                <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/discounts/{guid}:
+    get:
+      tags:
+        - Discounts
+      operationId: discountsGuidGet
+      summary: Get a discount
+      description: |
+        Returns a `Discount`
+        object containing information about a price deduction
+        configured for a restaurant.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration
+            applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the discount.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `Discount` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discount"
+      security:
+        - oauth2:
+            - config:read
   /config/v2/menuGroups/{guid}:
     get:
       tags:
@@ -3512,7 +3605,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/menuGroups:
     get:
       tags:
@@ -3568,7 +3660,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/menuItems/{guid}:
     get:
       tags:
@@ -3602,7 +3693,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/menuItems:
     get:
       tags:
@@ -3658,7 +3748,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/printers/{guid}:
     get:
       tags:
@@ -3692,7 +3781,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/printers:
     get:
       tags:
@@ -3748,7 +3836,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/tables/{guid}:
     get:
       tags:
@@ -3782,7 +3869,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/tables:
     get:
       tags:
@@ -3838,7 +3924,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/preModifiers:
     get:
       tags:
@@ -3886,7 +3971,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/preModifierGroups/{guid}:
     get:
       tags:
@@ -3917,7 +4001,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/preModifierGroups:
     get:
       tags:
@@ -3965,7 +4048,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/noSaleReasons/{guid}:
     get:
       tags:
@@ -3996,7 +4078,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/noSaleReasons:
     get:
       tags:
@@ -4044,7 +4125,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/payoutReasons/{guid}:
     get:
       tags:
@@ -4084,7 +4164,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/payoutReasons:
     get:
       tags:
@@ -4142,7 +4221,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/priceGroups/{guid}:
     get:
       tags:
@@ -4182,7 +4260,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/priceGroups:
     get:
       tags:
@@ -4278,7 +4355,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/taxRates:
     get:
       tags:
@@ -4373,7 +4449,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/serviceAreas:
     get:
       tags:
@@ -4430,7 +4505,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/serviceCharges/{guid}:
     get:
       tags:
@@ -4469,7 +4543,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/serviceCharges:
     get:
       tags:
@@ -4564,7 +4637,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/revenueCenters:
     get:
       tags:
@@ -4659,7 +4731,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/restaurantServices:
     get:
       tags:
@@ -4785,7 +4856,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /config/v2/voidReasons:
     get:
       tags:
@@ -4842,7 +4912,6 @@ paths:
       security:
         - oauth2:
             - config:read
-
   /menus/v2/menus:
     get:
       operationId: menusV2Get
@@ -4875,7 +4944,6 @@ paths:
       security:
         - oauth2:
             - menus:read
-
   /menus/v2/metadata:
     get:
       operationId: menusV2MetadataGet
@@ -6776,6 +6844,13 @@ components:
                 - FIRST
                 - LEAST_EXPENSIVE
                 - MOST_EXPENSIVE
+            fixedTotal:
+              type: number
+              format: double
+              description: |
+                The total price of items discounted by a combo
+                discount. This value is `null` for discounts that are
+                not combo discounts.
 
     Printer:
       type: object

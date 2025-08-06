@@ -36,7 +36,8 @@ class Discount(BaseModel):
     selection_type: Optional[StrictStr] = Field(default=None, description="* `CHECK` - the discount can be applied to a check. * `BOGO` - a buy one get one (BOGO) discount. * `ITEM` - the discount can be applied to an item selection in a check. ", alias="selectionType")
     non_exclusive: Optional[StrictBool] = Field(default=None, description="Indicates whether you can apply the discount with other discounts. This value is always `false` for item and combo discounts. Set this value for check and BOGO discounts by selecting **Allow with other discounts** in the **Discounts Rules** section of the discounts configuration page of Toast Web. ", alias="nonExclusive")
     item_picking_priority: Optional[StrictStr] = Field(default=None, description="Indicates which menu item selections are discounted when you apply a BOGO discount. An item that is discounted by a BOGO discount is a \"get\" item.  * `FIRST` - the BOGO discount applies to the first matching item selection in the check or the discount is not a BOGO discount. The `itemPickingPriority` is always `FIRST` for discounts that are not BOGO discounts.  * `LEAST_EXPENSIVE` - the BOGO discount applies to the least expensive matching item selection in the check.  * `MOST_EXPENSIVE` - the BOGO discount applies to the most expensive matching item selection in the check. ", alias="itemPickingPriority")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "name", "active", "type", "percentage", "amount", "selectionType", "nonExclusive", "itemPickingPriority"]
+    fixed_total: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The total price of items discounted by a combo discount. This value is `null` for discounts that are not combo discounts. ", alias="fixedTotal")
+    __properties: ClassVar[List[str]] = ["guid", "entityType", "name", "active", "type", "percentage", "amount", "selectionType", "nonExclusive", "itemPickingPriority", "fixedTotal"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -128,7 +129,8 @@ class Discount(BaseModel):
             "amount": obj.get("amount"),
             "selectionType": obj.get("selectionType"),
             "nonExclusive": obj.get("nonExclusive"),
-            "itemPickingPriority": obj.get("itemPickingPriority")
+            "itemPickingPriority": obj.get("itemPickingPriority"),
+            "fixedTotal": obj.get("fixedTotal")
         })
         return _obj
 

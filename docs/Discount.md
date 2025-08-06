@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **selection_type** | **str** | * &#x60;CHECK&#x60; - the discount can be applied to a check. * &#x60;BOGO&#x60; - a buy one get one (BOGO) discount. * &#x60;ITEM&#x60; - the discount can be applied to an item selection in a check.  | [optional] 
 **non_exclusive** | **bool** | Indicates whether you can apply the discount with other discounts. This value is always &#x60;false&#x60; for item and combo discounts. Set this value for check and BOGO discounts by selecting **Allow with other discounts** in the **Discounts Rules** section of the discounts configuration page of Toast Web.  | [optional] 
 **item_picking_priority** | **str** | Indicates which menu item selections are discounted when you apply a BOGO discount. An item that is discounted by a BOGO discount is a \&quot;get\&quot; item.  * &#x60;FIRST&#x60; - the BOGO discount applies to the first matching item selection in the check or the discount is not a BOGO discount. The &#x60;itemPickingPriority&#x60; is always &#x60;FIRST&#x60; for discounts that are not BOGO discounts.  * &#x60;LEAST_EXPENSIVE&#x60; - the BOGO discount applies to the least expensive matching item selection in the check.  * &#x60;MOST_EXPENSIVE&#x60; - the BOGO discount applies to the most expensive matching item selection in the check.  | [optional] 
+**fixed_total** | **float** | The total price of items discounted by a combo discount. This value is &#x60;null&#x60; for discounts that are not combo discounts.  | [optional] 
 
 ## Example
 
