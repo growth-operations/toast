@@ -19,6 +19,8 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.applied_discount_trigger import AppliedDiscountTrigger
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -35,7 +37,14 @@ class AppliedDiscount(BaseModel):
     approver: Optional[Dict[str, Any]] = None
     discount_type: Optional[StrictStr] = Field(default=None, description="The behavior of this discount. ", alias="discountType")
     discount_percent: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The percent value (0-100) of the applied discount when the `discountType` is `PERCENT` or `OPEN_PERCENT`.", alias="discountPercent")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "name", "discountAmount", "discount", "approver", "discountType", "discountPercent"]
+    non_tax_discount_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The discount amount, excluding the tax discount amount. Response only.", alias="nonTaxDiscountAmount")
+    triggers: Optional[List[AppliedDiscountTrigger]] = Field(default=None, description="The menu item selections in the check that triggered this discount to be applied. Response only.")
+    processing_state: Optional[StrictStr] = Field(default=None, description="The validation state of a loyalty program discount. Response only.  Valid values:  * `PENDING_APPLIED` - The loyalty program discount is applied to the check but the loyalty program service provider has not validated it. The discount will appear on guest receipts.  * `APPLIED` - The loyalty program discount has been validated by the loyalty program service provider and will appear on guest receipts.  * `PENDING_VOID` - The loyalty program service provider rejected the discount. The discount is pending removal from the check.  * `VOID` - The loyalty program discount has been removed from the check because the loyalty program service provider rejected it. ", alias="processingState")
+    applied_discount_reason: Optional[Dict[str, Any]] = Field(default=None, alias="appliedDiscountReason")
+    loyalty_details: Optional[Dict[str, Any]] = Field(default=None, alias="loyaltyDetails")
+    combo_items: Optional[List[ExternalReference]] = Field(default=None, description="The menu item selections that are discounted as part of a combo discount. Response only.", alias="comboItems")
+    applied_promo_code: Optional[StrictStr] = Field(default=None, description="The promo code that was applied to get this discount. Response only.", alias="appliedPromoCode")
+    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "name", "discountAmount", "discount", "approver", "discountType", "discountPercent", "nonTaxDiscountAmount", "triggers", "processingState", "appliedDiscountReason", "loyaltyDetails", "comboItems", "appliedPromoCode"]
 
     @field_validator('discount_type')
     def discount_type_validate_enum(cls, value):
@@ -45,6 +54,16 @@ class AppliedDiscount(BaseModel):
 
         if value not in set(['BOGO', 'PERCENT', 'FIXED', 'OPEN_PERCENT', 'OPEN_FIXED', 'FIXED_TOTAL']):
             raise ValueError("must be one of enum values ('BOGO', 'PERCENT', 'FIXED', 'OPEN_PERCENT', 'OPEN_FIXED', 'FIXED_TOTAL')")
+        return value
+
+    @field_validator('processing_state')
+    def processing_state_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['PENDING_APPLIED', 'APPLIED', 'PENDING_VOID', 'VOID']):
+            raise ValueError("must be one of enum values ('PENDING_APPLIED', 'APPLIED', 'PENDING_VOID', 'VOID')")
         return value
 
     model_config = ConfigDict(
@@ -86,6 +105,20 @@ class AppliedDiscount(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in triggers (list)
+        _items = []
+        if self.triggers:
+            for _item_triggers in self.triggers:
+                if _item_triggers:
+                    _items.append(_item_triggers.to_dict())
+            _dict['triggers'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in combo_items (list)
+        _items = []
+        if self.combo_items:
+            for _item_combo_items in self.combo_items:
+                if _item_combo_items:
+                    _items.append(_item_combo_items.to_dict())
+            _dict['comboItems'] = _items
         return _dict
 
     @classmethod
@@ -106,7 +139,14 @@ class AppliedDiscount(BaseModel):
             "discount": obj.get("discount"),
             "approver": obj.get("approver"),
             "discountType": obj.get("discountType"),
-            "discountPercent": obj.get("discountPercent")
+            "discountPercent": obj.get("discountPercent"),
+            "nonTaxDiscountAmount": obj.get("nonTaxDiscountAmount"),
+            "triggers": [AppliedDiscountTrigger.from_dict(_item) for _item in obj["triggers"]] if obj.get("triggers") is not None else None,
+            "processingState": obj.get("processingState"),
+            "appliedDiscountReason": obj.get("appliedDiscountReason"),
+            "loyaltyDetails": obj.get("loyaltyDetails"),
+            "comboItems": [ExternalReference.from_dict(_item) for _item in obj["comboItems"]] if obj.get("comboItems") is not None else None,
+            "appliedPromoCode": obj.get("appliedPromoCode")
         })
         return _obj
 

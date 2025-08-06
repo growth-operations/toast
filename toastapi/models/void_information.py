@@ -17,23 +17,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class Customer(BaseModel):
+class VoidInformation(BaseModel):
     """
-    Customer
+    Information about a void applied to a check or item.
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
-    first_name: StrictStr = Field(description="The first name, or given name, of the guest. ", alias="firstName")
-    last_name: StrictStr = Field(description="The last name, or surname, of the guest. ", alias="lastName")
-    phone: StrictStr = Field(description="The telephone number of the guest. ")
-    phone_country_code: Optional[StrictStr] = Field(default=None, description="The international phone country code for the telephone number of the guest. ", alias="phoneCountryCode")
-    email: StrictStr = Field(description="The email address corresponding to the guest who placed the order. ")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "firstName", "lastName", "phone", "phoneCountryCode", "email"]
+    void_user: Optional[Dict[str, Any]] = Field(default=None, alias="voidUser")
+    void_approver: Optional[Dict[str, Any]] = Field(default=None, alias="voidApprover")
+    void_date: Optional[datetime] = Field(default=None, description="The date on which the void was made.", alias="voidDate")
+    void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which the void was made. Response only.", alias="voidBusinessDate")
+    void_reason: Optional[Dict[str, Any]] = Field(default=None, alias="voidReason")
+    __properties: ClassVar[List[str]] = ["voidUser", "voidApprover", "voidDate", "voidBusinessDate", "voidReason"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +52,7 @@ class Customer(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Customer from a JSON string"""
+        """Create an instance of VoidInformation from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,11 +73,20 @@ class Customer(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of void_user
+        if self.void_user:
+            _dict['voidUser'] = self.void_user.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of void_approver
+        if self.void_approver:
+            _dict['voidApprover'] = self.void_approver.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of void_reason
+        if self.void_reason:
+            _dict['voidReason'] = self.void_reason.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Customer from a dict"""
+        """Create an instance of VoidInformation from a dict"""
         if obj is None:
             return None
 
@@ -86,13 +94,11 @@ class Customer(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "guid": obj.get("guid"),
-            "entityType": obj.get("entityType"),
-            "firstName": obj.get("firstName"),
-            "lastName": obj.get("lastName"),
-            "phone": obj.get("phone"),
-            "phoneCountryCode": obj.get("phoneCountryCode"),
-            "email": obj.get("email")
+            "voidUser": ExternalReference.from_dict(obj["voidUser"]) if obj.get("voidUser") is not None else None,
+            "voidApprover": ExternalReference.from_dict(obj["voidApprover"]) if obj.get("voidApprover") is not None else None,
+            "voidDate": obj.get("voidDate"),
+            "voidBusinessDate": obj.get("voidBusinessDate"),
+            "voidReason": ExternalReference.from_dict(obj["voidReason"]) if obj.get("voidReason") is not None else None
         })
         return _obj
 

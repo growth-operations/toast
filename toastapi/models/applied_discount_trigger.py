@@ -17,41 +17,19 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
-class DeliveryInfo(BaseModel):
+class AppliedDiscountTrigger(BaseModel):
     """
-    Information related to delivery orders. Required if the dining option behavior is `DELIVERY`.
+    The Selection that triggered the application of this discount
     """ # noqa: E501
-    address1: StrictStr = Field(description="The first line of the street address of the delivery destination. ")
-    address2: Optional[StrictStr] = Field(default=None, description="The second line of the street address of the delivery destination. ")
-    city: StrictStr = Field(description="The name of the city or town of the delivery destination. ")
-    state: StrictStr = Field(description="The postal abbreviation of the state or province of the delivery destination. ")
-    zip_code: StrictStr = Field(description="The postal or zip code of the delivery destination. ", alias="zipCode")
-    administrative_area: Optional[StrictStr] = Field(default=None, description="The state, province, or other geographic division that is larger than a city or town of the delivery destination. ", alias="administrativeArea")
-    country: Optional[StrictStr] = Field(default=None, description="The two-character ISO-3166-2 country code of the delivery destination. ")
-    latitude: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The north/south geographic coordinate of the delivery destination, in decimal format. ")
-    longitude: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The east/west geographic coordinate of the delivery destination, in decimal format. ")
-    notes: Optional[StrictStr] = Field(default=None, description="Additional instructions or information about the delivery. ")
-    delivered_date: Optional[datetime] = Field(default=None, description="The date and time that the delivery employee indicated in the Toast POS app that the order was delivered. Response only. ", alias="deliveredDate")
-    dispatched_date: Optional[datetime] = Field(default=None, description="The date and time that the restaurant indicated in the Toast POS app that the order was available for delivery and assigned to a delivery employee. ", alias="dispatchedDate")
-    delivery_employee: Optional[Dict[str, Any]] = Field(default=None, alias="deliveryEmployee")
-    delivery_state: Optional[StrictStr] = Field(default=None, description="An internal representation of the state of a delivery order. ", alias="deliveryState")
-    __properties: ClassVar[List[str]] = ["address1", "address2", "city", "state", "zipCode", "administrativeArea", "country", "latitude", "longitude", "notes", "deliveredDate", "dispatchedDate", "deliveryEmployee", "deliveryState"]
-
-    @field_validator('delivery_state')
-    def delivery_state_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['PENDING', 'IN_PROGRESS', 'PICKED_UP', 'DELIVERED']):
-            raise ValueError("must be one of enum values ('PENDING', 'IN_PROGRESS', 'PICKED_UP', 'DELIVERED')")
-        return value
+    selection: Optional[ExternalReference] = None
+    quantity: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The amount of the selection used to trigger the applied discount.")
+    __properties: ClassVar[List[str]] = ["selection", "quantity"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -71,7 +49,7 @@ class DeliveryInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of DeliveryInfo from a JSON string"""
+        """Create an instance of AppliedDiscountTrigger from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -92,14 +70,14 @@ class DeliveryInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of delivery_employee
-        if self.delivery_employee:
-            _dict['deliveryEmployee'] = self.delivery_employee.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of selection
+        if self.selection:
+            _dict['selection'] = self.selection.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of DeliveryInfo from a dict"""
+        """Create an instance of AppliedDiscountTrigger from a dict"""
         if obj is None:
             return None
 
@@ -107,20 +85,8 @@ class DeliveryInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "address1": obj.get("address1"),
-            "address2": obj.get("address2"),
-            "city": obj.get("city"),
-            "state": obj.get("state"),
-            "zipCode": obj.get("zipCode"),
-            "administrativeArea": obj.get("administrativeArea"),
-            "country": obj.get("country"),
-            "latitude": obj.get("latitude"),
-            "longitude": obj.get("longitude"),
-            "notes": obj.get("notes"),
-            "deliveredDate": obj.get("deliveredDate"),
-            "dispatchedDate": obj.get("dispatchedDate"),
-            "deliveryEmployee": ExternalReference.from_dict(obj["deliveryEmployee"]) if obj.get("deliveryEmployee") is not None else None,
-            "deliveryState": obj.get("deliveryState")
+            "selection": ExternalReference.from_dict(obj["selection"]) if obj.get("selection") is not None else None,
+            "quantity": obj.get("quantity")
         })
         return _obj
 

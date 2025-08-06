@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **city** | **str** | The name of the city or town of the delivery destination.  | 
 **state** | **str** | The postal abbreviation of the state or province of the delivery destination.  | 
 **zip_code** | **str** | The postal or zip code of the delivery destination.  | 
+**administrative_area** | **str** | The state, province, or other geographic division that is larger than a city or town of the delivery destination.  | [optional] 
+**country** | **str** | The two-character ISO-3166-2 country code of the delivery destination.  | [optional] 
 **latitude** | **float** | The north/south geographic coordinate of the delivery destination, in decimal format.  | [optional] 
 **longitude** | **float** | The east/west geographic coordinate of the delivery destination, in decimal format.  | [optional] 
 **notes** | **str** | Additional instructions or information about the delivery.  | [optional] 

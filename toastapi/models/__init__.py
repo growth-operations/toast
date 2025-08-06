@@ -19,8 +19,12 @@ from toastapi.models.alternate_payment_type import AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest
 from toastapi.models.applied_discount import AppliedDiscount
+from toastapi.models.applied_discount_reason import AppliedDiscountReason
+from toastapi.models.applied_discount_trigger import AppliedDiscountTrigger
+from toastapi.models.applied_loyalty_info import AppliedLoyaltyInfo
 from toastapi.models.applied_packaging_info import AppliedPackagingInfo
 from toastapi.models.applied_packaging_item import AppliedPackagingItem
+from toastapi.models.applied_service_charge import AppliedServiceCharge
 from toastapi.models.applied_tax_rate import AppliedTaxRate
 from toastapi.models.authentication_request import AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse
@@ -45,6 +49,7 @@ from toastapi.models.employee import Employee
 from toastapi.models.error_message import ErrorMessage
 from toastapi.models.external_reference import ExternalReference
 from toastapi.models.general import General
+from toastapi.models.gift_card_info import GiftCardInfo
 from toastapi.models.hours import Hours
 from toastapi.models.image import Image
 from toastapi.models.images_v2 import ImagesV2
@@ -52,6 +57,7 @@ from toastapi.models.item_tag_v2 import ItemTagV2
 from toastapi.models.job import Job
 from toastapi.models.job_wage_override import JobWageOverride
 from toastapi.models.location import Location
+from toastapi.models.loyalty_details import LoyaltyDetails
 from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilitatorTaxInfo
 from toastapi.models.menu import Menu
 from toastapi.models.menu_group import MenuGroup
@@ -83,6 +89,8 @@ from toastapi.models.pre_modifier_v2 import PreModifierV2
 from toastapi.models.prep_times import PrepTimes
 from toastapi.models.price_group import PriceGroup
 from toastapi.models.printer import Printer
+from toastapi.models.refund import Refund
+from toastapi.models.refund_details import RefundDetails
 from toastapi.models.restaurant import Restaurant
 from toastapi.models.restaurant_basic import RestaurantBasic
 from toastapi.models.restaurant_info import RestaurantInfo
@@ -115,6 +123,7 @@ from toastapi.models.tip_withholding import TipWithholding
 from toastapi.models.toast_reference import ToastReference
 from toastapi.models.urls import URLs
 from toastapi.models.update_payment_request import UpdatePaymentRequest
+from toastapi.models.void_information import VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections
 from toastapi.models.void_reason import VoidReason

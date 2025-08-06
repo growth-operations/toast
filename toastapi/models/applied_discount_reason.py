@@ -22,18 +22,15 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class Customer(BaseModel):
+class AppliedDiscountReason(BaseModel):
     """
-    Customer
+    AppliedDiscountReason
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
-    first_name: StrictStr = Field(description="The first name, or given name, of the guest. ", alias="firstName")
-    last_name: StrictStr = Field(description="The last name, or surname, of the guest. ", alias="lastName")
-    phone: StrictStr = Field(description="The telephone number of the guest. ")
-    phone_country_code: Optional[StrictStr] = Field(default=None, description="The international phone country code for the telephone number of the guest. ", alias="phoneCountryCode")
-    email: StrictStr = Field(description="The email address corresponding to the guest who placed the order. ")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "firstName", "lastName", "phone", "phoneCountryCode", "email"]
+    name: StrictStr = Field(description="The name of the reason for the applied discount.")
+    description: Optional[StrictStr] = Field(default=None, description="An optional description for the reason for the applied discount.")
+    comment: Optional[StrictStr] = Field(default=None, description="An optional comment on the reason for the applied discount.")
+    discount_reason: Optional[Dict[str, Any]] = Field(default=None, alias="discountReason")
+    __properties: ClassVar[List[str]] = ["name", "description", "comment", "discountReason"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +50,7 @@ class Customer(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Customer from a JSON string"""
+        """Create an instance of AppliedDiscountReason from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,11 +71,14 @@ class Customer(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of discount_reason
+        if self.discount_reason:
+            _dict['discountReason'] = self.discount_reason.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Customer from a dict"""
+        """Create an instance of AppliedDiscountReason from a dict"""
         if obj is None:
             return None
 
@@ -86,13 +86,10 @@ class Customer(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "guid": obj.get("guid"),
-            "entityType": obj.get("entityType"),
-            "firstName": obj.get("firstName"),
-            "lastName": obj.get("lastName"),
-            "phone": obj.get("phone"),
-            "phoneCountryCode": obj.get("phoneCountryCode"),
-            "email": obj.get("email")
+            "name": obj.get("name"),
+            "description": obj.get("description"),
+            "comment": obj.get("comment"),
+            "discountReason": ToastReference.from_dict(obj["discountReason"]) if obj.get("discountReason") is not None else None
         })
         return _obj
 

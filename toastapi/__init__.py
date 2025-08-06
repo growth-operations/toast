@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.9"
+__version__ = "1.0.10"
 
 # Define package exports
 __all__ = [
@@ -63,8 +63,12 @@ __all__ = [
     "ApplicableDiscount",
     "ApplicableDiscountsRequest",
     "AppliedDiscount",
+    "AppliedDiscountReason",
+    "AppliedDiscountTrigger",
+    "AppliedLoyaltyInfo",
     "AppliedPackagingInfo",
     "AppliedPackagingItem",
+    "AppliedServiceCharge",
     "AppliedTaxRate",
     "AuthenticationRequest",
     "AuthenticationResponse",
@@ -89,6 +93,7 @@ __all__ = [
     "ErrorMessage",
     "ExternalReference",
     "General",
+    "GiftCardInfo",
     "Hours",
     "Image",
     "ImagesV2",
@@ -96,6 +101,7 @@ __all__ = [
     "Job",
     "JobWageOverride",
     "Location",
+    "LoyaltyDetails",
     "MarketplaceFacilitatorTaxInfo",
     "Menu",
     "MenuGroup",
@@ -127,6 +133,8 @@ __all__ = [
     "PrepTimes",
     "PriceGroup",
     "Printer",
+    "Refund",
+    "RefundDetails",
     "Restaurant",
     "RestaurantBasic",
     "RestaurantInfo",
@@ -159,6 +167,7 @@ __all__ = [
     "ToastReference",
     "URLs",
     "UpdatePaymentRequest",
+    "VoidInformation",
     "VoidOrderRequest",
     "VoidOrderRequestSelections",
     "VoidReason",
@@ -216,8 +225,12 @@ from toastapi.models.alternate_payment_type import AlternatePaymentType as Alter
 from toastapi.models.applicable_discount import ApplicableDiscount as ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest as ApplicableDiscountsRequest
 from toastapi.models.applied_discount import AppliedDiscount as AppliedDiscount
+from toastapi.models.applied_discount_reason import AppliedDiscountReason as AppliedDiscountReason
+from toastapi.models.applied_discount_trigger import AppliedDiscountTrigger as AppliedDiscountTrigger
+from toastapi.models.applied_loyalty_info import AppliedLoyaltyInfo as AppliedLoyaltyInfo
 from toastapi.models.applied_packaging_info import AppliedPackagingInfo as AppliedPackagingInfo
 from toastapi.models.applied_packaging_item import AppliedPackagingItem as AppliedPackagingItem
+from toastapi.models.applied_service_charge import AppliedServiceCharge as AppliedServiceCharge
 from toastapi.models.applied_tax_rate import AppliedTaxRate as AppliedTaxRate
 from toastapi.models.authentication_request import AuthenticationRequest as AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse as AuthenticationResponse
@@ -242,6 +255,7 @@ from toastapi.models.employee import Employee as Employee
 from toastapi.models.error_message import ErrorMessage as ErrorMessage
 from toastapi.models.external_reference import ExternalReference as ExternalReference
 from toastapi.models.general import General as General
+from toastapi.models.gift_card_info import GiftCardInfo as GiftCardInfo
 from toastapi.models.hours import Hours as Hours
 from toastapi.models.image import Image as Image
 from toastapi.models.images_v2 import ImagesV2 as ImagesV2
@@ -249,6 +263,7 @@ from toastapi.models.item_tag_v2 import ItemTagV2 as ItemTagV2
 from toastapi.models.job import Job as Job
 from toastapi.models.job_wage_override import JobWageOverride as JobWageOverride
 from toastapi.models.location import Location as Location
+from toastapi.models.loyalty_details import LoyaltyDetails as LoyaltyDetails
 from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilitatorTaxInfo as MarketplaceFacilitatorTaxInfo
 from toastapi.models.menu import Menu as Menu
 from toastapi.models.menu_group import MenuGroup as MenuGroup
@@ -280,6 +295,8 @@ from toastapi.models.pre_modifier_v2 import PreModifierV2 as PreModifierV2
 from toastapi.models.prep_times import PrepTimes as PrepTimes
 from toastapi.models.price_group import PriceGroup as PriceGroup
 from toastapi.models.printer import Printer as Printer
+from toastapi.models.refund import Refund as Refund
+from toastapi.models.refund_details import RefundDetails as RefundDetails
 from toastapi.models.restaurant import Restaurant as Restaurant
 from toastapi.models.restaurant_basic import RestaurantBasic as RestaurantBasic
 from toastapi.models.restaurant_info import RestaurantInfo as RestaurantInfo
@@ -312,6 +329,7 @@ from toastapi.models.tip_withholding import TipWithholding as TipWithholding
 from toastapi.models.toast_reference import ToastReference as ToastReference
 from toastapi.models.urls import URLs as URLs
 from toastapi.models.update_payment_request import UpdatePaymentRequest as UpdatePaymentRequest
+from toastapi.models.void_information import VoidInformation as VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest as VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections as VoidOrderRequestSelections
 from toastapi.models.void_reason import VoidReason as VoidReason

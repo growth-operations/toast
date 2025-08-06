@@ -18,10 +18,12 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from toastapi.models.applied_discount import AppliedDiscount
+from toastapi.models.applied_loyalty_info import AppliedLoyaltyInfo
+from toastapi.models.applied_service_charge import AppliedServiceCharge
 from toastapi.models.customer import Customer
 from toastapi.models.payment import Payment
 from toastapi.models.selection import Selection
@@ -36,18 +38,43 @@ class Check(BaseModel):
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     created_date: Optional[datetime] = Field(default=None, description="The date and time that the Toast platform received the check.", alias="createdDate")
-    opened_date: Optional[datetime] = Field(default=None, description="The date on which this check was opened.", alias="openedDate")
+    opened_date: Optional[datetime] = Field(default=None, description="The date on which this check was opened. If not specified, it is set to the current system time.", alias="openedDate")
+    closed_date: Optional[datetime] = Field(default=None, description="The most recent date on which this check's payment status was set to `CLOSED`.", alias="closedDate")
+    modified_date: Optional[datetime] = Field(default=None, description="The most recent date on which this check was modified.", alias="modifiedDate")
+    deleted_date: Optional[datetime] = Field(default=None, description="The date on which this check was deleted.  `deletedDate` is only applicable when `deleted` is true.  If `deleted` is false, then `deletedDate` is set to the UNIX epoch, `1970-01-01T00:00:00.000+0000`. ", alias="deletedDate")
+    deleted: Optional[StrictBool] = Field(default=None, description="Set to `true` if this check was deleted.")
     selections: List[Selection]
     customer: Optional[Customer] = None
-    amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The total calculated price of the check including discounts and service charges.")
-    tax_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The calculated tax amount.", alias="taxAmount")
-    total_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The total calculated price of this check including discounts and taxes.", alias="totalAmount")
+    applied_loyalty_info: Optional[AppliedLoyaltyInfo] = Field(default=None, alias="appliedLoyaltyInfo")
+    tax_exempt: Optional[StrictBool] = Field(default=False, description="Set to `true` if this check is tax exempt.", alias="taxExempt")
+    display_number: Optional[StrictStr] = Field(default=None, description="Generally starts at one each day and counts up. The Toast platform fills this in if it is not specified when the order is POSTed. Not guaranteed to be unique.", alias="displayNumber")
+    applied_service_charges: Optional[List[AppliedServiceCharge]] = Field(default=None, description="Any restaurant-configured service charges that applied to this check.", alias="appliedServiceCharges")
+    amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The total calculated price of the check including discounts and service charges. The `amount` does not include gratuity or taxes. Response only.")
+    tax_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The calculated tax amount. Includes service charge and item level taxes. Response only.", alias="taxAmount")
+    total_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The total calculated price of this check including discounts and taxes. Not affected by refunds.", alias="totalAmount")
     payments: Optional[Annotated[List[Payment], Field(min_length=0)]] = Field(default=None, description="Payments made on this check.")
-    applied_discounts: Optional[Annotated[List[AppliedDiscount], Field(min_length=0)]] = Field(default=None, description="The discounts applied to this check.", alias="appliedDiscounts")
+    tab_name: Optional[StrictStr] = Field(default=None, description="The name of the tab on this check. This displays on the KDS (Kitchen Display System) for pending orders.  The `tabName` value can contain up to 255 characters. ", alias="tabName")
+    payment_status: Optional[StrictStr] = Field(default=None, description="The payment status of this check.  Valid values:  * `OPEN` - There is an outstanding balance.  * `PAID` - A credit card payment was applied, but the tip has not been adjusted.  * `CLOSED`  - There is no remaining amount due on this check. For credit card payments, the payment has been adjusted to reflect the tip. Toast does not prevent a `CLOSED` check from transitioning back to `OPEN` or `PAID`.  Response only. ", alias="paymentStatus")
+    applied_discounts: Optional[Annotated[List[AppliedDiscount], Field(min_length=0)]] = Field(default=None, description="The discounts applied to this check. In a `POST` request, only one `appliedDiscount` is allowed per check.", alias="appliedDiscounts")
     voided: Optional[StrictBool] = Field(default=None, description="True if this check is voided. Response only.")
     void_date: Optional[datetime] = Field(default=None, description="The date when this check was voided. Response only.", alias="voidDate")
-    paid_date: Optional[datetime] = Field(default=None, description="The most recent date when this check received payment.", alias="paidDate")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "createdDate", "openedDate", "selections", "customer", "amount", "taxAmount", "totalAmount", "payments", "appliedDiscounts", "voided", "voidDate", "paidDate"]
+    void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this check was voided. Response only.", alias="voidBusinessDate")
+    paid_date: Optional[datetime] = Field(default=None, description="The most recent date when this check received payment. If not specified when `POST`ing, it is set to the current system time.", alias="paidDate")
+    created_device: Optional[Dict[str, Any]] = Field(default=None, alias="createdDevice")
+    last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
+    duration: Optional[StrictInt] = Field(default=None, description="The number of seconds between creation and payment. Response only.")
+    opened_by: Optional[Dict[str, Any]] = Field(default=None, alias="openedBy")
+    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "createdDate", "openedDate", "closedDate", "modifiedDate", "deletedDate", "deleted", "selections", "customer", "appliedLoyaltyInfo", "taxExempt", "displayNumber", "appliedServiceCharges", "amount", "taxAmount", "totalAmount", "payments", "tabName", "paymentStatus", "appliedDiscounts", "voided", "voidDate", "voidBusinessDate", "paidDate", "createdDevice", "lastModifiedDevice", "duration", "openedBy"]
+
+    @field_validator('payment_status')
+    def payment_status_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['OPEN', 'PAID', 'CLOSED']):
+            raise ValueError("must be one of enum values ('OPEN', 'PAID', 'CLOSED')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -98,6 +125,16 @@ class Check(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of customer
         if self.customer:
             _dict['customer'] = self.customer.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of applied_loyalty_info
+        if self.applied_loyalty_info:
+            _dict['appliedLoyaltyInfo'] = self.applied_loyalty_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in applied_service_charges (list)
+        _items = []
+        if self.applied_service_charges:
+            for _item_applied_service_charges in self.applied_service_charges:
+                if _item_applied_service_charges:
+                    _items.append(_item_applied_service_charges.to_dict())
+            _dict['appliedServiceCharges'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in payments (list)
         _items = []
         if self.payments:
@@ -129,16 +166,31 @@ class Check(BaseModel):
             "externalId": obj.get("externalId"),
             "createdDate": obj.get("createdDate"),
             "openedDate": obj.get("openedDate"),
+            "closedDate": obj.get("closedDate"),
+            "modifiedDate": obj.get("modifiedDate"),
+            "deletedDate": obj.get("deletedDate"),
+            "deleted": obj.get("deleted"),
             "selections": [Selection.from_dict(_item) for _item in obj["selections"]] if obj.get("selections") is not None else None,
             "customer": Customer.from_dict(obj["customer"]) if obj.get("customer") is not None else None,
+            "appliedLoyaltyInfo": AppliedLoyaltyInfo.from_dict(obj["appliedLoyaltyInfo"]) if obj.get("appliedLoyaltyInfo") is not None else None,
+            "taxExempt": obj.get("taxExempt") if obj.get("taxExempt") is not None else False,
+            "displayNumber": obj.get("displayNumber"),
+            "appliedServiceCharges": [AppliedServiceCharge.from_dict(_item) for _item in obj["appliedServiceCharges"]] if obj.get("appliedServiceCharges") is not None else None,
             "amount": obj.get("amount"),
             "taxAmount": obj.get("taxAmount"),
             "totalAmount": obj.get("totalAmount"),
             "payments": [Payment.from_dict(_item) for _item in obj["payments"]] if obj.get("payments") is not None else None,
+            "tabName": obj.get("tabName"),
+            "paymentStatus": obj.get("paymentStatus"),
             "appliedDiscounts": [AppliedDiscount.from_dict(_item) for _item in obj["appliedDiscounts"]] if obj.get("appliedDiscounts") is not None else None,
             "voided": obj.get("voided"),
             "voidDate": obj.get("voidDate"),
-            "paidDate": obj.get("paidDate")
+            "voidBusinessDate": obj.get("voidBusinessDate"),
+            "paidDate": obj.get("paidDate"),
+            "createdDevice": obj.get("createdDevice"),
+            "lastModifiedDevice": obj.get("lastModifiedDevice"),
+            "duration": obj.get("duration"),
+            "openedBy": obj.get("openedBy")
         })
         return _obj
 

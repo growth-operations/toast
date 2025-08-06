@@ -32,23 +32,47 @@ class Payment(BaseModel):
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     paid_date: Optional[datetime] = Field(default=None, description="The date on which the payment was made.", alias="paidDate")
-    type: StrictStr = Field(description="The payment method. ")
+    paid_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this payment was first applied. Response only.", alias="paidBusinessDate")
+    type: StrictStr = Field(description="The payment method.  When `POST`ing, only `OTHER` and `CREDIT` payment types are supported. For cash payments, you create an external cash payment type in Other Payment Options.  All other types are response only.  Valid values:  * `CASH` - The guest paid in cash. * `CREDIT` - The guest used a credit card. * `GIFTCARD` - The guest used a gift card. * `HOUSE_ACCOUNT` - The guest used funds from their house account. * `REWARDCARD` - The guest used the available balance on a rewards card. * `LEVELUP` - The guest used the LevelUp app. * `TOAST_SV` - The guest used their Toast Cash stored value. * `OTHER` - The payment type is a custom type configured by the restaurant. * `UNDETERMINED` - The payment type cannot be determined. ")
+    card_entry_mode: Optional[StrictStr] = Field(default=None, description="Indicates how credit card data was obtained. Response only.  Valid values:  * `SWIPED` - The credit card was swiped through a card reader. * `KEYED` - The restaurant employee typed the card number into a device. * `ONLINE` - The credit card information was entered online. * `EMV_CHIP_SIGN` - The credit card was inserted into a chip reader. * `TOKENIZED` - The credit card number is tokenized, meaning that it is replaced by a series of randomly generated numbers. The authorizer is able to use the token to authorize the actual credit card. * `PRE_AUTHED` - The credit card was pre-authorized for an initial amount. An example of pre-authorization is swiping a credit card to start a bar tab. The final payment is authorized when the order is complete. * `SAVED_CARD` - The credit card information was retrieved from the guest's account. * `FUTURE_ORDER` - The credit card payment was included on a scheduled order. * `CONTACTLESS` - The guest used a contactless payment option to provide the credit card number. * `APPLE_PAY_CNP` - The guest used the Apple Pay app to make the payment. * `GOOGLE_PAY_CNP` - The guest used the Google Pay app to make the payment. * `INCREMENTAL_PRE_AUTHED` - An additional payment was added to a pre-authorized card. For example, a guest uses a credit card to open a bar tab. As they continue to order more drinks, the pre-authorized amount is updated. The final payment is authorized when the order is complete. * `PARTNER_ECOM_COF` - The restaurant has the credit card on file. * `CLICK_TO_PAY_CNP` - The guest used Click to Pay to make the payment. ", alias="cardEntryMode")
     amount: Union[StrictFloat, StrictInt] = Field(description="The amount of this payment, excluding tips.")
     tip_amount: Union[StrictFloat, StrictInt] = Field(description="The amount tipped on this payment.", alias="tipAmount")
-    amount_tendered: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The amount tendered for this payment.", alias="amountTendered")
+    amount_tendered: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The amount tendered for this payment. The amount tendered does not include the tip.", alias="amountTendered")
     card_type: Optional[StrictStr] = Field(default=None, description="The type of credit card that was used. Response only.", alias="cardType")
     last4_digits: Optional[StrictStr] = Field(default=None, description="The last 4 digits of the credit card that was used. Response only.", alias="last4Digits")
     server: Optional[Dict[str, Any]] = None
     refund_status: Optional[StrictStr] = Field(default=None, description="Indicates whether the payment was refunded. Response only. ", alias="refundStatus")
     payment_status: Optional[StrictStr] = Field(default=None, description="The status of this payment when the type is `CREDIT`. Response only. ", alias="paymentStatus")
+    original_processing_fee: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The original processing fee for this payment. Populated after the payment is captured. Response only.", alias="originalProcessingFee")
+    cash_drawer: Optional[Dict[str, Any]] = Field(default=None, alias="cashDrawer")
+    refund: Optional[Dict[str, Any]] = None
+    void_info: Optional[Dict[str, Any]] = Field(default=None, alias="voidInfo")
+    house_account: Optional[Dict[str, Any]] = Field(default=None, alias="houseAccount")
     other_payment: Optional[ExternalReference] = Field(default=None, alias="otherPayment")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "paidDate", "type", "amount", "tipAmount", "amountTendered", "cardType", "last4Digits", "server", "refundStatus", "paymentStatus", "otherPayment"]
+    created_device: Optional[Dict[str, Any]] = Field(default=None, alias="createdDevice")
+    last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
+    mca_repayment_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The total currency amount withheld as payments or repayments that apply to your business. For example, the `mcaRepaymentAmount` might include:  * Toast Capital payments * Marketplace facilitator tax * Toast Delivery Services costs * Instant deposits  The MCA repayment amount is set at the time the payment is captured, which is typically hours after the actual restaurant guest payment.  Until the `mcaRepaymentAmount` is set, this value is `null`.  The `mcaRepaymentAmount` _might_ be updated when the payment is settled, which is typically one or more days after the actual guest payment. Response only.  You can use the following resources to find more specific information about the payment and repayment amounts that are included in `mcaRepaymentAmount`.  * [Toast Capital payments](https://www.toasttab.com/restaurants/admin/capital/) * [Marketplace facilitator tax](https://www.toasttab.com/restaurants/admin/reports/home#sales-summary) * [Marketplace facilitator tax in API data](https://doc.toasttab.com/openapi/orders/tag/Data-definitions/schema/MarketplaceFacilitatorTaxInfo/) * [Instant deposits](https://www.toasttab.com/restaurants/admin/instant-deposit) * [Toast Delivery Services fees and tips](https://www.toasttab.com/restaurants/admin/reports/home#sales-summary) * [Toast Delivery Services fees and tips description](https://www.toasttab.com/restaurants/admin/reports/home#sales-summary)  _Important_: Some of the resources listed here require access to Toast products as a restaurant employee or operator. If your organization provides an integration service you might not have access to the Toast products used by the restaurants you integrate with. Toast support cannot provide access to Toast product information. That information is only available to direct Toast product users. ", alias="mcaRepaymentAmount")
+    card_payment_id: Optional[StrictStr] = Field(default=None, description="**Note:** this value is in limited release. Your orders API integration might not include the `cardPaymentId` value.  A unique identifier for the credit card used for a `CREDIT` type payment. The identifier string is generated by the Toast platform and _does not include any information related to or associated with the actual credit card account._ The identifier is unique within your restaurant management group.  The value is `null` for the following payment types:  * Payment types other than `CREDIT` * Credit card payments entered using EMV (chip cards) * Credit card payments entered by keying in card numbers  Response only. ", alias="cardPaymentId")
+    order_guid: Optional[StrictStr] = Field(default=None, description="The Toast platform identifier for the order that contains the payment. Response only.", alias="orderGuid")
+    check_guid: Optional[StrictStr] = Field(default=None, description="The Toast platform identifier for the check that contains the payment. Response only.", alias="checkGuid")
+    tender_transaction_guid: Optional[StrictStr] = Field(default=None, description="For internal use only.", alias="tenderTransactionGuid")
+    __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "paidDate", "paidBusinessDate", "type", "cardEntryMode", "amount", "tipAmount", "amountTendered", "cardType", "last4Digits", "server", "refundStatus", "paymentStatus", "originalProcessingFee", "cashDrawer", "refund", "voidInfo", "houseAccount", "otherPayment", "createdDevice", "lastModifiedDevice", "mcaRepaymentAmount", "cardPaymentId", "orderGuid", "checkGuid", "tenderTransactionGuid"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum"""
         if value not in set(['CASH', 'CREDIT', 'GIFTCARD', 'HOUSE_ACCOUNT', 'REWARDCARD', 'LEVELUP', 'TOAST_SV', 'OTHER', 'UNDETERMINED']):
             raise ValueError("must be one of enum values ('CASH', 'CREDIT', 'GIFTCARD', 'HOUSE_ACCOUNT', 'REWARDCARD', 'LEVELUP', 'TOAST_SV', 'OTHER', 'UNDETERMINED')")
+        return value
+
+    @field_validator('card_entry_mode')
+    def card_entry_mode_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['SWIPED', 'KEYED', 'ONLINE', 'EMV_CHIP_SIGN', 'TOKENIZED', 'PRE_AUTHED', 'SAVED_CARD', 'FUTURE_ORDER', 'CONTACTLESS', 'APPLE_PAY_CNP', 'GOOGLE_PAY_CNP', 'INCREMENTAL_PRE_AUTHED', 'PARTNER_ECOM_COF', 'CLICK_TO_PAY_CNP']):
+            raise ValueError("must be one of enum values ('SWIPED', 'KEYED', 'ONLINE', 'EMV_CHIP_SIGN', 'TOKENIZED', 'PRE_AUTHED', 'SAVED_CARD', 'FUTURE_ORDER', 'CONTACTLESS', 'APPLE_PAY_CNP', 'GOOGLE_PAY_CNP', 'INCREMENTAL_PRE_AUTHED', 'PARTNER_ECOM_COF', 'CLICK_TO_PAY_CNP')")
         return value
 
     @field_validator('card_type')
@@ -139,7 +163,9 @@ class Payment(BaseModel):
             "entityType": obj.get("entityType"),
             "externalId": obj.get("externalId"),
             "paidDate": obj.get("paidDate"),
+            "paidBusinessDate": obj.get("paidBusinessDate"),
             "type": obj.get("type"),
+            "cardEntryMode": obj.get("cardEntryMode"),
             "amount": obj.get("amount"),
             "tipAmount": obj.get("tipAmount"),
             "amountTendered": obj.get("amountTendered"),
@@ -148,7 +174,19 @@ class Payment(BaseModel):
             "server": obj.get("server"),
             "refundStatus": obj.get("refundStatus"),
             "paymentStatus": obj.get("paymentStatus"),
-            "otherPayment": ExternalReference.from_dict(obj["otherPayment"]) if obj.get("otherPayment") is not None else None
+            "originalProcessingFee": obj.get("originalProcessingFee"),
+            "cashDrawer": obj.get("cashDrawer"),
+            "refund": obj.get("refund"),
+            "voidInfo": obj.get("voidInfo"),
+            "houseAccount": obj.get("houseAccount"),
+            "otherPayment": ExternalReference.from_dict(obj["otherPayment"]) if obj.get("otherPayment") is not None else None,
+            "createdDevice": obj.get("createdDevice"),
+            "lastModifiedDevice": obj.get("lastModifiedDevice"),
+            "mcaRepaymentAmount": obj.get("mcaRepaymentAmount"),
+            "cardPaymentId": obj.get("cardPaymentId"),
+            "orderGuid": obj.get("orderGuid"),
+            "checkGuid": obj.get("checkGuid"),
+            "tenderTransactionGuid": obj.get("tenderTransactionGuid")
         })
         return _obj
 

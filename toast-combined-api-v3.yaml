@@ -5149,6 +5149,56 @@ components:
           description: |
             The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href="https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html">Dates and timestamps</a> section of the Toast Developer Guide.
           type: string
+    RefundDetails:
+      type: object
+      description: |
+        Information about refunded currency amounts for an item
+        selection, modifier option, or service charge. The refund
+        information includes separate values for the pre-tax value
+        being refunded and the tax amount being refunded.
+      properties:
+        refundAmount:
+          description: |
+            The value of the menu item or service charge (excluding taxes) being
+            refunded. Includes the value of any nested modifier options that
+            increased the price of the item or modifier option (an upcharge for
+            the modifier option).
+          type: number
+          format: double
+        taxRefundAmount:
+          description: |
+            The tax amount being refunded.
+          type: number
+          format: double
+        refundTransaction:
+          description: |
+            An identifier for the refund transaction. You can use the identifier to associate items and service charges that were refunded in the same transaction.
+          type: object
+          $ref: "#/components/schemas/ToastReference"
+    Refund:
+      type: object
+      description: A currency amount removed from a guest payment.
+      properties:
+        refundAmount:
+          type: number
+          format: double
+          description: The amount of the refund, excluding the tip.
+        tipRefundAmount:
+          type: number
+          format: double
+          description: The amount of the tip refund.
+        refundDate:
+          description: The date and time when the refund was made.
+          type: string
+          format: date-time
+        refundBusinessDate:
+          description: The business date (yyyyMMdd) on which this refund was created. Response only.
+          type: integer
+        refundTransaction:
+          description: |
+            An identifier for the refund transaction. You can use the identifier to associate items and service charges that were refunded in the same transaction.
+          type: object
+          $ref: "#/components/schemas/ToastReference"
     Restaurant:
       type: object
       description: |
@@ -5690,39 +5740,109 @@ components:
               type: string
               format: date-time
             openedDate:
-              description: The date on which this check was opened.
+              description: The date on which this check was opened. If not specified, it is set to the current system time.
               type: string
               format: date-time
+            closedDate:
+              type: string
+              format: date-time
+              description: The most recent date on which this check's payment status was set to `CLOSED`.
+            modifiedDate:
+              type: string
+              format: date-time
+              description: The most recent date on which this check was modified.
+            deletedDate:
+              type: string
+              format: date-time
+              description: |
+                The date on which this check was deleted.
+
+                `deletedDate` is only applicable when `deleted` is true.
+
+                If `deleted` is false, then `deletedDate` is set to the UNIX epoch, `1970-01-01T00:00:00.000+0000`.
+            deleted:
+              type: boolean
+              description: Set to `true` if this check was deleted.
             selections:
               type: array
               items:
                 $ref: "#/components/schemas/Selection"
             customer:
               description: |
-                A `Customer` object that holds information about a restaurant guest
+                A `Customer` object
+                that holds information about a restaurant guest
                 that is associated with the check.
+
+                Required for `POST` requests for orders that use the
+                takeout or delivery dining options.
+
+                For checks that apply or accrue Toast loyalty points, a
+                `GET` request returns a `Customer` object
+                even when restaurant employees do not enter guest
+                information for a check. In this case, the `Customer` object
+                contains only the Toast platform GUID of the guest.
+                All other values are `null`.
               $ref: "#/components/schemas/Customer"
+            appliedLoyaltyInfo:
+              description: Information about the customer loyalty program account associated with the check. Used to accrue loyalty program benefits and to redeem loyalty program discounts.
+              $ref: "#/components/schemas/AppliedLoyaltyInfo"
+            taxExempt:
+              type: boolean
+              default: false
+              description: Set to `true` if this check is tax exempt.
+            displayNumber:
+              type: string
+              description: Generally starts at one each day and counts up. The Toast platform fills this in if it is not specified when the order is POSTed. Not guaranteed to be unique.
+            appliedServiceCharges:
+              type: array
+              description: Any restaurant-configured service charges that applied to this check.
+              items:
+                $ref: "#/components/schemas/AppliedServiceCharge"
             amount:
               type: number
               format: double
-              description: The total calculated price of the check including discounts and service charges.
+              description: The total calculated price of the check including discounts and service charges. The `amount` does not include gratuity or taxes. Response only.
             taxAmount:
               type: number
               format: double
-              description: The calculated tax amount.
+              description: The calculated tax amount. Includes service charge and item level taxes. Response only.
             totalAmount:
               type: number
               format: double
-              description: The total calculated price of this check including discounts and taxes.
+              description: The total calculated price of this check including discounts and taxes. Not affected by refunds.
             payments:
               type: array
               description: Payments made on this check.
               minItems: 0
               items:
                 $ref: "#/components/schemas/Payment"
+            tabName:
+              type: string
+              description: |
+                The name of the tab on this check. This displays on the KDS (Kitchen Display System) for pending orders.
+
+                The `tabName` value can contain up to 255 characters.
+            paymentStatus:
+              type: string
+              description: |
+                The payment status of this check.
+
+                Valid values:
+
+                * `OPEN` - There is an outstanding balance.
+
+                * `PAID` - A credit card payment was applied, but the tip has not been adjusted.
+
+                * `CLOSED`  - There is no remaining amount due on this check. For credit card payments, the payment has been adjusted to reflect the tip. Toast does not prevent a `CLOSED` check from transitioning back to `OPEN` or `PAID`.
+
+                Response only.
+              enum:
+                - OPEN
+                - PAID
+                - CLOSED
             appliedDiscounts:
               type: array
-              description: The discounts applied to this check.
+              description: The discounts applied to this check. In a `POST` request, only one `appliedDiscount` is allowed per check.
               minItems: 0
               items:
                 $ref: "#/components/schemas/AppliedDiscount"
@@ -5733,14 +5853,47 @@ components:
               type: string
               format: date-time
               description: The date when this check was voided. Response only.
+            voidBusinessDate:
+              type: integer
+              description: The business date (yyyyMMdd) on which this check was voided. Response only.
             paidDate:
               type: string
               format: date-time
-              description: The most recent date when this check received payment.
+              description: The most recent date when this check received payment. If not specified when `POST`ing, it is set to the current system time.
+            createdDevice:
+              description: The Toast POS device that created the check. This value is `null` if the check was not created using a Toast POS device.
+              type: object
+              $ref: "#/components/schemas/Device"
+            lastModifiedDevice:
+              description: |
+                The Toast POS device that modified the check most recently. This value is `null` if the check was never modified using a Toast POS device.
+
+                If the check is modified but the modification was not made using a Toast POS device, then this value does not change.
+              type: object
+              $ref: "#/components/schemas/Device"
+            duration:
+              type: integer
+              description: The number of seconds between creation and payment. Response only.
+            openedBy:
+              description: The restaurant employee, or server, who opened the check.
+              type: object
+              $ref: "#/components/schemas/ExternalReference"
     Selection:
       type: object
       description: |
-        A `Selection` object can represent either a primary item or a modifier selection.
+        A `Selection` object can represent either a primary item (for example,
+        `Check.selections`) or a modifier (`Selection.modifiers`) selection.
+        Quantity defaults to `1`.
+
+        For a `POST` operation, all selections must have valid `item` and
+        `itemGroup` fields. The `item` and `itemGroup` values can be `null` for
+        `GET` requests. For example, they are `null` for gift cards and on special
+        requests.
+
+        To specify a modifier selection, add it to the `modifiers` list of
+        another selection. Each modifier selection must have its `optionGroup` field
+        set correctly, because a `MenuItem` can be included in multiple
+        `MenuOptionGroups`, potentially with different prices or sizing.
       allOf:
         - $ref: "#/components/schemas/ExternalReference"
         - type: object
@@ -5758,33 +5911,261 @@ components:
               $ref: "#/components/schemas/ConfigReference"
             optionGroup:
               type: object
-              description: A reference to the modifier group from which the menu item was selected.
+              description: A reference to the modifier group from which the menu item was selected. Only applies if this is a modifier selection.
+              $ref: "#/components/schemas/ConfigReference"
+            preModifier:
+              type: object
+              description: A reference to the selected pre-modifier.
               $ref: "#/components/schemas/ConfigReference"
             quantity:
               type: number
               format: double
-              description: Quantity ordered.
+              description: Quantity ordered. For items sold by weight, a decimal number. For discrete items, a counting number.
             seatNumber:
               type: integer
               description: |
                 Indicates which guest seat at a restaurant table ordered
-                a menu item selection.
+                a menu item selection. Restaurant employees can choose the
+                seat number when they add a menu item to a guest check.
+
+                * A positive integer value indicates the seat number for
+                  the menu item.
+
+                * `0` - Indicates that the menu item is shared by
+                  multiple guests.
+
+                * `-1` - Indicates that the restaurant employee did not
+                  select a seat for the menu item.
+
+                Response only.
+            unitOfMeasure:
+              type: string
+              description: |
+                The unit of measure required for weighing the item.
+
+                The default is `NONE`, which means that the item is not meant to be weighed.
+              enum:
+                - NONE
+                - LB
+                - OZ
+                - KG
+                - G
+            selectionType:
+              type: string
+              description: |
+                Specifies whether this selection is a special request or other off-menu sale.
+
+                If `null` or `NONE`, describes a normal modifier or item selection.
+
+                `TOAST_CARD_SELL` and `TOAST_CARD_RELOAD` are currently response-only.
+              enum:
+                - NONE
+                - OPEN_ITEM
+                - SPECIAL_REQUEST
+                - PORTION
+                - HOUSE_ACCOUNT_PAY_BALANCE
+                - TOAST_CARD_SELL
+                - TOAST_CARD_RELOAD
+            salesCategory:
+              type: object
+              description: A reference to the sales category of the item. Response only.
+              $ref: "#/components/schemas/ConfigReference"
+            appliedDiscounts:
+              type: array
+              description: The itemized discounts that are applied to this item. Response only.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/AppliedDiscount"
+            deferred:
+              type: boolean
+              description: Whether this selection is a deferred revenue transaction, such as a gift card sale.
+            preDiscountPrice:
+              type: number
+              description: Gross sale price for this selection. Excludes tax. Response only.
+              format: double
             price:
               type: number
               format: double
-              description: The price of this selection.
+              description: Net price for this selection. The final price of the item after considering discounts (including discounts at the check level), quantity adjustments, and modifier prices at the time the item was selected for purchase. Response only.
+            tax:
+              type: number
+              format: double
+              description: The total tax amount for this selection. Response only.
             voided:
               type: boolean
-              description: True if this selection is voided.
+              description: Set to `true` if this selection is voided. Response only.
             voidDate:
               type: string
               format: date-time
-              description: The date when this selection was voided.
+              description: The date on which this selection was voided. Response only.
+            voidBusinessDate:
+              type: integer
+              description: The business date (yyyyMMdd) on which this selection was voided. Response only.
+            voidReason:
+              type: object
+              description: If `voided` is `true`, a reference to the void reason. Response only.
+              $ref: "#/components/schemas/ExternalReference"
+            refundDetails:
+              description: |
+                A `RefundDetails` object that
+                contains information about refunded payment amounts for the item.
+              type: object
+              $ref: "#/components/schemas/RefundDetails"
+            displayName:
+              type: string
+              description: |
+                The display name of the selection.
+
+                Can be used to set a special request value.
+
+                Otherwise, it is generated from this selection's item property.
+            createdDate:
+              type: string
+              format: date-time
+              description: The date on which this selection was created. If not specified, defaults to the current time.
+            modifiedDate:
+              type: string
+              format: date-time
+              description: The date on which this selection was last modified. If not specified, defaults to the current time.
             modifiers:
               type: array
-              description: Modifier selections for this item.
+              description: A list of modifiers that apply to this selection.
               items:
                 $ref: "#/components/schemas/Selection"
+            fulfillmentStatus:
+              type: string
+              default: NEW
+              description: |
+                Indicates the stage of the preparation workflow that the
+                menu item selection is in.
+
+                The `fulfillmentStatus` of a
+                menu item selection changes as restaurant employees move
+                the item through the functions of the Toast POS, for
+                example order entry and the kitchen display system (KDS).
+                Response only.
+
+                Valid values:
+
+                * `NEW` - The menu item selection was added to a
+                  check but is not yet sent to the KDS for
+                  preparation.
+
+                * `HOLD` - A restaurant employee paused the menu
+                  item selection so that it does not appear in the
+                  KDS for preparation.
+
+                * `SENT` - The menu item selection was fired and
+                  appears in the KDS for preparation.
+
+                * `READY` - Preparation is complete. The menu item
+                  selection is fulfilled and no longer appears in
+                  the KDS. If your restaurant does not use the Toast platform
+                  KDS, then order items do not reach the `READY`
+                  status.
+              enum:
+                - NEW
+                - HOLD
+                - SENT
+                - READY
+            taxInclusion:
+              type: string
+              description: |
+                Indicates whether the menu item price includes one or more tax
+                amounts. If the menu item is a modifier for another menu item
+                selection, it always inherits the tax inclusion behavior of the menu
+                item that it applies to.
+
+                Valid values:
+                * `INCLUDED` - The menu item price includes one or more tax amounts.
+                * `NOT_INCLUDED` - The menu item price does not include any tax
+                  amounts.
+                * `INHERITED` - The menu item is a modifier for another menu item
+                  selection in the check. The `taxInclusion` value of the parent menu
+                  item selection applies to the modifier. If a menu item selection
+                  *that is not a modifier* inherits tax inclusion behavior from a
+                  menu or menu group, the `taxInclusion` value is either
+                  `INCLUDED` or `NOT_INCLUDED`.
+              enum:
+                - INCLUDED
+                - NOT_INCLUDED
+                - INHERITED
+            appliedTaxes:
+              type: array
+              description: An array of `AppliedTaxRate` objects that contain information about tax payments made for the selection. Response only.
+              items:
+                $ref: "#/components/schemas/AppliedTaxRate"
+            diningOption:
+              description: |
+                A reference to the setting or method that a restaurant uses to fulfill orders. For example, dine-in, takeout, or delivery might be dining options.
+
+                Restaurants configure the dining options that they fulfill orders in.
+
+                Response only.
+              type: object
+              $ref: "#/components/schemas/ExternalReference"
+            openPriceAmount:
+              description: |
+                A non-negative currency amount that sets the price of a
+                menu item that is configured to use the *Open Price*
+                pricing strategy. If you do not supply an
+                `openPriceAmount` value for an open price menu item, the
+                orders API sets the price to 0.00.
+
+                If a menu item is configured to use tax-inclusive
+                pricing, the orders API calculates the base price and tax
+                amount based on the open price that you specify. _The
+                open-price amount includes both the base-price and
+                inclusive tax amount._
+
+                `POST` only. The `openPriceAmount` value is not
+                present in orders API return data. It is used to
+                populate `receiptLinePrice`.
+              type: number
+              format: double
+            receiptLinePrice:
+              type: number
+              format: double
+              description: |
+                The price of the menu item selection without any quantity, taxes, 
+                discounts, and modifier adjustments. If the menu item has taxes included, the `receiptLinePrice` value shows the original price, including taxes.
+
+                For example, if the menu item selection is for two orders of fries, 
+                `receiptLinePrice` is the price of one order of fries. If a menu item selection 
+                is for three large drinks, receiptLinePrice is the price of one large drink.
+
+                Populated based on the menu configuration, or using the value provided in 
+                `externalPriceAmount` or `openPriceAmount`.
+            optionGroupPricingMode:
+              type: string
+              description: Information about how the modifier group affects the pricing of its parent item.
+              enum:
+                - INCLUDED
+                - FIXED_PRICE
+                - ADJUSTS_PRICE
+                - REPLACES_PRICE
+                - LOCATION_SPECIFIC_PRICE
+            externalPriceAmount:
+              description: |
+                The menu item price that was calculated by the
+                marketplace facilitator organization that created the
+                order.
+
+                `POST` only. The orders API does not include the
+                `externalPriceAmount` value in return data. It is
+                used to populate `receiptLinePrice`.
+
+                **Note**: you can only include this information if your
+                Toast API client is associated with a designated
+                marketplace facilitator organization. Most Toast API
+                clients do not create marketplace facilitator orders.
+              type: number
+              format: double
+            splitOrigin:
+              description: |
+                Reserved for future use.
+              type: object
+              $ref: "#/components/schemas/ToastReference"
     Payment:
       type: object
       description: Defines a payment.
@@ -5800,10 +6181,29 @@ components:
               description: The date on which the payment was made.
               type: string
               format: date-time
+            paidBusinessDate:
+              description: The business date (yyyyMMdd) on which this payment was first applied. Response only.
+              type: integer
             type:
               type: string
               description: |
                 The payment method.
+
+                When `POST`ing, only `OTHER` and `CREDIT` payment types are supported. For cash payments, you create an external cash payment type in Other Payment Options.
+
+                All other types are response only.
+
+                Valid values:
+
+                * `CASH` - The guest paid in cash.
+                * `CREDIT` - The guest used a credit card.
+                * `GIFTCARD` - The guest used a gift card.
+                * `HOUSE_ACCOUNT` - The guest used funds from their house account.
+                * `REWARDCARD` - The guest used the available balance on a rewards card.
+                * `LEVELUP` - The guest used the LevelUp app.
+                * `TOAST_SV` - The guest used their Toast Cash stored value.
+                * `OTHER` - The payment type is a custom type configured by the restaurant.
+                * `UNDETERMINED` - The payment type cannot be determined.
               enum:
                 - CASH
                 - CREDIT
@@ -5814,6 +6214,42 @@ components:
                 - TOAST_SV
                 - OTHER
                 - UNDETERMINED
+            cardEntryMode:
+              type: string
+              description: |
+                Indicates how credit card data was obtained. Response only.
+
+                Valid values:
+
+                * `SWIPED` - The credit card was swiped through a card reader.
+                * `KEYED` - The restaurant employee typed the card number into a device.
+                * `ONLINE` - The credit card information was entered online.
+                * `EMV_CHIP_SIGN` - The credit card was inserted into a chip reader.
+                * `TOKENIZED` - The credit card number is tokenized, meaning that it is replaced by a series of randomly generated numbers. The authorizer is able to use the token to authorize the actual credit card.
+                * `PRE_AUTHED` - The credit card was pre-authorized for an initial amount. An example of pre-authorization is swiping a credit card to start a bar tab. The final payment is authorized when the order is complete.
+                * `SAVED_CARD` - The credit card information was retrieved from the guest's account.
+                * `FUTURE_ORDER` - The credit card payment was included on a scheduled order.
+                * `CONTACTLESS` - The guest used a contactless payment option to provide the credit card number.
+                * `APPLE_PAY_CNP` - The guest used the Apple Pay app to make the payment.
+                * `GOOGLE_PAY_CNP` - The guest used the Google Pay app to make the payment.
+                * `INCREMENTAL_PRE_AUTHED` - An additional payment was added to a pre-authorized card. For example, a guest uses a credit card to open a bar tab. As they continue to order more drinks, the pre-authorized amount is updated. The final payment is authorized when the order is complete.
+                * `PARTNER_ECOM_COF` - The restaurant has the credit card on file.
+                * `CLICK_TO_PAY_CNP` - The guest used Click to Pay to make the payment.
+              enum:
+                - SWIPED
+                - KEYED
+                - ONLINE
+                - EMV_CHIP_SIGN
+                - TOKENIZED
+                - PRE_AUTHED
+                - SAVED_CARD
+                - FUTURE_ORDER
+                - CONTACTLESS
+                - APPLE_PAY_CNP
+                - GOOGLE_PAY_CNP
+                - INCREMENTAL_PRE_AUTHED
+                - PARTNER_ECOM_COF
+                - CLICK_TO_PAY_CNP
             amount:
               type: number
               format: double
@@ -5825,7 +6261,7 @@ components:
             amountTendered:
               type: number
               format: double
-              description: The amount tendered for this payment.
+              description: The amount tendered for this payment. The amount tendered does not include the tip.
             cardType:
               type: string
               description: The type of credit card that was used. Response only.
@@ -5876,9 +6312,109 @@ components:
                 - CAPTURE_IN_PROGRESS
                 - CAPTURED
                 - VOIDED
-            otherPayment:
-              description: Required when the payment type is `OTHER`. A reference to an alternative payment method.
+            originalProcessingFee:
+              type: number
+              format: double
+              description: The original processing fee for this payment. Populated after the payment is captured. Response only.
+            cashDrawer:
+              type: object
+              description: A reference to the `cashDrawer` used to receive this payment. Response only.
               $ref: "#/components/schemas/ExternalReference"
+            refund:
+              type: object
+              description: Response only.
+              $ref: "#/components/schemas/Refund"
+            voidInfo:
+              type: object
+              description: If the payment was voided, this contains information about who did it and when. Response only.
+              $ref: "#/components/schemas/VoidInformation"
+            houseAccount:
+              type: object
+              description: A reference to the house account, if any, that is associated with this payment. Response only.
+              $ref: "#/components/schemas/ExternalReference"
+            otherPayment:
+              description: Required when the payment type is `OTHER`. A reference to an alternative payment method that was configured by the restaurant.
+              $ref: "#/components/schemas/ExternalReference"
+            createdDevice:
+              description: The Toast POS device that created the payment. This value is `null` if the payment was not created using a Toast POS device.
+              type: object
+              $ref: "#/components/schemas/Device"
+            lastModifiedDevice:
+              description: |
+                The Toast POS device that modified the payment most recently. This value is `null` if the payment was never modified using a Toast POS device.
+
+                If the payment is modified but the modification was not made using a Toast POS device, then this value does not change.
+              type: object
+              $ref: "#/components/schemas/Device"
+            mcaRepaymentAmount:
+              description: |
+                The total currency amount withheld as payments or repayments that
+                apply to your business. For example, the `mcaRepaymentAmount` might include:
+
+                * Toast Capital payments
+                * Marketplace facilitator tax
+                * Toast Delivery Services costs
+                * Instant deposits
+
+                The MCA repayment amount is set at the time the payment is
+                captured, which is typically hours after the actual restaurant
+                guest payment.
+
+                Until the `mcaRepaymentAmount` is set, this value is `null`.
+
+                The `mcaRepaymentAmount` _might_ be updated when the payment is
+                settled, which is typically one or more days after the actual
+                guest payment. Response only.
+
+                You can use the following resources to find more specific
+                information about the payment and repayment amounts that are
+                included in `mcaRepaymentAmount`.
+
+                * [Toast Capital payments](https://www.toasttab.com/restaurants/admin/capital/)
+                * [Marketplace facilitator tax](https://www.toasttab.com/restaurants/admin/reports/home#sales-summary)
+                * [Marketplace facilitator tax in API data](https://doc.toasttab.com/openapi/orders/tag/Data-definitions/schema/MarketplaceFacilitatorTaxInfo/)
+                * [Instant deposits](https://www.toasttab.com/restaurants/admin/instant-deposit)
+                * [Toast Delivery Services fees and tips](https://www.toasttab.com/restaurants/admin/reports/home#sales-summary)
+                * [Toast Delivery Services fees and tips description](https://www.toasttab.com/restaurants/admin/reports/home#sales-summary)
+
+                _Important_: Some of the resources listed here require access to
+                Toast products as a restaurant employee or operator. If your
+                organization provides an integration service you might not have
+                access to the Toast products used by the restaurants you integrate
+                with. Toast support cannot provide access to Toast product
+                information. That information is only available to direct Toast
+                product users.
+              type: number
+              format: double
+            cardPaymentId:
+              type: string
+              description: |
+                **Note:** this value is in limited release. Your orders API
+                integration might not include the `cardPaymentId` value.
+
+                A unique identifier for the credit card used for a
+                `CREDIT` type payment. The identifier string is generated
+                by the Toast platform and _does not include any
+                information related to or associated with the actual
+                credit card account._ The identifier is unique within
+                your restaurant management group.
+
+                The value is `null` for the following payment types:
+
+                * Payment types other than `CREDIT`
+                * Credit card payments entered using EMV (chip cards)
+                * Credit card payments entered by keying in card numbers
+
+                Response only.
+            orderGuid:
+              type: string
+              description: The Toast platform identifier for the order that contains the payment. Response only.
+            checkGuid:
+              type: string
+              description: The Toast platform identifier for the check that contains the payment. Response only.
+            tenderTransactionGuid:
+              type: string
+              description: For internal use only.
     AppliedPackagingInfo:
       type: object
       description: |
@@ -5926,6 +6462,190 @@ components:
               type: string
               description: |
                 The guest-facing name, configured by the restaurant in Toast Web, for this packaging item. Response only.
+    AppliedDiscountReason:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the reason for the applied discount.
+        description:
+          type: string
+          description: An optional description for the reason for the applied discount.
+        comment:
+          type: string
+          description: An optional comment on the reason for the applied discount.
+        discountReason:
+          type: object
+          description: A ToastReference object that contains the GUID for the discount reason configured for the discount.
+          $ref: "#/components/schemas/ToastReference"
+    AppliedDiscountTrigger:
+      type: object
+      description: The Selection that triggered the application of this discount
+      properties:
+        selection:
+          $ref: "#/components/schemas/ExternalReference"
+        quantity:
+          type: number
+          format: double
+          description: The amount of the selection used to trigger the applied discount.
+    AppliedLoyaltyInfo:
+      type: object
+      description: Information about the customer loyalty program account associated with a check.
+      required:
+        - loyaltyIdentifier
+        - vendor
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            loyaltyIdentifier:
+              type: string
+              description: An identifier for the loyalty program account. For `POST` orders, this identifier is transmitted to the loyalty program service provider to associate the check with the loyalty account.
+            maskedLoyaltyIdentifier:
+              type: string
+              description: |
+                A representation of the identifier of the loyalty program
+                account that can be displayed securely. For example:
+                `************1234`. The Toast POS displays this string to
+                restaurant employees and guests.
+
+                You can optionally include this
+                value when you `POST` an order. It is
+                available in response data when you `GET` the order.
+
+                If you do not provide a `maskedLoyaltyIdentifier` when you
+                `POST` an order, this value is `null` in response data.
+
+                The Toast POS app displays a masked representation of the
+                `loyaltyIdentifier`. All characters except the last four
+                are hidden.
+            vendor:
+              type: string
+              description: The specific loyalty program service provider that supports the loyalty account.
+              enum:
+                - TOAST
+                - PUNCHH
+                - PUNCHH2
+                - PAYTRONIX
+                - APPFRONT
+                - INTEGRATION
+            accrualFamilyGuid:
+              type: string
+              description: |
+                Response only. An internal Toast platform identifier for loyalty
+                program transactions.
+
+                This is not returned from the initial
+                `POST` order request and is available at a later time.
+            accrualText:
+              type: string
+              description: |
+                Response only. A description of the loyalty program transaction
+                to print on the customer's receipt. For example,
+                "Earned 27 points."
+
+                The maximum length of the description string
+                is 255 characters.
+
+                This is not returned from the initial
+                `POST` order request and is available at a later time.
+    AppliedServiceCharge:
+      type: object
+      description: |
+        A service charge that is added to a check. A service charge can represent an upcharge such as a gratuity or a delivery fee.
+
+        Whether the upcharge is taxable is defined in the restaurant-configured `serviceCharge`.
+
+        The fields on the `AppliedServiceCharge` are calculated based on the referenced `ServiceCharge` configuration.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          required:
+            - serviceCharge
+          properties:
+            chargeAmount:
+              type: number
+              format: double
+              description: The final applied amount excluding tax. Required if `chargeType` is `OPEN`.
+            serviceCharge:
+              description: A reference to the restaurant-configured service charge. If a service charge is taxable, the tax amount is applied to the check.
+              type: object
+              $ref: "#/components/schemas/ExternalReference"
+            chargeType:
+              description: |
+                The type of service charge. Response only.
+
+                Valid values:
+
+                * `FIXED` - The service charge is for a specific currency amount.
+
+                * `PERCENT` - The service charge is for a percentage of the check amount.
+
+                * `OPEN` - The service charge is not configured with an amount. The amount is specified by the restaurant employee.
+              type: string
+              enum:
+                - FIXED
+                - PERCENT
+                - OPEN
+            name:
+              description: The configured human readable label for the service charge. Response only.
+              type: string
+            delivery:
+              description: Whether this service charge is a delivery charge. Response only.
+              type: boolean
+            takeout:
+              description: Whether this service charge is a takeout charge. Response only.
+              type: boolean
+            dineIn:
+              description: Whether this service charge is a dine-in charge. Response only.
+              type: boolean
+            gratuity:
+              description: Whether this service charge is a gratuity. Can be used to derive required tip amount on the check. Response only.
+              type: boolean
+            taxable:
+              description: Whether this service charge is taxable. Response only.
+              type: boolean
+            appliedTaxes:
+              type: array
+              description: Taxes applied to the service charge.
+              items:
+                $ref: "#/components/schemas/AppliedTaxRate"
+            serviceChargeCalculation:
+              type: string
+              description: |
+                Defines whether a `PERCENT` service charge is applied before (`PRE_DISCOUNT`) or after (`POST_DISCOUNT`) discounts.
+
+                This field is `null` for `FIXED` and `OPEN` service charges.
+              enum:
+                - PRE_DISCOUNT
+                - POST_DISCOUNT
+            refundDetails:
+              description: |
+                A `RefundDetails` object that
+                contains information about refunded payment amounts for the item.
+              type: object
+              $ref: "#/components/schemas/RefundDetails"
+            serviceChargeCategory:
+              description: |
+                The type of service charge. Default is `SERVICE_CHARGE`. Response only.
+
+                Valid values:
+
+                * `SERVICE_CHARGE` - The default type for a service charge.
+
+                * `CREDIT_CARD_SURCHARGE` - A fee assessed _only_ on payment transactions that use a credit card.
+
+                * `FUNDRAISING_CAMPAIGN` - Service charge associated with fundraising.
+              type: string
+              enum:
+                - SERVICE_CHARGE
+                - CREDIT_CARD_SURCHARGE
+                - FUNDRAISING_CAMPAIGN
+            paymentGuid:
+              description: The Toast platform unique identifier for the payment the fee is linked to. The `paymentGuid` value is always `null` unless the `serviceChargeCategory` object value is `CREDIT_CARD_SURCHARGE`. Response only.
+              type: string
     AppliedDiscount:
       type: object
       description: |
@@ -5964,6 +6684,50 @@ components:
               type: number
               format: double
               description: The percent value (0-100) of the applied discount when the `discountType` is `PERCENT` or `OPEN_PERCENT`.
+            nonTaxDiscountAmount:
+              type: number
+              format: double
+              description: The discount amount, excluding the tax discount amount. Response only.
+            triggers:
+              type: array
+              description: The menu item selections in the check that triggered this discount to be applied. Response only.
+              items:
+                $ref: "#/components/schemas/AppliedDiscountTrigger"
+            processingState:
+              type: string
+              description: |
+                The validation state of a loyalty program discount. Response only.
+
+                Valid values:
+
+                * `PENDING_APPLIED` - The loyalty program discount is applied to the check but the loyalty program service provider has not validated it. The discount will appear on guest receipts.
+
+                * `APPLIED` - The loyalty program discount has been validated by the loyalty program service provider and will appear on guest receipts.
+
+                * `PENDING_VOID` - The loyalty program service provider rejected the discount. The discount is pending removal from the check.
+
+                * `VOID` - The loyalty program discount has been removed from the check because the loyalty program service provider rejected it.
+              enum:
+                - PENDING_APPLIED
+                - APPLIED
+                - PENDING_VOID
+                - VOID
+            appliedDiscountReason:
+              type: object
+              description: Information about the optional reason for the applied discount. Response only.
+              $ref: "#/components/schemas/AppliedDiscountReason"
+            loyaltyDetails:
+              type: object
+              description: Information about the customer loyalty program discount that is applied to a check. The loyalty program account is identified in the `AppliedLoyaltyInfo` value for the check.
+              $ref: "#/components/schemas/LoyaltyDetails"
+            comboItems:
+              type: array
+              description: The menu item selections that are discounted as part of a combo discount. Response only.
+              items:
+                $ref: "#/components/schemas/ExternalReference"
+            appliedPromoCode:
+              type: string
+              description: The promo code that was applied to get this discount. Response only.
     Customer:
       type: object
       allOf:
@@ -5987,6 +6751,10 @@ components:
               type: string
               description: |
                 The telephone number of the guest.
+            phoneCountryCode:
+              type: string
+              description: |
+                The international phone country code for the telephone number of the guest.
             email:
               type: string
               description: |
@@ -6043,6 +6811,14 @@ components:
           type: string
           description: |
             The postal or zip code of the delivery destination.
+        administrativeArea:
+          type: string
+          description: |
+            The state, province, or other geographic division that is larger than a city or town of the delivery destination.
+        country:
+          type: string
+          description: |
+            The two-character ISO-3166-2 country code of the delivery destination.
         latitude:
           type: number
           format: double
@@ -6602,6 +7378,32 @@ components:
           format: double
           description: The east/west geographic coordinate of the
             restaurant, in decimal degrees.
+
+    LoyaltyDetails:
+      type: object
+      description: Information about the loyalty program discount that is applied to a check. The loyalty program account is identified in the `AppliedLoyaltyInfo` value for the check.
+      required:
+        - vendor
+        - referenceId
+      properties:
+        vendor:
+          type: string
+          description: The specific loyalty program service provider that supports the loyalty account.
+          enum:
+            - TOAST
+            - PUNCHH
+            - PUNCHH2
+            - PAYTRONIX
+            - APPFRONT
+            - INTEGRATION
+        referenceId:
+          type: string
+          description: |
+            The identifier of the loyalty program discount that
+            is recognized by the loyalty program service provider.
+
+            The Toast platform transmits the discount identifier to the service
+            provider to determine the validity and amount of the discount.
 
     URLs:
       type: object
@@ -8275,6 +9077,22 @@ components:
         enum: [POS, KIOSK, GRUBHUB, TOAST_ONLINE_ORDERING, ORDERING_PARTNERS]
       description: An array of strings that indicate where this menu entity is visible.
 
+    GiftCardInfo:
+      type: object
+      description: Reserved for future use.
+      required:
+        - cardNumberIdentifier
+        - last4CardDigits
+      allOf:
+        - $ref: "#/components/schemas/ToastReference"
+        - type: object
+          properties:
+            last4CardDigits:
+              type: string
+              description: The last 4 digits of the gift card that was used.
+            first5CardDigits:
+              type: string
+              description: The first 5 digits of the gift card that was used. Response only.
     General:
       type: object
       description: General information about a restaurant location.
@@ -8428,3 +9246,27 @@ components:
       format: int32
       nullable: true
       description: The number of guests this menu item serves.
+
+    VoidInformation:
+      type: object
+      description: Information about a void applied to a check or item.
+      properties:
+        voidUser:
+          type: object
+          description: The user who voided the order.
+          $ref: "#/components/schemas/ExternalReference"
+        voidApprover:
+          type: object
+          description: The user who approved the void.
+          $ref: "#/components/schemas/ExternalReference"
+        voidDate:
+          description: The date on which the void was made.
+          type: string
+          format: date-time
+        voidBusinessDate:
+          description: The business date (yyyyMMdd) on which the void was made. Response only.
+          type: integer
+        voidReason:
+          type: object
+          description: A reference to the configured void reason for the void.
+          $ref: "#/components/schemas/ExternalReference"

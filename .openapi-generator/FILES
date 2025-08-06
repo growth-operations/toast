@@ -9,8 +9,12 @@ docs/AlternatePaymentTypesApi.md
 docs/ApplicableDiscount.md
 docs/ApplicableDiscountsRequest.md
 docs/AppliedDiscount.md
+docs/AppliedDiscountReason.md
+docs/AppliedDiscountTrigger.md
+docs/AppliedLoyaltyInfo.md
 docs/AppliedPackagingInfo.md
 docs/AppliedPackagingItem.md
+docs/AppliedServiceCharge.md
 docs/AppliedTaxRate.md
 docs/AuthenticationApi.md
 docs/AuthenticationRequest.md
@@ -41,6 +45,7 @@ docs/EmployeesApi.md
 docs/ErrorMessage.md
 docs/ExternalReference.md
 docs/General.md
+docs/GiftCardInfo.md
 docs/Hours.md
 docs/Image.md
 docs/ImagesV2.md
@@ -49,6 +54,7 @@ docs/Job.md
 docs/JobWageOverride.md
 docs/JobsApi.md
 docs/Location.md
+docs/LoyaltyDetails.md
 docs/MarketplaceFacilitatorTaxInfo.md
 docs/Menu.md
 docs/MenuGroup.md
@@ -92,6 +98,8 @@ docs/PriceGroup.md
 docs/PriceGroupsApi.md
 docs/Printer.md
 docs/PrintersApi.md
+docs/Refund.md
+docs/RefundDetails.md
 docs/Restaurant.md
 docs/RestaurantBasic.md
 docs/RestaurantInfo.md
@@ -134,6 +142,7 @@ docs/TipWithholdingApi.md
 docs/ToastReference.md
 docs/URLs.md
 docs/UpdatePaymentRequest.md
+docs/VoidInformation.md
 docs/VoidOrderRequest.md
 docs/VoidOrderRequestSelections.md
 docs/VoidReason.md
@@ -147,13 +156,6 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
-test/test_applied_packaging_info.py
-test/test_applied_packaging_item.py
-test/test_applied_tax_rate.py
-test/test_curbside_pickup_info.py
-test/test_delivery_service_info.py
-test/test_device.py
-test/test_marketplace_facilitator_tax_info.py
 toastapi/__init__.py
 toastapi/api/__init__.py
 toastapi/api/alternate_payment_types_api.py
@@ -197,8 +199,12 @@ toastapi/models/alternate_payment_type.py
 toastapi/models/applicable_discount.py
 toastapi/models/applicable_discounts_request.py
 toastapi/models/applied_discount.py
+toastapi/models/applied_discount_reason.py
+toastapi/models/applied_discount_trigger.py
+toastapi/models/applied_loyalty_info.py
 toastapi/models/applied_packaging_info.py
 toastapi/models/applied_packaging_item.py
+toastapi/models/applied_service_charge.py
 toastapi/models/applied_tax_rate.py
 toastapi/models/authentication_request.py
 toastapi/models/authentication_response.py
@@ -223,6 +229,7 @@ toastapi/models/employee.py
 toastapi/models/error_message.py
 toastapi/models/external_reference.py
 toastapi/models/general.py
+toastapi/models/gift_card_info.py
 toastapi/models/hours.py
 toastapi/models/image.py
 toastapi/models/images_v2.py
@@ -230,6 +237,7 @@ toastapi/models/item_tag_v2.py
 toastapi/models/job.py
 toastapi/models/job_wage_override.py
 toastapi/models/location.py
+toastapi/models/loyalty_details.py
 toastapi/models/marketplace_facilitator_tax_info.py
 toastapi/models/menu.py
 toastapi/models/menu_group.py
@@ -261,6 +269,8 @@ toastapi/models/pre_modifier_v2.py
 toastapi/models/prep_times.py
 toastapi/models/price_group.py
 toastapi/models/printer.py
+toastapi/models/refund.py
+toastapi/models/refund_details.py
 toastapi/models/restaurant.py
 toastapi/models/restaurant_basic.py
 toastapi/models/restaurant_info.py
@@ -293,6 +303,7 @@ toastapi/models/tip_withholding.py
 toastapi/models/toast_reference.py
 toastapi/models/update_payment_request.py
 toastapi/models/urls.py
+toastapi/models/void_information.py
 toastapi/models/void_order_request.py
 toastapi/models/void_order_request_selections.py
 toastapi/models/void_reason.py

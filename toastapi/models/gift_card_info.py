@@ -22,18 +22,15 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class Customer(BaseModel):
+class GiftCardInfo(BaseModel):
     """
-    Customer
+    Reserved for future use.
     """ # noqa: E501
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
-    first_name: StrictStr = Field(description="The first name, or given name, of the guest. ", alias="firstName")
-    last_name: StrictStr = Field(description="The last name, or surname, of the guest. ", alias="lastName")
-    phone: StrictStr = Field(description="The telephone number of the guest. ")
-    phone_country_code: Optional[StrictStr] = Field(default=None, description="The international phone country code for the telephone number of the guest. ", alias="phoneCountryCode")
-    email: StrictStr = Field(description="The email address corresponding to the guest who placed the order. ")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "firstName", "lastName", "phone", "phoneCountryCode", "email"]
+    last4_card_digits: StrictStr = Field(description="The last 4 digits of the gift card that was used.", alias="last4CardDigits")
+    first5_card_digits: Optional[StrictStr] = Field(default=None, description="The first 5 digits of the gift card that was used. Response only.", alias="first5CardDigits")
+    __properties: ClassVar[List[str]] = ["guid", "entityType", "last4CardDigits", "first5CardDigits"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +50,7 @@ class Customer(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Customer from a JSON string"""
+        """Create an instance of GiftCardInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,7 +75,7 @@ class Customer(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Customer from a dict"""
+        """Create an instance of GiftCardInfo from a dict"""
         if obj is None:
             return None
 
@@ -88,11 +85,8 @@ class Customer(BaseModel):
         _obj = cls.model_validate({
             "guid": obj.get("guid"),
             "entityType": obj.get("entityType"),
-            "firstName": obj.get("firstName"),
-            "lastName": obj.get("lastName"),
-            "phone": obj.get("phone"),
-            "phoneCountryCode": obj.get("phoneCountryCode"),
-            "email": obj.get("email")
+            "last4CardDigits": obj.get("last4CardDigits"),
+            "first5CardDigits": obj.get("first5CardDigits")
         })
         return _obj
 
