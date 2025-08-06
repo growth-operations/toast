@@ -22,6 +22,8 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, Strict
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from toastapi.models.check import Check
+from toastapi.models.delivery_info import DeliveryInfo
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -36,15 +38,15 @@ class Order(BaseModel):
     modified_date: Optional[datetime] = Field(default=None, description="The most recent date that the order, or a check or menu item selection in the order, was modified.", alias="modifiedDate")
     promised_date: Optional[datetime] = Field(default=None, description="For scheduled orders, the date and time that the order is scheduled to be fulfilled.  For dine-in and as soon as possible (ASAP) orders, `promisedDate` is `null`. ", alias="promisedDate")
     channel_guid: Optional[StrictStr] = Field(default=None, description="Reserved for future use. ", alias="channelGuid")
-    dining_option: Dict[str, Any] = Field(alias="diningOption")
+    dining_option: ExternalReference = Field(alias="diningOption")
     checks: Annotated[List[Check], Field(min_length=1)] = Field(description="The checks for this order. Most orders have one check.  If the check is split, then there are multiple checks. ")
-    table: Optional[Dict[str, Any]] = None
-    service_area: Optional[Dict[str, Any]] = Field(default=None, alias="serviceArea")
-    restaurant_service: Optional[Dict[str, Any]] = Field(default=None, alias="restaurantService")
-    revenue_center: Optional[Dict[str, Any]] = Field(default=None, alias="revenueCenter")
+    table: Optional[ExternalReference] = None
+    service_area: Optional[ExternalReference] = Field(default=None, alias="serviceArea")
+    restaurant_service: Optional[ExternalReference] = Field(default=None, alias="restaurantService")
+    revenue_center: Optional[ExternalReference] = Field(default=None, alias="revenueCenter")
     source: Optional[StrictStr] = Field(default=None, description="Indicates the way that the order was placed.  Valid values:  * `In Store` * `Online` * `Order-and-Pay-at-Table` * `API` * `Kiosk` * `Caller Id` * `Google` * `Invoice` * `Toast Pickup App` * `Toast Local` * `Branded Online Ordering` * `Catering` * `Catering Online Ordering` * `Toast Tables` * `eCommerce Online ordering` * `Branded Mobile App * `Grubhub` (deprecated)  Response only. ")
     duration: Optional[StrictInt] = Field(default=None, description="The number of seconds between creation and payment. Response only.")
-    delivery_info: Optional[Dict[str, Any]] = Field(default=None, alias="deliveryInfo")
+    delivery_info: Optional[DeliveryInfo] = Field(default=None, alias="deliveryInfo")
     required_prep_time: Optional[StrictStr] = Field(default=None, description="The amount of time that it will take to prepare the order. This value overrides the  default `deliveryPrepTime` or `takeoutPrepTime` that normally controls auto-firing for scheduled orders.  You can use `requiredPrepTime` to handle atypical orders that will take more time than usual for a restaurant to prepare.  Express the required preparation time in ISO-8601 duration format. Must be greater than zero and be an  increment of five minutes. For example, the value \"PT15M\" sets the required preparation time for the order to 15 minutes. ", alias="requiredPrepTime")
     estimated_fulfillment_date: Optional[datetime] = Field(default=None, description="The date and time that the order is expected to be ready for pickup or to be delivered.  This value is only set when the order dining option uses the `DELIVERY` or `TAKE_OUT` dining behavior. For other dining options, the value is `null`.  Response only. ", alias="estimatedFulfillmentDate")
     number_of_guests: Optional[StrictInt] = Field(default=None, description="The number of restaurant guests that are associated with the order. For example, for a dine-in order, this might be the number of guests at a table. ", alias="numberOfGuests")
@@ -69,7 +71,7 @@ class Order(BaseModel):
     last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
     marketplace_facilitator_tax_info: Optional[Dict[str, Any]] = Field(default=None, alias="marketplaceFacilitatorTaxInfo")
     pricing_features: Optional[List[StrictStr]] = Field(default=None, description="Pricing features that this order is using.", alias="pricingFeatures")
-    server: Optional[Dict[str, Any]] = None
+    server: Optional[ExternalReference] = None
     created_date: Optional[datetime] = Field(default=None, description="The date and time that the Toast platform received the order.", alias="createdDate")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "openedDate", "modifiedDate", "promisedDate", "channelGuid", "diningOption", "checks", "table", "serviceArea", "restaurantService", "revenueCenter", "source", "duration", "deliveryInfo", "requiredPrepTime", "estimatedFulfillmentDate", "numberOfGuests", "voided", "voidDate", "voidBusinessDate", "paidDate", "closedDate", "deletedDate", "deleted", "businessDate", "appliedPackagingInfo", "approvalStatus", "createdDevice", "createdInTestMode", "curbsidePickupInfo", "deliveryServiceInfo", "displayNumber", "excessFood", "guestOrderStatus", "initialDate", "lastModifiedDevice", "marketplaceFacilitatorTaxInfo", "pricingFeatures", "server", "createdDate"]
 
@@ -133,6 +135,9 @@ class Order(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of dining_option
+        if self.dining_option:
+            _dict['diningOption'] = self.dining_option.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in checks (list)
         _items = []
         if self.checks:
@@ -140,6 +145,24 @@ class Order(BaseModel):
                 if _item_checks:
                     _items.append(_item_checks.to_dict())
             _dict['checks'] = _items
+        # override the default output from pydantic by calling `to_dict()` of table
+        if self.table:
+            _dict['table'] = self.table.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of service_area
+        if self.service_area:
+            _dict['serviceArea'] = self.service_area.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of restaurant_service
+        if self.restaurant_service:
+            _dict['restaurantService'] = self.restaurant_service.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of revenue_center
+        if self.revenue_center:
+            _dict['revenueCenter'] = self.revenue_center.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of delivery_info
+        if self.delivery_info:
+            _dict['deliveryInfo'] = self.delivery_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of server
+        if self.server:
+            _dict['server'] = self.server.to_dict()
         return _dict
 
     @classmethod
@@ -159,15 +182,15 @@ class Order(BaseModel):
             "modifiedDate": obj.get("modifiedDate"),
             "promisedDate": obj.get("promisedDate"),
             "channelGuid": obj.get("channelGuid"),
-            "diningOption": obj.get("diningOption"),
+            "diningOption": ExternalReference.from_dict(obj["diningOption"]) if obj.get("diningOption") is not None else None,
             "checks": [Check.from_dict(_item) for _item in obj["checks"]] if obj.get("checks") is not None else None,
-            "table": obj.get("table"),
-            "serviceArea": obj.get("serviceArea"),
-            "restaurantService": obj.get("restaurantService"),
-            "revenueCenter": obj.get("revenueCenter"),
+            "table": ExternalReference.from_dict(obj["table"]) if obj.get("table") is not None else None,
+            "serviceArea": ExternalReference.from_dict(obj["serviceArea"]) if obj.get("serviceArea") is not None else None,
+            "restaurantService": ExternalReference.from_dict(obj["restaurantService"]) if obj.get("restaurantService") is not None else None,
+            "revenueCenter": ExternalReference.from_dict(obj["revenueCenter"]) if obj.get("revenueCenter") is not None else None,
             "source": obj.get("source"),
             "duration": obj.get("duration"),
-            "deliveryInfo": obj.get("deliveryInfo"),
+            "deliveryInfo": DeliveryInfo.from_dict(obj["deliveryInfo"]) if obj.get("deliveryInfo") is not None else None,
             "requiredPrepTime": obj.get("requiredPrepTime"),
             "estimatedFulfillmentDate": obj.get("estimatedFulfillmentDate"),
             "numberOfGuests": obj.get("numberOfGuests"),
@@ -192,7 +215,7 @@ class Order(BaseModel):
             "lastModifiedDevice": obj.get("lastModifiedDevice"),
             "marketplaceFacilitatorTaxInfo": obj.get("marketplaceFacilitatorTaxInfo"),
             "pricingFeatures": obj.get("pricingFeatures"),
-            "server": obj.get("server"),
+            "server": ExternalReference.from_dict(obj["server"]) if obj.get("server") is not None else None,
             "createdDate": obj.get("createdDate")
         })
         return _obj

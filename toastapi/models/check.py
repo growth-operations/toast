@@ -25,6 +25,8 @@ from toastapi.models.applied_discount import AppliedDiscount
 from toastapi.models.applied_loyalty_info import AppliedLoyaltyInfo
 from toastapi.models.applied_service_charge import AppliedServiceCharge
 from toastapi.models.customer import Customer
+from toastapi.models.device import Device
+from toastapi.models.external_reference import ExternalReference
 from toastapi.models.payment import Payment
 from toastapi.models.selection import Selection
 from typing import Optional, Set
@@ -60,10 +62,10 @@ class Check(BaseModel):
     void_date: Optional[datetime] = Field(default=None, description="The date when this check was voided. Response only.", alias="voidDate")
     void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this check was voided. Response only.", alias="voidBusinessDate")
     paid_date: Optional[datetime] = Field(default=None, description="The most recent date when this check received payment. If not specified when `POST`ing, it is set to the current system time.", alias="paidDate")
-    created_device: Optional[Dict[str, Any]] = Field(default=None, alias="createdDevice")
+    created_device: Optional[Device] = Field(default=None, alias="createdDevice")
     last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
     duration: Optional[StrictInt] = Field(default=None, description="The number of seconds between creation and payment. Response only.")
-    opened_by: Optional[Dict[str, Any]] = Field(default=None, alias="openedBy")
+    opened_by: Optional[ExternalReference] = Field(default=None, alias="openedBy")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "createdDate", "openedDate", "closedDate", "modifiedDate", "deletedDate", "deleted", "selections", "customer", "appliedLoyaltyInfo", "taxExempt", "displayNumber", "appliedServiceCharges", "amount", "taxAmount", "totalAmount", "payments", "tabName", "paymentStatus", "appliedDiscounts", "voided", "voidDate", "voidBusinessDate", "paidDate", "createdDevice", "lastModifiedDevice", "duration", "openedBy"]
 
     @field_validator('payment_status')
@@ -149,6 +151,12 @@ class Check(BaseModel):
                 if _item_applied_discounts:
                     _items.append(_item_applied_discounts.to_dict())
             _dict['appliedDiscounts'] = _items
+        # override the default output from pydantic by calling `to_dict()` of created_device
+        if self.created_device:
+            _dict['createdDevice'] = self.created_device.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of opened_by
+        if self.opened_by:
+            _dict['openedBy'] = self.opened_by.to_dict()
         return _dict
 
     @classmethod
@@ -187,10 +195,10 @@ class Check(BaseModel):
             "voidDate": obj.get("voidDate"),
             "voidBusinessDate": obj.get("voidBusinessDate"),
             "paidDate": obj.get("paidDate"),
-            "createdDevice": obj.get("createdDevice"),
+            "createdDevice": Device.from_dict(obj["createdDevice"]) if obj.get("createdDevice") is not None else None,
             "lastModifiedDevice": obj.get("lastModifiedDevice"),
             "duration": obj.get("duration"),
-            "openedBy": obj.get("openedBy")
+            "openedBy": ExternalReference.from_dict(obj["openedBy"]) if obj.get("openedBy") is not None else None
         })
         return _obj
 

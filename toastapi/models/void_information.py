@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,11 +28,11 @@ class VoidInformation(BaseModel):
     """
     Information about a void applied to a check or item.
     """ # noqa: E501
-    void_user: Optional[Dict[str, Any]] = Field(default=None, alias="voidUser")
-    void_approver: Optional[Dict[str, Any]] = Field(default=None, alias="voidApprover")
+    void_user: Optional[ExternalReference] = Field(default=None, alias="voidUser")
+    void_approver: Optional[ExternalReference] = Field(default=None, alias="voidApprover")
     void_date: Optional[datetime] = Field(default=None, description="The date on which the void was made.", alias="voidDate")
     void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which the void was made. Response only.", alias="voidBusinessDate")
-    void_reason: Optional[Dict[str, Any]] = Field(default=None, alias="voidReason")
+    void_reason: Optional[ExternalReference] = Field(default=None, alias="voidReason")
     __properties: ClassVar[List[str]] = ["voidUser", "voidApprover", "voidDate", "voidBusinessDate", "voidReason"]
 
     model_config = ConfigDict(

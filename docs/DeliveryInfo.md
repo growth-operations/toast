@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **notes** | **str** | Additional instructions or information about the delivery.  | [optional] 
 **delivered_date** | **datetime** | The date and time that the delivery employee indicated in the Toast POS app that the order was delivered. Response only.  | [optional] 
 **dispatched_date** | **datetime** | The date and time that the restaurant indicated in the Toast POS app that the order was available for delivery and assigned to a delivery employee.  | [optional] 
-**delivery_employee** | [**ExternalReference**](.md) |  | [optional] 
+**delivery_employee** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **delivery_state** | **str** | An internal representation of the state of a delivery order.  | [optional] 
 
 ## Example

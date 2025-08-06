@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,7 +30,7 @@ class ServiceArea(BaseModel):
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     name: Optional[StrictStr] = Field(default=None, description="The name of this service area.")
-    revenue_center: Optional[Dict[str, Any]] = Field(default=None, alias="revenueCenter")
+    revenue_center: Optional[ExternalReference] = Field(default=None, alias="revenueCenter")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "name", "revenueCenter"]
 
     model_config = ConfigDict(
@@ -71,6 +72,9 @@ class ServiceArea(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of revenue_center
+        if self.revenue_center:
+            _dict['revenueCenter'] = self.revenue_center.to_dict()
         return _dict
 
     @classmethod
@@ -86,7 +90,7 @@ class ServiceArea(BaseModel):
             "guid": obj.get("guid"),
             "entityType": obj.get("entityType"),
             "name": obj.get("name"),
-            "revenueCenter": obj.get("revenueCenter")
+            "revenueCenter": ExternalReference.from_dict(obj["revenueCenter"]) if obj.get("revenueCenter") is not None else None
         })
         return _obj
 

@@ -7,7 +7,7 @@ The overriding job wage, for an employee that has a wage that  differs from the 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **wage** | **float** | Required currency value of the employee&#39;s overriding job wage.  | 
-**job_reference** | [**ExternalReference**](.md) |  | 
+**job_reference** | [**ExternalReference**](ExternalReference.md) |  | 
 
 ## Example
 

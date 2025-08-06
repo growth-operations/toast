@@ -13,15 +13,15 @@ Name | Type | Description | Notes
 **modified_date** | **datetime** | The most recent date that the order, or a check or menu item selection in the order, was modified. | [optional] 
 **promised_date** | **datetime** | For scheduled orders, the date and time that the order is scheduled to be fulfilled.  For dine-in and as soon as possible (ASAP) orders, &#x60;promisedDate&#x60; is &#x60;null&#x60;.  | [optional] 
 **channel_guid** | **str** | Reserved for future use.  | [optional] 
-**dining_option** | **object** |  | 
+**dining_option** | [**ExternalReference**](ExternalReference.md) |  | 
 **checks** | [**List[Check]**](Check.md) | The checks for this order. Most orders have one check.  If the check is split, then there are multiple checks.  | 
-**table** | **object** |  | [optional] 
-**service_area** | **object** |  | [optional] 
-**restaurant_service** | **object** |  | [optional] 
-**revenue_center** | **object** |  | [optional] 
+**table** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
+**service_area** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
+**restaurant_service** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
+**revenue_center** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **source** | **str** | Indicates the way that the order was placed.  Valid values:  * &#x60;In Store&#x60; * &#x60;Online&#x60; * &#x60;Order-and-Pay-at-Table&#x60; * &#x60;API&#x60; * &#x60;Kiosk&#x60; * &#x60;Caller Id&#x60; * &#x60;Google&#x60; * &#x60;Invoice&#x60; * &#x60;Toast Pickup App&#x60; * &#x60;Toast Local&#x60; * &#x60;Branded Online Ordering&#x60; * &#x60;Catering&#x60; * &#x60;Catering Online Ordering&#x60; * &#x60;Toast Tables&#x60; * &#x60;eCommerce Online ordering&#x60; * &#x60;Branded Mobile App * &#x60;Grubhub&#x60; (deprecated)  Response only.  | [optional] 
 **duration** | **int** | The number of seconds between creation and payment. Response only. | [optional] 
-**delivery_info** | **object** |  | [optional] 
+**delivery_info** | [**DeliveryInfo**](DeliveryInfo.md) |  | [optional] 
 **required_prep_time** | **str** | The amount of time that it will take to prepare the order. This value overrides the  default &#x60;deliveryPrepTime&#x60; or &#x60;takeoutPrepTime&#x60; that normally controls auto-firing for scheduled orders.  You can use &#x60;requiredPrepTime&#x60; to handle atypical orders that will take more time than usual for a restaurant to prepare.  Express the required preparation time in ISO-8601 duration format. Must be greater than zero and be an  increment of five minutes. For example, the value \&quot;PT15M\&quot; sets the required preparation time for the order to 15 minutes.  | [optional] 
 **estimated_fulfillment_date** | **datetime** | The date and time that the order is expected to be ready for pickup or to be delivered.  This value is only set when the order dining option uses the &#x60;DELIVERY&#x60; or &#x60;TAKE_OUT&#x60; dining behavior. For other dining options, the value is &#x60;null&#x60;.  Response only.  | [optional] 
 **number_of_guests** | **int** | The number of restaurant guests that are associated with the order. For example, for a dine-in order, this might be the number of guests at a table.  | [optional] 
@@ -46,7 +46,7 @@ Name | Type | Description | Notes
 **last_modified_device** | **object** |  | [optional] 
 **marketplace_facilitator_tax_info** | **object** |  | [optional] 
 **pricing_features** | **List[str]** | Pricing features that this order is using. | [optional] 
-**server** | **object** |  | [optional] 
+**server** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **created_date** | **datetime** | The date and time that the Toast platform received the order. | [optional] 
 
 ## Example

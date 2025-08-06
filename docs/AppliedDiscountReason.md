@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **name** | **str** | The name of the reason for the applied discount. | 
 **description** | **str** | An optional description for the reason for the applied discount. | [optional] 
 **comment** | **str** | An optional comment on the reason for the applied discount. | [optional] 
-**discount_reason** | [**ToastReference**](.md) |  | [optional] 
+**discount_reason** | [**ToastReference**](ToastReference.md) |  | [optional] 
 
 ## Example
 

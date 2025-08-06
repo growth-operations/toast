@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Union
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,7 +28,7 @@ class JobWageOverride(BaseModel):
     The overriding job wage, for an employee that has a wage that  differs from the job's default wage. 
     """ # noqa: E501
     wage: Union[StrictFloat, StrictInt] = Field(description="Required currency value of the employee's overriding job wage. ")
-    job_reference: Dict[str, Any] = Field(alias="jobReference")
+    job_reference: ExternalReference = Field(alias="jobReference")
     __properties: ClassVar[List[str]] = ["wage", "jobReference"]
 
     model_config = ConfigDict(

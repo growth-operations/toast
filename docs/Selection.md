@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **guid** | **str** | The GUID maintained by the Toast platform. | 
 **entity_type** | **str** | The type of object this is. Response only. | 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
-**item** | **object** |  | 
+**item** | [**ConfigReference**](ConfigReference.md) |  | 
 **item_group** | **object** |  | [optional] 
 **option_group** | **object** |  | [optional] 
 **pre_modifier** | **object** |  | [optional] 
@@ -26,7 +26,7 @@ Name | Type | Description | Notes
 **voided** | **bool** | Set to &#x60;true&#x60; if this selection is voided. Response only. | [optional] 
 **void_date** | **datetime** | The date on which this selection was voided. Response only. | [optional] 
 **void_business_date** | **int** | The business date (yyyyMMdd) on which this selection was voided. Response only. | [optional] 
-**void_reason** | **object** |  | [optional] 
+**void_reason** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **refund_details** | **object** |  | [optional] 
 **display_name** | **str** | The display name of the selection.  Can be used to set a special request value.  Otherwise, it is generated from this selection&#39;s item property.  | [optional] 
 **created_date** | **datetime** | The date on which this selection was created. If not specified, defaults to the current time. | [optional] 

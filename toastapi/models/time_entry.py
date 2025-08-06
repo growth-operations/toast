@@ -21,6 +21,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from toastapi.models.external_reference import ExternalReference
 from toastapi.models.time_entry_break import TimeEntryBreak
 from typing import Optional, Set
 from typing_extensions import Self
@@ -35,9 +36,9 @@ class TimeEntry(BaseModel):
     created_date: Optional[datetime] = Field(default=None, description="Date created, in UTC format (read-only). ", alias="createdDate")
     modified_date: Optional[datetime] = Field(default=None, description="Date modified, in UTC format (read-only). ", alias="modifiedDate")
     deleted: Optional[StrictBool] = Field(default=None, description="If the time entry is deleted in the Toast platform. ")
-    job_reference: Optional[Dict[str, Any]] = Field(default=None, alias="jobReference")
-    employee_reference: Optional[Dict[str, Any]] = Field(default=None, alias="employeeReference")
-    shift_reference: Optional[Dict[str, Any]] = Field(default=None, alias="shiftReference")
+    job_reference: Optional[ExternalReference] = Field(default=None, alias="jobReference")
+    employee_reference: Optional[ExternalReference] = Field(default=None, alias="employeeReference")
+    shift_reference: Optional[ExternalReference] = Field(default=None, alias="shiftReference")
     in_date: Optional[datetime] = Field(default=None, description="The date and time that an employee clocked in to a work shift. ", alias="inDate")
     out_date: Optional[datetime] = Field(default=None, description="The date and time that an employee closed a work shift. ", alias="outDate")
     auto_clocked_out: Optional[StrictBool] = Field(default=None, description="Indicates whether the Toast platform automatically clocked the employee out of their shift at the end of the restaurant business day. ", alias="autoClockedOut")
@@ -89,6 +90,15 @@ class TimeEntry(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of job_reference
+        if self.job_reference:
+            _dict['jobReference'] = self.job_reference.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of employee_reference
+        if self.employee_reference:
+            _dict['employeeReference'] = self.employee_reference.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of shift_reference
+        if self.shift_reference:
+            _dict['shiftReference'] = self.shift_reference.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in breaks (list)
         _items = []
         if self.breaks:
@@ -114,9 +124,9 @@ class TimeEntry(BaseModel):
             "createdDate": obj.get("createdDate"),
             "modifiedDate": obj.get("modifiedDate"),
             "deleted": obj.get("deleted"),
-            "jobReference": obj.get("jobReference"),
-            "employeeReference": obj.get("employeeReference"),
-            "shiftReference": obj.get("shiftReference"),
+            "jobReference": ExternalReference.from_dict(obj["jobReference"]) if obj.get("jobReference") is not None else None,
+            "employeeReference": ExternalReference.from_dict(obj["employeeReference"]) if obj.get("employeeReference") is not None else None,
+            "shiftReference": ExternalReference.from_dict(obj["shiftReference"]) if obj.get("shiftReference") is not None else None,
             "inDate": obj.get("inDate"),
             "outDate": obj.get("outDate"),
             "autoClockedOut": obj.get("autoClockedOut"),

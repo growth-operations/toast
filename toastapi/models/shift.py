@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -33,8 +34,8 @@ class Shift(BaseModel):
     created_date: Optional[datetime] = Field(default=None, description="Date created, in UTC format (read-only). ", alias="createdDate")
     modified_date: Optional[datetime] = Field(default=None, description="Date modified, in UTC format (read-only). ", alias="modifiedDate")
     deleted: Optional[StrictBool] = Field(default=None, description="If the shift is deleted in the Toast platform. ")
-    job_reference: Optional[Dict[str, Any]] = Field(default=None, alias="jobReference")
-    employee_reference: Optional[Dict[str, Any]] = Field(default=None, alias="employeeReference")
+    job_reference: Optional[ExternalReference] = Field(default=None, alias="jobReference")
+    employee_reference: Optional[ExternalReference] = Field(default=None, alias="employeeReference")
     in_date: Optional[datetime] = Field(default=None, description="Timestamp of the beginning of the shift. This is when the  employee can clock in. Expressed in the UTC time zone. ", alias="inDate")
     out_date: Optional[datetime] = Field(default=None, description="Timestamp of the end of the shift. This is when the  employee can clock out. Expressed in the UTC time zone. ", alias="outDate")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "createdDate", "modifiedDate", "deleted", "jobReference", "employeeReference", "inDate", "outDate"]
@@ -78,6 +79,12 @@ class Shift(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of job_reference
+        if self.job_reference:
+            _dict['jobReference'] = self.job_reference.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of employee_reference
+        if self.employee_reference:
+            _dict['employeeReference'] = self.employee_reference.to_dict()
         return _dict
 
     @classmethod
@@ -96,8 +103,8 @@ class Shift(BaseModel):
             "createdDate": obj.get("createdDate"),
             "modifiedDate": obj.get("modifiedDate"),
             "deleted": obj.get("deleted"),
-            "jobReference": obj.get("jobReference"),
-            "employeeReference": obj.get("employeeReference"),
+            "jobReference": ExternalReference.from_dict(obj["jobReference"]) if obj.get("jobReference") is not None else None,
+            "employeeReference": ExternalReference.from_dict(obj["employeeReference"]) if obj.get("employeeReference") is not None else None,
             "inDate": obj.get("inDate"),
             "outDate": obj.get("outDate")
         })

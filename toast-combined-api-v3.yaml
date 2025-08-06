@@ -5457,7 +5457,6 @@ components:
               format: uuid
             diningOption:
               description: The restaurant-configured dining option that applies to this order.
-              type: object
               $ref: "#/components/schemas/ExternalReference"
             checks:
               type: array
@@ -5469,20 +5468,16 @@ components:
               items:
                 $ref: "#/components/schemas/Check"
             table:
-              type: object
               description: |
                 The restaurant table at which this order was placed.
               $ref: "#/components/schemas/ExternalReference"
             serviceArea:
-              type: object
               description: The service area. Response only.
               $ref: "#/components/schemas/ExternalReference"
             restaurantService:
-              type: object
               description: The applicable meal service. For example, lunch or dinner. Response only.
               $ref: "#/components/schemas/ExternalReference"
             revenueCenter:
-              type: object
               description: |
                 The division or section of a restaurant that the order is
                 fulfilled in.
@@ -5520,7 +5515,6 @@ components:
               description: The number of seconds between creation and payment. Response only.
             deliveryInfo:
               description: Delivery information related to orders with a `DELIVERY` dining option.
-              type: object
               $ref: "#/components/schemas/DeliveryInfo"
             requiredPrepTime:
               type: string
@@ -5711,7 +5705,6 @@ components:
                   - TAXESV3
             server:
               description: The restaurant employee, or server, who is assigned to the order.
-              type: object
               $ref: "#/components/schemas/ExternalReference"
             createdDate:
               description: The date and time that the Toast platform received the order.
@@ -5862,7 +5855,6 @@ components:
               description: The most recent date when this check received payment. If not specified when `POST`ing, it is set to the current system time.
             createdDevice:
               description: The Toast POS device that created the check. This value is `null` if the check was not created using a Toast POS device.
-              type: object
               $ref: "#/components/schemas/Device"
             lastModifiedDevice:
               description: |
@@ -5876,7 +5868,6 @@ components:
               description: The number of seconds between creation and payment. Response only.
             openedBy:
               description: The restaurant employee, or server, who opened the check.
-              type: object
               $ref: "#/components/schemas/ExternalReference"
     Selection:
       type: object
@@ -5902,7 +5893,6 @@ components:
             - quantity
           properties:
             item:
-              type: object
               description: A reference to the selected menu item.
               $ref: "#/components/schemas/ConfigReference"
             itemGroup:
@@ -6002,7 +5992,6 @@ components:
               type: integer
               description: The business date (yyyyMMdd) on which this selection was voided. Response only.
             voidReason:
-              type: object
               description: If `voided` is `true`, a reference to the void reason. Response only.
               $ref: "#/components/schemas/ExternalReference"
             refundDetails:
@@ -6284,7 +6273,6 @@ components:
               description: The last 4 digits of the credit card that was used. Response only.
             server:
               description: The restaurant employee, or server, who is associated with the payment. Response only.
-              type: object
               $ref: "#/components/schemas/ExternalReference"
             refundStatus:
               type: string
@@ -6317,7 +6305,6 @@ components:
               format: double
               description: The original processing fee for this payment. Populated after the payment is captured. Response only.
             cashDrawer:
-              type: object
               description: A reference to the `cashDrawer` used to receive this payment. Response only.
               $ref: "#/components/schemas/ExternalReference"
             refund:
@@ -6329,7 +6316,6 @@ components:
               description: If the payment was voided, this contains information about who did it and when. Response only.
               $ref: "#/components/schemas/VoidInformation"
             houseAccount:
-              type: object
               description: A reference to the house account, if any, that is associated with this payment. Response only.
               $ref: "#/components/schemas/ExternalReference"
             otherPayment:
@@ -6337,7 +6323,6 @@ components:
               $ref: "#/components/schemas/ExternalReference"
             createdDevice:
               description: The Toast POS device that created the payment. This value is `null` if the payment was not created using a Toast POS device.
-              type: object
               $ref: "#/components/schemas/Device"
             lastModifiedDevice:
               description: |
@@ -6477,7 +6462,6 @@ components:
           type: string
           description: An optional comment on the reason for the applied discount.
         discountReason:
-          type: object
           description: A ToastReference object that contains the GUID for the discount reason configured for the discount.
           $ref: "#/components/schemas/ToastReference"
     AppliedDiscountTrigger:
@@ -6571,7 +6555,6 @@ components:
               description: The final applied amount excluding tax. Required if `chargeType` is `OPEN`.
             serviceCharge:
               description: A reference to the restaurant-configured service charge. If a service charge is taxable, the tax amount is applied to the check.
-              type: object
               $ref: "#/components/schemas/ExternalReference"
             chargeType:
               description: |
@@ -6662,11 +6645,9 @@ components:
               format: double
               description: The discount amount. This amount is subtracted from the check or item.
             discount:
-              type: object
               description: A GUID reference to the discount configured for the restaurant.
               $ref: "#/components/schemas/ToastReference"
             approver:
-              type: object
               description: The user who approved the discount. Response only.
               $ref: "#/components/schemas/ExternalReference"
             discountType:
@@ -6713,11 +6694,9 @@ components:
                 - PENDING_VOID
                 - VOID
             appliedDiscountReason:
-              type: object
               description: Information about the optional reason for the applied discount. Response only.
               $ref: "#/components/schemas/AppliedDiscountReason"
             loyaltyDetails:
-              type: object
               description: Information about the customer loyalty program discount that is applied to a check. The loyalty program account is identified in the `AppliedLoyaltyInfo` value for the check.
               $ref: "#/components/schemas/LoyaltyDetails"
             comboItems:
@@ -6851,7 +6830,6 @@ components:
         deliveryEmployee:
           description: |
             The Toast GUID of the employee who delivers the order.
-          type: object
           $ref: "#/components/schemas/ExternalReference"
         deliveryState:
           description: |
@@ -7038,7 +7016,6 @@ components:
           description: |
             Required currency value of the employee's overriding job wage.
         jobReference:
-          type: object
           description: |
             Required external reference to the job to which this wage 
             applies overridden
@@ -7067,12 +7044,10 @@ components:
               description: |
                 If the shift is deleted in the Toast platform.
             jobReference:
-              type: object
               description: |
                 External reference to the job assigned to this shift.
               $ref: "#/components/schemas/ExternalReference"
             employeeReference:
-              type: object
               description: |
                 External reference to the employee assigned to this shift.
               $ref: "#/components/schemas/ExternalReference"
@@ -7112,19 +7087,16 @@ components:
               description: |
                 If the time entry is deleted in the Toast platform.
             jobReference:
-              type: object
               description: |
                 Optional, external reference to the job the employee 
                 assumed when clocking into the Toast platform.
               $ref: "#/components/schemas/ExternalReference"
             employeeReference:
-              type: object
               description: |
                 External reference to the employee that created this time 
                 entry.
               $ref: "#/components/schemas/ExternalReference"
             shiftReference:
-              type: object
               description: |
                 Optional, external reference to the scheduled shift 
                 associated with this time entry.
@@ -8101,7 +8073,6 @@ components:
               type: string
               description: The name of this service area.
             revenueCenter:
-              type: object
               description: The revenue center the service area belongs to.
               $ref: "#/components/schemas/ExternalReference"
 
@@ -9252,11 +9223,9 @@ components:
       description: Information about a void applied to a check or item.
       properties:
         voidUser:
-          type: object
           description: The user who voided the order.
           $ref: "#/components/schemas/ExternalReference"
         voidApprover:
-          type: object
           description: The user who approved the void.
           $ref: "#/components/schemas/ExternalReference"
         voidDate:
@@ -9267,6 +9236,5 @@ components:
           description: The business date (yyyyMMdd) on which the void was made. Response only.
           type: integer
         voidReason:
-          type: object
           description: A reference to the configured void reason for the void.
           $ref: "#/components/schemas/ExternalReference"

@@ -12,8 +12,8 @@ Name | Type | Description | Notes
 **created_date** | **datetime** | Date created, in UTC format (read-only).  | [optional] 
 **modified_date** | **datetime** | Date modified, in UTC format (read-only).  | [optional] 
 **deleted** | **bool** | If the shift is deleted in the Toast platform.  | [optional] 
-**job_reference** | **object** |  | [optional] 
-**employee_reference** | **object** |  | [optional] 
+**job_reference** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
+**employee_reference** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **in_date** | **datetime** | Timestamp of the beginning of the shift. This is when the  employee can clock in. Expressed in the UTC time zone.  | [optional] 
 **out_date** | **datetime** | Timestamp of the end of the shift. This is when the  employee can clock out. Expressed in the UTC time zone.  | [optional] 
 

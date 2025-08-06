@@ -23,6 +23,8 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from toastapi.models.applied_discount import AppliedDiscount
 from toastapi.models.applied_tax_rate import AppliedTaxRate
+from toastapi.models.config_reference import ConfigReference
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -33,7 +35,7 @@ class Selection(BaseModel):
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
-    item: Dict[str, Any]
+    item: ConfigReference
     item_group: Optional[Dict[str, Any]] = Field(default=None, alias="itemGroup")
     option_group: Optional[Dict[str, Any]] = Field(default=None, alias="optionGroup")
     pre_modifier: Optional[Dict[str, Any]] = Field(default=None, alias="preModifier")
@@ -50,7 +52,7 @@ class Selection(BaseModel):
     voided: Optional[StrictBool] = Field(default=None, description="Set to `true` if this selection is voided. Response only.")
     void_date: Optional[datetime] = Field(default=None, description="The date on which this selection was voided. Response only.", alias="voidDate")
     void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this selection was voided. Response only.", alias="voidBusinessDate")
-    void_reason: Optional[Dict[str, Any]] = Field(default=None, alias="voidReason")
+    void_reason: Optional[ExternalReference] = Field(default=None, alias="voidReason")
     refund_details: Optional[Dict[str, Any]] = Field(default=None, alias="refundDetails")
     display_name: Optional[StrictStr] = Field(default=None, description="The display name of the selection.  Can be used to set a special request value.  Otherwise, it is generated from this selection's item property. ", alias="displayName")
     created_date: Optional[datetime] = Field(default=None, description="The date on which this selection was created. If not specified, defaults to the current time.", alias="createdDate")
@@ -156,6 +158,9 @@ class Selection(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of item
+        if self.item:
+            _dict['item'] = self.item.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in applied_discounts (list)
         _items = []
         if self.applied_discounts:
@@ -163,6 +168,9 @@ class Selection(BaseModel):
                 if _item_applied_discounts:
                     _items.append(_item_applied_discounts.to_dict())
             _dict['appliedDiscounts'] = _items
+        # override the default output from pydantic by calling `to_dict()` of void_reason
+        if self.void_reason:
+            _dict['voidReason'] = self.void_reason.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in modifiers (list)
         _items = []
         if self.modifiers:
@@ -192,7 +200,7 @@ class Selection(BaseModel):
             "guid": obj.get("guid"),
             "entityType": obj.get("entityType"),
             "externalId": obj.get("externalId"),
-            "item": obj.get("item"),
+            "item": ConfigReference.from_dict(obj["item"]) if obj.get("item") is not None else None,
             "itemGroup": obj.get("itemGroup"),
             "optionGroup": obj.get("optionGroup"),
             "preModifier": obj.get("preModifier"),
@@ -209,7 +217,7 @@ class Selection(BaseModel):
             "voided": obj.get("voided"),
             "voidDate": obj.get("voidDate"),
             "voidBusinessDate": obj.get("voidBusinessDate"),
-            "voidReason": obj.get("voidReason"),
+            "voidReason": ExternalReference.from_dict(obj["voidReason"]) if obj.get("voidReason") is not None else None,
             "refundDetails": obj.get("refundDetails"),
             "displayName": obj.get("displayName"),
             "createdDate": obj.get("createdDate"),

@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **entity_type** | **str** | The type of object this is. Response only. | 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
 **charge_amount** | **float** | The final applied amount excluding tax. Required if &#x60;chargeType&#x60; is &#x60;OPEN&#x60;. | [optional] 
-**service_charge** | **object** |  | 
+**service_charge** | [**ExternalReference**](ExternalReference.md) |  | 
 **charge_type** | **str** | The type of service charge. Response only.  Valid values:  * &#x60;FIXED&#x60; - The service charge is for a specific currency amount.  * &#x60;PERCENT&#x60; - The service charge is for a percentage of the check amount.  * &#x60;OPEN&#x60; - The service charge is not configured with an amount. The amount is specified by the restaurant employee.  | [optional] 
 **name** | **str** | The configured human readable label for the service charge. Response only. | [optional] 
 **delivery** | **bool** | Whether this service charge is a delivery charge. Response only. | [optional] 

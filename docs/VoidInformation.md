@@ -6,11 +6,11 @@ Information about a void applied to a check or item.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**void_user** | [**ExternalReference**](.md) |  | [optional] 
-**void_approver** | [**ExternalReference**](.md) |  | [optional] 
+**void_user** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
+**void_approver** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **void_date** | **datetime** | The date on which the void was made. | [optional] 
 **void_business_date** | **int** | The business date (yyyyMMdd) on which the void was made. Response only. | [optional] 
-**void_reason** | [**ExternalReference**](.md) |  | [optional] 
+**void_reason** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 
 ## Example
 

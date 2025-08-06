@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -39,7 +40,7 @@ class DeliveryInfo(BaseModel):
     notes: Optional[StrictStr] = Field(default=None, description="Additional instructions or information about the delivery. ")
     delivered_date: Optional[datetime] = Field(default=None, description="The date and time that the delivery employee indicated in the Toast POS app that the order was delivered. Response only. ", alias="deliveredDate")
     dispatched_date: Optional[datetime] = Field(default=None, description="The date and time that the restaurant indicated in the Toast POS app that the order was available for delivery and assigned to a delivery employee. ", alias="dispatchedDate")
-    delivery_employee: Optional[Dict[str, Any]] = Field(default=None, alias="deliveryEmployee")
+    delivery_employee: Optional[ExternalReference] = Field(default=None, alias="deliveryEmployee")
     delivery_state: Optional[StrictStr] = Field(default=None, description="An internal representation of the state of a delivery order. ", alias="deliveryState")
     __properties: ClassVar[List[str]] = ["address1", "address2", "city", "state", "zipCode", "administrativeArea", "country", "latitude", "longitude", "notes", "deliveredDate", "dispatchedDate", "deliveryEmployee", "deliveryState"]
 

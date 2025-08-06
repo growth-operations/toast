@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,7 +30,7 @@ class AppliedDiscountReason(BaseModel):
     name: StrictStr = Field(description="The name of the reason for the applied discount.")
     description: Optional[StrictStr] = Field(default=None, description="An optional description for the reason for the applied discount.")
     comment: Optional[StrictStr] = Field(default=None, description="An optional comment on the reason for the applied discount.")
-    discount_reason: Optional[Dict[str, Any]] = Field(default=None, alias="discountReason")
+    discount_reason: Optional[ToastReference] = Field(default=None, alias="discountReason")
     __properties: ClassVar[List[str]] = ["name", "description", "comment", "discountReason"]
 
     model_config = ConfigDict(

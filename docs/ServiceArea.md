@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **guid** | **str** | The GUID maintained by the Toast platform. | 
 **entity_type** | **str** | The type of object this is. Response only. | 
 **name** | **str** | The name of this service area. | [optional] 
-**revenue_center** | **object** |  | [optional] 
+**revenue_center** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 
 ## Example
 

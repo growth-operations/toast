@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from toastapi.models.applied_tax_rate import AppliedTaxRate
+from toastapi.models.external_reference import ExternalReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -31,7 +32,7 @@ class AppliedServiceCharge(BaseModel):
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     charge_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The final applied amount excluding tax. Required if `chargeType` is `OPEN`.", alias="chargeAmount")
-    service_charge: Dict[str, Any] = Field(alias="serviceCharge")
+    service_charge: ExternalReference = Field(alias="serviceCharge")
     charge_type: Optional[StrictStr] = Field(default=None, description="The type of service charge. Response only.  Valid values:  * `FIXED` - The service charge is for a specific currency amount.  * `PERCENT` - The service charge is for a percentage of the check amount.  * `OPEN` - The service charge is not configured with an amount. The amount is specified by the restaurant employee. ", alias="chargeType")
     name: Optional[StrictStr] = Field(default=None, description="The configured human readable label for the service charge. Response only.")
     delivery: Optional[StrictBool] = Field(default=None, description="Whether this service charge is a delivery charge. Response only.")
@@ -115,6 +116,9 @@ class AppliedServiceCharge(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of service_charge
+        if self.service_charge:
+            _dict['serviceCharge'] = self.service_charge.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in applied_taxes (list)
         _items = []
         if self.applied_taxes:
@@ -138,7 +142,7 @@ class AppliedServiceCharge(BaseModel):
             "entityType": obj.get("entityType"),
             "externalId": obj.get("externalId"),
             "chargeAmount": obj.get("chargeAmount"),
-            "serviceCharge": obj.get("serviceCharge"),
+            "serviceCharge": ExternalReference.from_dict(obj["serviceCharge"]) if obj.get("serviceCharge") is not None else None,
             "chargeType": obj.get("chargeType"),
             "name": obj.get("name"),
             "delivery": obj.get("delivery"),
