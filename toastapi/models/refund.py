@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -31,7 +32,7 @@ class Refund(BaseModel):
     tip_refund_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The amount of the tip refund.", alias="tipRefundAmount")
     refund_date: Optional[datetime] = Field(default=None, description="The date and time when the refund was made.", alias="refundDate")
     refund_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this refund was created. Response only.", alias="refundBusinessDate")
-    refund_transaction: Optional[Dict[str, Any]] = Field(default=None, alias="refundTransaction")
+    refund_transaction: Optional[ToastReference] = Field(default=None, alias="refundTransaction")
     __properties: ClassVar[List[str]] = ["refundAmount", "tipRefundAmount", "refundDate", "refundBusinessDate", "refundTransaction"]
 
     model_config = ConfigDict(

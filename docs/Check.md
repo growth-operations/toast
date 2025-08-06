@@ -33,7 +33,7 @@ Name | Type | Description | Notes
 **void_business_date** | **int** | The business date (yyyyMMdd) on which this check was voided. Response only. | [optional] 
 **paid_date** | **datetime** | The most recent date when this check received payment. If not specified when &#x60;POST&#x60;ing, it is set to the current system time. | [optional] 
 **created_device** | [**Device**](Device.md) |  | [optional] 
-**last_modified_device** | **object** |  | [optional] 
+**last_modified_device** | [**Device**](Device.md) |  | [optional] 
 **duration** | **int** | The number of seconds between creation and payment. Response only. | [optional] 
 **opened_by** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 

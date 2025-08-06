@@ -63,7 +63,7 @@ class Check(BaseModel):
     void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this check was voided. Response only.", alias="voidBusinessDate")
     paid_date: Optional[datetime] = Field(default=None, description="The most recent date when this check received payment. If not specified when `POST`ing, it is set to the current system time.", alias="paidDate")
     created_device: Optional[Device] = Field(default=None, alias="createdDevice")
-    last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
+    last_modified_device: Optional[Device] = Field(default=None, alias="lastModifiedDevice")
     duration: Optional[StrictInt] = Field(default=None, description="The number of seconds between creation and payment. Response only.")
     opened_by: Optional[ExternalReference] = Field(default=None, alias="openedBy")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "createdDate", "openedDate", "closedDate", "modifiedDate", "deletedDate", "deleted", "selections", "customer", "appliedLoyaltyInfo", "taxExempt", "displayNumber", "appliedServiceCharges", "amount", "taxAmount", "totalAmount", "payments", "tabName", "paymentStatus", "appliedDiscounts", "voided", "voidDate", "voidBusinessDate", "paidDate", "createdDevice", "lastModifiedDevice", "duration", "openedBy"]
@@ -154,6 +154,9 @@ class Check(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of created_device
         if self.created_device:
             _dict['createdDevice'] = self.created_device.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of last_modified_device
+        if self.last_modified_device:
+            _dict['lastModifiedDevice'] = self.last_modified_device.to_dict()
         # override the default output from pydantic by calling `to_dict()` of opened_by
         if self.opened_by:
             _dict['openedBy'] = self.opened_by.to_dict()
@@ -196,7 +199,7 @@ class Check(BaseModel):
             "voidBusinessDate": obj.get("voidBusinessDate"),
             "paidDate": obj.get("paidDate"),
             "createdDevice": Device.from_dict(obj["createdDevice"]) if obj.get("createdDevice") is not None else None,
-            "lastModifiedDevice": obj.get("lastModifiedDevice"),
+            "lastModifiedDevice": Device.from_dict(obj["lastModifiedDevice"]) if obj.get("lastModifiedDevice") is not None else None,
             "duration": obj.get("duration"),
             "openedBy": ExternalReference.from_dict(obj["openedBy"]) if obj.get("openedBy") is not None else None
         })

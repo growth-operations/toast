@@ -6,7 +6,7 @@ A wrapper object that contains an `Order` object and an optional promotional cod
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**order** | [**Order**](.md) |  | 
+**order** | [**Order**](Order.md) |  | 
 **promo_code** | **str** | An optional promotional code.  | [optional] 
 
 ## Example

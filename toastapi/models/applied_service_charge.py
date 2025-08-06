@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, Stri
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from toastapi.models.applied_tax_rate import AppliedTaxRate
 from toastapi.models.external_reference import ExternalReference
+from toastapi.models.refund_details import RefundDetails
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -42,7 +43,7 @@ class AppliedServiceCharge(BaseModel):
     taxable: Optional[StrictBool] = Field(default=None, description="Whether this service charge is taxable. Response only.")
     applied_taxes: Optional[List[AppliedTaxRate]] = Field(default=None, description="Taxes applied to the service charge.", alias="appliedTaxes")
     service_charge_calculation: Optional[StrictStr] = Field(default=None, description="Defines whether a `PERCENT` service charge is applied before (`PRE_DISCOUNT`) or after (`POST_DISCOUNT`) discounts.  This field is `null` for `FIXED` and `OPEN` service charges. ", alias="serviceChargeCalculation")
-    refund_details: Optional[Dict[str, Any]] = Field(default=None, alias="refundDetails")
+    refund_details: Optional[RefundDetails] = Field(default=None, alias="refundDetails")
     service_charge_category: Optional[StrictStr] = Field(default=None, description="The type of service charge. Default is `SERVICE_CHARGE`. Response only.  Valid values:  * `SERVICE_CHARGE` - The default type for a service charge.  * `CREDIT_CARD_SURCHARGE` - A fee assessed _only_ on payment transactions that use a credit card.  * `FUNDRAISING_CAMPAIGN` - Service charge associated with fundraising. ", alias="serviceChargeCategory")
     payment_guid: Optional[StrictStr] = Field(default=None, description="The Toast platform unique identifier for the payment the fee is linked to. The `paymentGuid` value is always `null` unless the `serviceChargeCategory` object value is `CREDIT_CARD_SURCHARGE`. Response only.", alias="paymentGuid")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "chargeAmount", "serviceCharge", "chargeType", "name", "delivery", "takeout", "dineIn", "gratuity", "taxable", "appliedTaxes", "serviceChargeCalculation", "refundDetails", "serviceChargeCategory", "paymentGuid"]
@@ -126,6 +127,9 @@ class AppliedServiceCharge(BaseModel):
                 if _item_applied_taxes:
                     _items.append(_item_applied_taxes.to_dict())
             _dict['appliedTaxes'] = _items
+        # override the default output from pydantic by calling `to_dict()` of refund_details
+        if self.refund_details:
+            _dict['refundDetails'] = self.refund_details.to_dict()
         return _dict
 
     @classmethod
@@ -152,7 +156,7 @@ class AppliedServiceCharge(BaseModel):
             "taxable": obj.get("taxable"),
             "appliedTaxes": [AppliedTaxRate.from_dict(_item) for _item in obj["appliedTaxes"]] if obj.get("appliedTaxes") is not None else None,
             "serviceChargeCalculation": obj.get("serviceChargeCalculation"),
-            "refundDetails": obj.get("refundDetails"),
+            "refundDetails": RefundDetails.from_dict(obj["refundDetails"]) if obj.get("refundDetails") is not None else None,
             "serviceChargeCategory": obj.get("serviceChargeCategory"),
             "paymentGuid": obj.get("paymentGuid")
         })

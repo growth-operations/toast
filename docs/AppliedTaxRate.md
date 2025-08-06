@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **guid** | **str** | The GUID maintained by the Toast platform. | 
 **entity_type** | **str** | The type of object this is. | 
-**tax_rate** | **object** |  | 
+**tax_rate** | [**ToastReference**](ToastReference.md) |  | 
 **name** | **str** | The name of the tax rate. | [optional] 
 **rate** | **float** | The tax rate, which can be a fixed amount, a percentage, or null. | [optional] 
 **tax_amount** | **float** | The tax amount that was actually applied. | [optional] 

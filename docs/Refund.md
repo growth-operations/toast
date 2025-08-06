@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **tip_refund_amount** | **float** | The amount of the tip refund. | [optional] 
 **refund_date** | **datetime** | The date and time when the refund was made. | [optional] 
 **refund_business_date** | **int** | The business date (yyyyMMdd) on which this refund was created. Response only. | [optional] 
-**refund_transaction** | [**ToastReference**](.md) |  | [optional] 
+**refund_transaction** | [**ToastReference**](ToastReference.md) |  | [optional] 
 
 ## Example
 

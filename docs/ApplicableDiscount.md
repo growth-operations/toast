@@ -6,7 +6,7 @@ A wrapper object that contains information about a discount that you can apply t
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**discount** | [**ToastReference**](.md) |  | 
+**discount** | [**ToastReference**](ToastReference.md) |  | 
 **applicable_checks** | [**List[ExternalReference]**](ExternalReference.md) | If the discount is applicable to a check, this value holds an array of &#x60;ExternalReference&#x60; objects containing the identifiers of the checks.  | [optional] 
 **applicable_selections** | [**List[ExternalReference]**](ExternalReference.md) | If the discount is applicable to a menu item selection, this value holds an array of &#x60;ExternalReference&#x60; objects containing the identifiers of the menu items.  | [optional] 
 

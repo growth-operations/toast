@@ -20,7 +20,7 @@ Name | Type | Description | Notes
 **taxable** | **bool** | Whether this service charge is taxable. Response only. | [optional] 
 **applied_taxes** | [**List[AppliedTaxRate]**](AppliedTaxRate.md) | Taxes applied to the service charge. | [optional] 
 **service_charge_calculation** | **str** | Defines whether a &#x60;PERCENT&#x60; service charge is applied before (&#x60;PRE_DISCOUNT&#x60;) or after (&#x60;POST_DISCOUNT&#x60;) discounts.  This field is &#x60;null&#x60; for &#x60;FIXED&#x60; and &#x60;OPEN&#x60; service charges.  | [optional] 
-**refund_details** | **object** |  | [optional] 
+**refund_details** | [**RefundDetails**](RefundDetails.md) |  | [optional] 
 **service_charge_category** | **str** | The type of service charge. Default is &#x60;SERVICE_CHARGE&#x60;. Response only.  Valid values:  * &#x60;SERVICE_CHARGE&#x60; - The default type for a service charge.  * &#x60;CREDIT_CARD_SURCHARGE&#x60; - A fee assessed _only_ on payment transactions that use a credit card.  * &#x60;FUNDRAISING_CAMPAIGN&#x60; - Service charge associated with fundraising.  | [optional] 
 **payment_guid** | **str** | The Toast platform unique identifier for the payment the fee is linked to. The &#x60;paymentGuid&#x60; value is always &#x60;null&#x60; unless the &#x60;serviceChargeCategory&#x60; object value is &#x60;CREDIT_CARD_SURCHARGE&#x60;. Response only. | [optional] 
 

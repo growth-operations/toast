@@ -5173,7 +5173,6 @@ components:
         refundTransaction:
           description: |
             An identifier for the refund transaction. You can use the identifier to associate items and service charges that were refunded in the same transaction.
-          type: object
           $ref: "#/components/schemas/ToastReference"
     Refund:
       type: object
@@ -5197,7 +5196,6 @@ components:
         refundTransaction:
           description: |
             An identifier for the refund transaction. You can use the identifier to associate items and service charges that were refunded in the same transaction.
-          type: object
           $ref: "#/components/schemas/ToastReference"
     Restaurant:
       type: object
@@ -5594,7 +5592,6 @@ components:
                 Information describing the guest's packaging preferences for this order, for example utensils, napkins, condiments.
 
                 For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiOrdersPackagingPreferences.html">Packaging preferences</a>
-              type: object
               $ref: "#/components/schemas/AppliedPackagingInfo"
             approvalStatus:
               type: string
@@ -5632,7 +5629,6 @@ components:
                 - NOT_APPROVED
             createdDevice:
               description: The Toast POS device that created the order. This value is `null` if the order was not created using a Toast POS device.
-              type: object
               $ref: "#/components/schemas/Device"
             createdInTestMode:
               type: boolean
@@ -5645,12 +5641,10 @@ components:
             curbsidePickupInfo:
               description: |
                 Information that the restaurant can use to identify a guest when they arrive outside the restaurant to pick up their order.
-              type: object
               $ref: "#/components/schemas/CurbsidePickupInfo"
             deliveryServiceInfo:
               description: |
                 Reserved for future use.
-              type: object
               $ref: "#/components/schemas/DeliveryServiceInfo"
             displayNumber:
               type: string
@@ -5676,7 +5670,6 @@ components:
                 The Toast POS device that modified the order most recently. This value is `null` if the order was never modified using a Toast POS device.
 
                 If the order is modified but the modification was not made using a Toast POS device, this value does not change.
-              type: object
               $ref: "#/components/schemas/Device"
             marketplaceFacilitatorTaxInfo:
               description: |
@@ -5692,7 +5685,6 @@ components:
                 Toast API client is associated with a designated
                 marketplace facilitator organization. Most Toast API
                 clients do not create marketplace facilitator orders.
-              type: object
               $ref: "#/components/schemas/MarketplaceFacilitatorTaxInfo"
             pricingFeatures:
               type: array
@@ -5861,7 +5853,6 @@ components:
                 The Toast POS device that modified the check most recently. This value is `null` if the check was never modified using a Toast POS device.
 
                 If the check is modified but the modification was not made using a Toast POS device, then this value does not change.
-              type: object
               $ref: "#/components/schemas/Device"
             duration:
               type: integer
@@ -5896,15 +5887,12 @@ components:
               description: A reference to the selected menu item.
               $ref: "#/components/schemas/ConfigReference"
             itemGroup:
-              type: object
               description: A reference to the menu group from which the item was selected.
               $ref: "#/components/schemas/ConfigReference"
             optionGroup:
-              type: object
               description: A reference to the modifier group from which the menu item was selected. Only applies if this is a modifier selection.
               $ref: "#/components/schemas/ConfigReference"
             preModifier:
-              type: object
               description: A reference to the selected pre-modifier.
               $ref: "#/components/schemas/ConfigReference"
             quantity:
@@ -5957,7 +5945,6 @@ components:
                 - TOAST_CARD_SELL
                 - TOAST_CARD_RELOAD
             salesCategory:
-              type: object
               description: A reference to the sales category of the item. Response only.
               $ref: "#/components/schemas/ConfigReference"
             appliedDiscounts:
@@ -5998,7 +5985,6 @@ components:
               description: |
                 A `RefundDetails` object that
                 contains information about refunded payment amounts for the item.
-              type: object
               $ref: "#/components/schemas/RefundDetails"
             displayName:
               type: string
@@ -6091,7 +6077,6 @@ components:
                 Restaurants configure the dining options that they fulfill orders in.
 
                 Response only.
-              type: object
               $ref: "#/components/schemas/ExternalReference"
             openPriceAmount:
               description: |
@@ -6153,7 +6138,6 @@ components:
             splitOrigin:
               description: |
                 Reserved for future use.
-              type: object
               $ref: "#/components/schemas/ToastReference"
     Payment:
       type: object
@@ -6308,11 +6292,9 @@ components:
               description: A reference to the `cashDrawer` used to receive this payment. Response only.
               $ref: "#/components/schemas/ExternalReference"
             refund:
-              type: object
               description: Response only.
               $ref: "#/components/schemas/Refund"
             voidInfo:
-              type: object
               description: If the payment was voided, this contains information about who did it and when. Response only.
               $ref: "#/components/schemas/VoidInformation"
             houseAccount:
@@ -6329,7 +6311,6 @@ components:
                 The Toast POS device that modified the payment most recently. This value is `null` if the payment was never modified using a Toast POS device.
 
                 If the payment is modified but the modification was not made using a Toast POS device, then this value does not change.
-              type: object
               $ref: "#/components/schemas/Device"
             mcaRepaymentAmount:
               description: |
@@ -6435,8 +6416,8 @@ components:
               description: |
                 The packaging preference choice that the guest selected in your ordering interface.
               enum:
-                - 'YES'
-                - 'NO'
+                - "YES"
+                - "NO"
             itemTypes:
               type: array
               items:
@@ -6608,7 +6589,6 @@ components:
               description: |
                 A `RefundDetails` object that
                 contains information about refunded payment amounts for the item.
-              type: object
               $ref: "#/components/schemas/RefundDetails"
             serviceChargeCategory:
               description: |
@@ -7247,7 +7227,6 @@ components:
         - order
       properties:
         order:
-          type: object
           $ref: "#/components/schemas/Order"
           description: |
             An `Order` object that
@@ -7270,7 +7249,6 @@ components:
           description: |
             A `ToastReference` object containing the identifiers of the discount.
             Response only.
-          type: object
           $ref: "#/components/schemas/ToastReference"
         applicableChecks:
           description: |
@@ -8105,7 +8083,6 @@ components:
                 charges, based on pre-discount check amount. Must be a
                 number between 0 and 100.
             criteria:
-              type: object
               description: A reference to the ServiceChargeCriteria to determine if this service charge is applicable to a given check. See each ServiceChargeCriteria for details.
               $ref: "#/components/schemas/ServiceChargeCriteria"
             gratuity:
@@ -8966,7 +8943,6 @@ components:
               description: The type of object this is.
               type: string
             taxRate:
-              type: object
               $ref: "#/components/schemas/ToastReference"
             name:
               type: string

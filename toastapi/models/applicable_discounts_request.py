@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.order import Order
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,7 +27,7 @@ class ApplicableDiscountsRequest(BaseModel):
     """
     A wrapper object that contains an `Order` object and an optional promotional code. 
     """ # noqa: E501
-    order: Dict[str, Any]
+    order: Order
     promo_code: Optional[StrictStr] = Field(default=None, description="An optional promotional code. ", alias="promoCode")
     __properties: ClassVar[List[str]] = ["order", "promoCode"]
 

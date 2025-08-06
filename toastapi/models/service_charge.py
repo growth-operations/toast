@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.service_charge_criteria import ServiceChargeCriteria
 from toastapi.models.tax_rate import TaxRate
 from typing import Optional, Set
 from typing_extensions import Self
@@ -34,7 +35,7 @@ class ServiceCharge(BaseModel):
     amount_type: Optional[StrictStr] = Field(default=None, description="The type of service charge.", alias="amountType")
     amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Amount in USD to be applied for `FIXED` type service charges.")
     percent: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Percent fee to be applied for `PERCENT` type service charges, based on pre-discount check amount. Must be a number between 0 and 100. ")
-    criteria: Optional[Dict[str, Any]] = None
+    criteria: Optional[ServiceChargeCriteria] = None
     gratuity: Optional[StrictBool] = Field(default=None, description="True if the service charge is a gratuity and is assigned to the owner of the check.")
     taxable: Optional[StrictBool] = Field(default=None, description="True if tax should be applied to the service charge.")
     applicable_taxes: Optional[List[TaxRate]] = Field(default=None, description="A reference to the taxes applied to the service charge, if the service charge is taxable.", alias="applicableTaxes")
@@ -111,6 +112,9 @@ class ServiceCharge(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of criteria
+        if self.criteria:
+            _dict['criteria'] = self.criteria.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in applicable_taxes (list)
         _items = []
         if self.applicable_taxes:
@@ -137,7 +141,7 @@ class ServiceCharge(BaseModel):
             "amountType": obj.get("amountType"),
             "amount": obj.get("amount"),
             "percent": obj.get("percent"),
-            "criteria": obj.get("criteria"),
+            "criteria": ServiceChargeCriteria.from_dict(obj["criteria"]) if obj.get("criteria") is not None else None,
             "gratuity": obj.get("gratuity"),
             "taxable": obj.get("taxable"),
             "applicableTaxes": [TaxRate.from_dict(_item) for _item in obj["applicableTaxes"]] if obj.get("applicableTaxes") is not None else None,

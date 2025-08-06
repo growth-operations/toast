@@ -25,6 +25,8 @@ from toastapi.models.applied_discount import AppliedDiscount
 from toastapi.models.applied_tax_rate import AppliedTaxRate
 from toastapi.models.config_reference import ConfigReference
 from toastapi.models.external_reference import ExternalReference
+from toastapi.models.refund_details import RefundDetails
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -36,14 +38,14 @@ class Selection(BaseModel):
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     item: ConfigReference
-    item_group: Optional[Dict[str, Any]] = Field(default=None, alias="itemGroup")
-    option_group: Optional[Dict[str, Any]] = Field(default=None, alias="optionGroup")
-    pre_modifier: Optional[Dict[str, Any]] = Field(default=None, alias="preModifier")
+    item_group: Optional[ConfigReference] = Field(default=None, alias="itemGroup")
+    option_group: Optional[ConfigReference] = Field(default=None, alias="optionGroup")
+    pre_modifier: Optional[ConfigReference] = Field(default=None, alias="preModifier")
     quantity: Union[StrictFloat, StrictInt] = Field(description="Quantity ordered. For items sold by weight, a decimal number. For discrete items, a counting number.")
     seat_number: Optional[StrictInt] = Field(default=None, description="Indicates which guest seat at a restaurant table ordered a menu item selection. Restaurant employees can choose the seat number when they add a menu item to a guest check.  * A positive integer value indicates the seat number for   the menu item.  * `0` - Indicates that the menu item is shared by   multiple guests.  * `-1` - Indicates that the restaurant employee did not   select a seat for the menu item.  Response only. ", alias="seatNumber")
     unit_of_measure: Optional[StrictStr] = Field(default=None, description="The unit of measure required for weighing the item.  The default is `NONE`, which means that the item is not meant to be weighed. ", alias="unitOfMeasure")
     selection_type: Optional[StrictStr] = Field(default=None, description="Specifies whether this selection is a special request or other off-menu sale.  If `null` or `NONE`, describes a normal modifier or item selection.  `TOAST_CARD_SELL` and `TOAST_CARD_RELOAD` are currently response-only. ", alias="selectionType")
-    sales_category: Optional[Dict[str, Any]] = Field(default=None, alias="salesCategory")
+    sales_category: Optional[ConfigReference] = Field(default=None, alias="salesCategory")
     applied_discounts: Optional[Annotated[List[AppliedDiscount], Field(min_length=0)]] = Field(default=None, description="The itemized discounts that are applied to this item. Response only.", alias="appliedDiscounts")
     deferred: Optional[StrictBool] = Field(default=None, description="Whether this selection is a deferred revenue transaction, such as a gift card sale.")
     pre_discount_price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Gross sale price for this selection. Excludes tax. Response only.", alias="preDiscountPrice")
@@ -53,7 +55,7 @@ class Selection(BaseModel):
     void_date: Optional[datetime] = Field(default=None, description="The date on which this selection was voided. Response only.", alias="voidDate")
     void_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this selection was voided. Response only.", alias="voidBusinessDate")
     void_reason: Optional[ExternalReference] = Field(default=None, alias="voidReason")
-    refund_details: Optional[Dict[str, Any]] = Field(default=None, alias="refundDetails")
+    refund_details: Optional[RefundDetails] = Field(default=None, alias="refundDetails")
     display_name: Optional[StrictStr] = Field(default=None, description="The display name of the selection.  Can be used to set a special request value.  Otherwise, it is generated from this selection's item property. ", alias="displayName")
     created_date: Optional[datetime] = Field(default=None, description="The date on which this selection was created. If not specified, defaults to the current time.", alias="createdDate")
     modified_date: Optional[datetime] = Field(default=None, description="The date on which this selection was last modified. If not specified, defaults to the current time.", alias="modifiedDate")
@@ -61,12 +63,12 @@ class Selection(BaseModel):
     fulfillment_status: Optional[StrictStr] = Field(default='NEW', description="Indicates the stage of the preparation workflow that the menu item selection is in.  The `fulfillmentStatus` of a menu item selection changes as restaurant employees move the item through the functions of the Toast POS, for example order entry and the kitchen display system (KDS). Response only.  Valid values:  * `NEW` - The menu item selection was added to a   check but is not yet sent to the KDS for   preparation.  * `HOLD` - A restaurant employee paused the menu   item selection so that it does not appear in the   KDS for preparation.  * `SENT` - The menu item selection was fired and   appears in the KDS for preparation.  * `READY` - Preparation is complete. The menu item   selection is fulfilled and no longer appears in   the KDS. If your restaurant does not use the Toast platform   KDS, then order items do not reach the `READY`   status. ", alias="fulfillmentStatus")
     tax_inclusion: Optional[StrictStr] = Field(default=None, description="Indicates whether the menu item price includes one or more tax amounts. If the menu item is a modifier for another menu item selection, it always inherits the tax inclusion behavior of the menu item that it applies to.  Valid values: * `INCLUDED` - The menu item price includes one or more tax amounts. * `NOT_INCLUDED` - The menu item price does not include any tax   amounts. * `INHERITED` - The menu item is a modifier for another menu item   selection in the check. The `taxInclusion` value of the parent menu   item selection applies to the modifier. If a menu item selection   *that is not a modifier* inherits tax inclusion behavior from a   menu or menu group, the `taxInclusion` value is either   `INCLUDED` or `NOT_INCLUDED`. ", alias="taxInclusion")
     applied_taxes: Optional[List[AppliedTaxRate]] = Field(default=None, description="An array of `AppliedTaxRate` objects that contain information about tax payments made for the selection. Response only.", alias="appliedTaxes")
-    dining_option: Optional[Dict[str, Any]] = Field(default=None, alias="diningOption")
+    dining_option: Optional[ExternalReference] = Field(default=None, alias="diningOption")
     open_price_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="A non-negative currency amount that sets the price of a menu item that is configured to use the *Open Price* pricing strategy. If you do not supply an `openPriceAmount` value for an open price menu item, the orders API sets the price to 0.00.  If a menu item is configured to use tax-inclusive pricing, the orders API calculates the base price and tax amount based on the open price that you specify. _The open-price amount includes both the base-price and inclusive tax amount._  `POST` only. The `openPriceAmount` value is not present in orders API return data. It is used to populate `receiptLinePrice`. ", alias="openPriceAmount")
     receipt_line_price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of the menu item selection without any quantity, taxes,  discounts, and modifier adjustments. If the menu item has taxes included, the `receiptLinePrice` value shows the original price, including taxes.  For example, if the menu item selection is for two orders of fries,  `receiptLinePrice` is the price of one order of fries. If a menu item selection  is for three large drinks, receiptLinePrice is the price of one large drink.  Populated based on the menu configuration, or using the value provided in  `externalPriceAmount` or `openPriceAmount`. ", alias="receiptLinePrice")
     option_group_pricing_mode: Optional[StrictStr] = Field(default=None, description="Information about how the modifier group affects the pricing of its parent item.", alias="optionGroupPricingMode")
     external_price_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The menu item price that was calculated by the marketplace facilitator organization that created the order.  `POST` only. The orders API does not include the `externalPriceAmount` value in return data. It is used to populate `receiptLinePrice`.  **Note**: you can only include this information if your Toast API client is associated with a designated marketplace facilitator organization. Most Toast API clients do not create marketplace facilitator orders. ", alias="externalPriceAmount")
-    split_origin: Optional[Dict[str, Any]] = Field(default=None, alias="splitOrigin")
+    split_origin: Optional[ToastReference] = Field(default=None, alias="splitOrigin")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "item", "itemGroup", "optionGroup", "preModifier", "quantity", "seatNumber", "unitOfMeasure", "selectionType", "salesCategory", "appliedDiscounts", "deferred", "preDiscountPrice", "price", "tax", "voided", "voidDate", "voidBusinessDate", "voidReason", "refundDetails", "displayName", "createdDate", "modifiedDate", "modifiers", "fulfillmentStatus", "taxInclusion", "appliedTaxes", "diningOption", "openPriceAmount", "receiptLinePrice", "optionGroupPricingMode", "externalPriceAmount", "splitOrigin"]
 
     @field_validator('unit_of_measure')
@@ -161,6 +163,18 @@ class Selection(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of item
         if self.item:
             _dict['item'] = self.item.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of item_group
+        if self.item_group:
+            _dict['itemGroup'] = self.item_group.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of option_group
+        if self.option_group:
+            _dict['optionGroup'] = self.option_group.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of pre_modifier
+        if self.pre_modifier:
+            _dict['preModifier'] = self.pre_modifier.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of sales_category
+        if self.sales_category:
+            _dict['salesCategory'] = self.sales_category.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in applied_discounts (list)
         _items = []
         if self.applied_discounts:
@@ -171,6 +185,9 @@ class Selection(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of void_reason
         if self.void_reason:
             _dict['voidReason'] = self.void_reason.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of refund_details
+        if self.refund_details:
+            _dict['refundDetails'] = self.refund_details.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in modifiers (list)
         _items = []
         if self.modifiers:
@@ -185,6 +202,12 @@ class Selection(BaseModel):
                 if _item_applied_taxes:
                     _items.append(_item_applied_taxes.to_dict())
             _dict['appliedTaxes'] = _items
+        # override the default output from pydantic by calling `to_dict()` of dining_option
+        if self.dining_option:
+            _dict['diningOption'] = self.dining_option.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of split_origin
+        if self.split_origin:
+            _dict['splitOrigin'] = self.split_origin.to_dict()
         return _dict
 
     @classmethod
@@ -201,14 +224,14 @@ class Selection(BaseModel):
             "entityType": obj.get("entityType"),
             "externalId": obj.get("externalId"),
             "item": ConfigReference.from_dict(obj["item"]) if obj.get("item") is not None else None,
-            "itemGroup": obj.get("itemGroup"),
-            "optionGroup": obj.get("optionGroup"),
-            "preModifier": obj.get("preModifier"),
+            "itemGroup": ConfigReference.from_dict(obj["itemGroup"]) if obj.get("itemGroup") is not None else None,
+            "optionGroup": ConfigReference.from_dict(obj["optionGroup"]) if obj.get("optionGroup") is not None else None,
+            "preModifier": ConfigReference.from_dict(obj["preModifier"]) if obj.get("preModifier") is not None else None,
             "quantity": obj.get("quantity"),
             "seatNumber": obj.get("seatNumber"),
             "unitOfMeasure": obj.get("unitOfMeasure"),
             "selectionType": obj.get("selectionType"),
-            "salesCategory": obj.get("salesCategory"),
+            "salesCategory": ConfigReference.from_dict(obj["salesCategory"]) if obj.get("salesCategory") is not None else None,
             "appliedDiscounts": [AppliedDiscount.from_dict(_item) for _item in obj["appliedDiscounts"]] if obj.get("appliedDiscounts") is not None else None,
             "deferred": obj.get("deferred"),
             "preDiscountPrice": obj.get("preDiscountPrice"),
@@ -218,7 +241,7 @@ class Selection(BaseModel):
             "voidDate": obj.get("voidDate"),
             "voidBusinessDate": obj.get("voidBusinessDate"),
             "voidReason": ExternalReference.from_dict(obj["voidReason"]) if obj.get("voidReason") is not None else None,
-            "refundDetails": obj.get("refundDetails"),
+            "refundDetails": RefundDetails.from_dict(obj["refundDetails"]) if obj.get("refundDetails") is not None else None,
             "displayName": obj.get("displayName"),
             "createdDate": obj.get("createdDate"),
             "modifiedDate": obj.get("modifiedDate"),
@@ -226,12 +249,12 @@ class Selection(BaseModel):
             "fulfillmentStatus": obj.get("fulfillmentStatus") if obj.get("fulfillmentStatus") is not None else 'NEW',
             "taxInclusion": obj.get("taxInclusion"),
             "appliedTaxes": [AppliedTaxRate.from_dict(_item) for _item in obj["appliedTaxes"]] if obj.get("appliedTaxes") is not None else None,
-            "diningOption": obj.get("diningOption"),
+            "diningOption": ExternalReference.from_dict(obj["diningOption"]) if obj.get("diningOption") is not None else None,
             "openPriceAmount": obj.get("openPriceAmount"),
             "receiptLinePrice": obj.get("receiptLinePrice"),
             "optionGroupPricingMode": obj.get("optionGroupPricingMode"),
             "externalPriceAmount": obj.get("externalPriceAmount"),
-            "splitOrigin": obj.get("splitOrigin")
+            "splitOrigin": ToastReference.from_dict(obj["splitOrigin"]) if obj.get("splitOrigin") is not None else None
         })
         return _obj
 

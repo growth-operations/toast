@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **refund_amount** | **float** | The value of the menu item or service charge (excluding taxes) being refunded. Includes the value of any nested modifier options that increased the price of the item or modifier option (an upcharge for the modifier option).  | [optional] 
 **tax_refund_amount** | **float** | The tax amount being refunded.  | [optional] 
-**refund_transaction** | [**ToastReference**](.md) |  | [optional] 
+**refund_transaction** | [**ToastReference**](ToastReference.md) |  | [optional] 
 
 ## Example
 

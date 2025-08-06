@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from toastapi.models.external_reference import ExternalReference
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,7 +28,7 @@ class ApplicableDiscount(BaseModel):
     """
     A wrapper object that contains information about a discount that you can apply to an order, and which checks or menu item selections you can apply it to. 
     """ # noqa: E501
-    discount: Dict[str, Any]
+    discount: ToastReference
     applicable_checks: Optional[List[ExternalReference]] = Field(default=None, description="If the discount is applicable to a check, this value holds an array of `ExternalReference` objects containing the identifiers of the checks. ", alias="applicableChecks")
     applicable_selections: Optional[List[ExternalReference]] = Field(default=None, description="If the discount is applicable to a menu item selection, this value holds an array of `ExternalReference` objects containing the identifiers of the menu items. ", alias="applicableSelections")
     __properties: ClassVar[List[str]] = ["discount", "applicableChecks", "applicableSelections"]

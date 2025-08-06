@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +29,7 @@ class RefundDetails(BaseModel):
     """ # noqa: E501
     refund_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The value of the menu item or service charge (excluding taxes) being refunded. Includes the value of any nested modifier options that increased the price of the item or modifier option (an upcharge for the modifier option). ", alias="refundAmount")
     tax_refund_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The tax amount being refunded. ", alias="taxRefundAmount")
-    refund_transaction: Optional[Dict[str, Any]] = Field(default=None, alias="refundTransaction")
+    refund_transaction: Optional[ToastReference] = Field(default=None, alias="refundTransaction")
     __properties: ClassVar[List[str]] = ["refundAmount", "taxRefundAmount", "refundTransaction"]
 
     model_config = ConfigDict(

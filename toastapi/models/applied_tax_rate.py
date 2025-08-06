@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +29,7 @@ class AppliedTaxRate(BaseModel):
     """ # noqa: E501
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is.", alias="entityType")
-    tax_rate: Dict[str, Any] = Field(alias="taxRate")
+    tax_rate: ToastReference = Field(alias="taxRate")
     name: Optional[StrictStr] = Field(default=None, description="The name of the tax rate.")
     rate: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The tax rate, which can be a fixed amount, a percentage, or null.")
     tax_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The tax amount that was actually applied.", alias="taxAmount")
@@ -88,6 +89,9 @@ class AppliedTaxRate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of tax_rate
+        if self.tax_rate:
+            _dict['taxRate'] = self.tax_rate.to_dict()
         return _dict
 
     @classmethod
@@ -102,7 +106,7 @@ class AppliedTaxRate(BaseModel):
         _obj = cls.model_validate({
             "guid": obj.get("guid"),
             "entityType": obj.get("entityType"),
-            "taxRate": obj.get("taxRate"),
+            "taxRate": ToastReference.from_dict(obj["taxRate"]) if obj.get("taxRate") is not None else None,
             "name": obj.get("name"),
             "rate": obj.get("rate"),
             "taxAmount": obj.get("taxAmount"),

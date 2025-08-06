@@ -21,9 +21,14 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from toastapi.models.applied_packaging_info import AppliedPackagingInfo
 from toastapi.models.check import Check
+from toastapi.models.curbside_pickup_info import CurbsidePickupInfo
 from toastapi.models.delivery_info import DeliveryInfo
+from toastapi.models.delivery_service_info import DeliveryServiceInfo
+from toastapi.models.device import Device
 from toastapi.models.external_reference import ExternalReference
+from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilitatorTaxInfo
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -58,18 +63,18 @@ class Order(BaseModel):
     deleted_date: Optional[datetime] = Field(default=None, description="The date and time when the order was deleted.  The `deletedDate` value only applies when the `deleted` value is `true`.  If `deleted` is `false`, the value of `deletedDate` is the UNIX epoch, `1970-01-01T00:00:00.000+0000`. ", alias="deletedDate")
     deleted: Optional[StrictBool] = Field(default=None, description="Set to `true` if this order is deleted. Response only.  For example, if you combine a check into another order, the original order for the check is deleted. ")
     business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which the order was fulfilled. Response only.", alias="businessDate")
-    applied_packaging_info: Optional[Dict[str, Any]] = Field(default=None, alias="appliedPackagingInfo")
+    applied_packaging_info: Optional[AppliedPackagingInfo] = Field(default=None, alias="appliedPackagingInfo")
     approval_status: Optional[StrictStr] = Field(default=None, description="The current state of the order in the restaurant order fulfillment process. For example, the `approvalStatus` can indicate that an order is waiting for a restaurant employee to approve it or that the order is in a restaurant kitchen being fulfilled. Response only.  Valid values:  * `NEEDS_APPROVAL` - The order is created but will not be fulfilled by the restaurant until an employee approves it.  * `APPROVED` - The order is being fulfilled by the restaurant or it was fulfilled in the past. Orders remain in this state indefinitely after they are fulfilled.  * `FUTURE` - The order is expected to be fulfilled by the restaurant at a future date and time. Restaurant employees will receive information about the order at the date and time that it is ready to be fulfilled.  * `NOT_APPROVED` - Restaurant employees received information about the order but did not approve it for fulfillment. An order enters this state after a period of time passes without a restaurant employee approving it. ", alias="approvalStatus")
-    created_device: Optional[Dict[str, Any]] = Field(default=None, alias="createdDevice")
+    created_device: Optional[Device] = Field(default=None, alias="createdDevice")
     created_in_test_mode: Optional[StrictBool] = Field(default=None, description="Indicates whether the order was created while the restaurant was in test mode.  For more information, see [this _Toast Central_ article](https://central.toasttab.com/s/article/Test-Mode-Enable-and-Disable-1492802389999) ", alias="createdInTestMode")
-    curbside_pickup_info: Optional[Dict[str, Any]] = Field(default=None, alias="curbsidePickupInfo")
-    delivery_service_info: Optional[Dict[str, Any]] = Field(default=None, alias="deliveryServiceInfo")
+    curbside_pickup_info: Optional[CurbsidePickupInfo] = Field(default=None, alias="curbsidePickupInfo")
+    delivery_service_info: Optional[DeliveryServiceInfo] = Field(default=None, alias="deliveryServiceInfo")
     display_number: Optional[StrictStr] = Field(default=None, description="Response only. Generally starts at one each day and counts up. Not guaranteed to be unique, can be empty if unset.", alias="displayNumber")
     excess_food: Optional[StrictBool] = Field(default=None, description="Indicates whether the order was created to track excess food (for example, food waste) rather than a  standard guest order. Response only.  For more information on the differences between guest orders and excess food orders, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiDailyOrderForTrackingExcessFood.html\">Daily order for tracking excess food</a>. ", alias="excessFood")
     guest_order_status: Optional[StrictStr] = Field(default=None, description="Reserved for future use. ", alias="guestOrderStatus")
     initial_date: Optional[StrictInt] = Field(default=None, description="Reserved for future use. Do not use the `initialDate` value for integration development.", alias="initialDate")
-    last_modified_device: Optional[Dict[str, Any]] = Field(default=None, alias="lastModifiedDevice")
-    marketplace_facilitator_tax_info: Optional[Dict[str, Any]] = Field(default=None, alias="marketplaceFacilitatorTaxInfo")
+    last_modified_device: Optional[Device] = Field(default=None, alias="lastModifiedDevice")
+    marketplace_facilitator_tax_info: Optional[MarketplaceFacilitatorTaxInfo] = Field(default=None, alias="marketplaceFacilitatorTaxInfo")
     pricing_features: Optional[List[StrictStr]] = Field(default=None, description="Pricing features that this order is using.", alias="pricingFeatures")
     server: Optional[ExternalReference] = None
     created_date: Optional[datetime] = Field(default=None, description="The date and time that the Toast platform received the order.", alias="createdDate")
@@ -160,6 +165,24 @@ class Order(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of delivery_info
         if self.delivery_info:
             _dict['deliveryInfo'] = self.delivery_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of applied_packaging_info
+        if self.applied_packaging_info:
+            _dict['appliedPackagingInfo'] = self.applied_packaging_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of created_device
+        if self.created_device:
+            _dict['createdDevice'] = self.created_device.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of curbside_pickup_info
+        if self.curbside_pickup_info:
+            _dict['curbsidePickupInfo'] = self.curbside_pickup_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of delivery_service_info
+        if self.delivery_service_info:
+            _dict['deliveryServiceInfo'] = self.delivery_service_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of last_modified_device
+        if self.last_modified_device:
+            _dict['lastModifiedDevice'] = self.last_modified_device.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of marketplace_facilitator_tax_info
+        if self.marketplace_facilitator_tax_info:
+            _dict['marketplaceFacilitatorTaxInfo'] = self.marketplace_facilitator_tax_info.to_dict()
         # override the default output from pydantic by calling `to_dict()` of server
         if self.server:
             _dict['server'] = self.server.to_dict()
@@ -202,18 +225,18 @@ class Order(BaseModel):
             "deletedDate": obj.get("deletedDate"),
             "deleted": obj.get("deleted"),
             "businessDate": obj.get("businessDate"),
-            "appliedPackagingInfo": obj.get("appliedPackagingInfo"),
+            "appliedPackagingInfo": AppliedPackagingInfo.from_dict(obj["appliedPackagingInfo"]) if obj.get("appliedPackagingInfo") is not None else None,
             "approvalStatus": obj.get("approvalStatus"),
-            "createdDevice": obj.get("createdDevice"),
+            "createdDevice": Device.from_dict(obj["createdDevice"]) if obj.get("createdDevice") is not None else None,
             "createdInTestMode": obj.get("createdInTestMode"),
-            "curbsidePickupInfo": obj.get("curbsidePickupInfo"),
-            "deliveryServiceInfo": obj.get("deliveryServiceInfo"),
+            "curbsidePickupInfo": CurbsidePickupInfo.from_dict(obj["curbsidePickupInfo"]) if obj.get("curbsidePickupInfo") is not None else None,
+            "deliveryServiceInfo": DeliveryServiceInfo.from_dict(obj["deliveryServiceInfo"]) if obj.get("deliveryServiceInfo") is not None else None,
             "displayNumber": obj.get("displayNumber"),
             "excessFood": obj.get("excessFood"),
             "guestOrderStatus": obj.get("guestOrderStatus"),
             "initialDate": obj.get("initialDate"),
-            "lastModifiedDevice": obj.get("lastModifiedDevice"),
-            "marketplaceFacilitatorTaxInfo": obj.get("marketplaceFacilitatorTaxInfo"),
+            "lastModifiedDevice": Device.from_dict(obj["lastModifiedDevice"]) if obj.get("lastModifiedDevice") is not None else None,
+            "marketplaceFacilitatorTaxInfo": MarketplaceFacilitatorTaxInfo.from_dict(obj["marketplaceFacilitatorTaxInfo"]) if obj.get("marketplaceFacilitatorTaxInfo") is not None else None,
             "pricingFeatures": obj.get("pricingFeatures"),
             "server": ExternalReference.from_dict(obj["server"]) if obj.get("server") is not None else None,
             "createdDate": obj.get("createdDate")
