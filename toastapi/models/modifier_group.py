@@ -17,10 +17,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from toastapi.models.modifier_option import ModifierOption
 from toastapi.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
@@ -40,8 +39,45 @@ class ModifierGroup(BaseModel):
     visibility: Optional[Visibility] = None
     pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that represents the pricing strategy used for this modifier group.  If there is no additional charge for the modifier options in this group, or if the modifier options in the group are priced individually, then the `pricingStrategy` value is NONE.  If the modifier group is priced at the group level and is using the:   * Fixed Price pricing strategy, then the `pricingStrategy` value is NONE.   * Sequence Price pricing strategy, then the `pricingStrategy` value is SEQUENCE_PRICE.   * Size Price pricing strategy, then the `pricingStrategy` value is SIZE_PRICE.   * Size/Sequence Price pricing strategy, then the `pricingStrategy` value is SIZE_SEQUENCE_PRICE.     If the `pricingStrategy` value is NONE,  then the prices for the modifier options in this group are resolved down to the modifier option level and you can retrieve them from the `price` value of the individual `ModifierOption` objects.  If the `pricingStrategy` value is SIZE_PRICE, SEQUENCE_PRICE, or SIZE_SEQUENCE_PRICE, then you must use the rules provided in _this modifier group's_ `pricingRules` value to calculate the prices for the modifier options in the group. ", alias="pricingStrategy")
     pricing_rules: Optional[Dict[str, Any]] = Field(default=None, description="A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used. ", alias="pricingRules")
-    modifier_options: Optional[Annotated[List[ModifierOption], Field(min_length=0)]] = Field(default=None, description="An array of `ModifierOption` objects that are contained in this modifier group. Modifier options are the individual selections available to a restaurant guest within a modifier group. For example, the modifier options in a \"Pizza Toppings\" modifier group might be pepperoni, mushrooms, or extra cheese. ", alias="modifierOptions")
-    __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "multiLocationId", "masterId", "posName", "posButtonColorLight", "posButtonColorDark", "visibility", "pricingStrategy", "pricingRules", "modifierOptions"]
+    default_options_charge_price: Optional[StrictStr] = Field(default=None, description="Indicates whether the prices associated with any default modifiers in this group are added to the cost of the menu items they modify.  Values are:   * NO: The default modifier price is ignored. No change is made to the cost of the menu item.   * YES: The default modifier price is added to the menu item price. YES is the default setting for `defaultOptionsChargePrice`. ", alias="defaultOptionsChargePrice")
+    default_options_substitution_pricing: Optional[StrictStr] = Field(default=None, description="Indicates whether substitution pricing is enabled for the modifier group. ", alias="defaultOptionsSubstitutionPricing")
+    min_selections: Optional[StrictInt] = Field(default=None, description="The minimum number of modifier options that a customer can choose from this modifier group.  If a server is not required to select a modifier option from this modifier group, `minSelections` is set to 0.  If a server must select a modifier option from this modifier group, `minSelections` must be set to 1 or higher. ", alias="minSelections")
+    max_selections: Optional[StrictInt] = Field(default=None, description="The maximum number of modifier options that a customer can choose from this modifier group. `maxSelections` is null if a customer can choose an unlimited number of modifier options from this modifier group. ", alias="maxSelections")
+    required_mode: Optional[StrictStr] = Field(default=None, description="Specifies how the modifier group appears and behaves in the Toast POS app. ", alias="requiredMode")
+    is_multi_select: Optional[StrictBool] = Field(default=None, description="Indicates whether you can select more than one modifier option from this modifier group. ", alias="isMultiSelect")
+    pre_modifier_group_reference: Optional[StrictInt] = Field(default=None, description="The `referenceId` of a `PreModifierGroup` object. This object defines the premodifiers that can be applied to the modifier options contained in this modifier group. ", alias="preModifierGroupReference")
+    modifier_option_references: Optional[Annotated[List[StrictInt], Field(min_length=0)]] = Field(default=None, description="An array of `referenceId`s for `ModifierOption` objects. These objects define the modifier options contained in this modifier group. ", alias="modifierOptionReferences")
+    __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "multiLocationId", "masterId", "posName", "posButtonColorLight", "posButtonColorDark", "visibility", "pricingStrategy", "pricingRules", "defaultOptionsChargePrice", "defaultOptionsSubstitutionPricing", "minSelections", "maxSelections", "requiredMode", "isMultiSelect", "preModifierGroupReference", "modifierOptionReferences"]
+
+    @field_validator('default_options_charge_price')
+    def default_options_charge_price_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['false', 'true']):
+            raise ValueError("must be one of enum values ('false', 'true')")
+        return value
+
+    @field_validator('default_options_substitution_pricing')
+    def default_options_substitution_pricing_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['false', 'true']):
+            raise ValueError("must be one of enum values ('false', 'true')")
+        return value
+
+    @field_validator('required_mode')
+    def required_mode_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['REQUIRED', 'OPTIONAL_FORCE_SHOW', 'OPTIONAL']):
+            raise ValueError("must be one of enum values ('REQUIRED', 'OPTIONAL_FORCE_SHOW', 'OPTIONAL')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -82,13 +118,16 @@ class ModifierGroup(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in modifier_options (list)
-        _items = []
-        if self.modifier_options:
-            for _item_modifier_options in self.modifier_options:
-                if _item_modifier_options:
-                    _items.append(_item_modifier_options.to_dict())
-            _dict['modifierOptions'] = _items
+        # set to None if max_selections (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_selections is None and "max_selections" in self.model_fields_set:
+            _dict['maxSelections'] = None
+
+        # set to None if pre_modifier_group_reference (nullable) is None
+        # and model_fields_set contains the field
+        if self.pre_modifier_group_reference is None and "pre_modifier_group_reference" in self.model_fields_set:
+            _dict['preModifierGroupReference'] = None
+
         return _dict
 
     @classmethod
@@ -112,7 +151,14 @@ class ModifierGroup(BaseModel):
             "visibility": obj.get("visibility"),
             "pricingStrategy": obj.get("pricingStrategy"),
             "pricingRules": obj.get("pricingRules"),
-            "modifierOptions": [ModifierOption.from_dict(_item) for _item in obj["modifierOptions"]] if obj.get("modifierOptions") is not None else None
+            "defaultOptionsChargePrice": obj.get("defaultOptionsChargePrice"),
+            "defaultOptionsSubstitutionPricing": obj.get("defaultOptionsSubstitutionPricing"),
+            "minSelections": obj.get("minSelections"),
+            "maxSelections": obj.get("maxSelections"),
+            "requiredMode": obj.get("requiredMode"),
+            "isMultiSelect": obj.get("isMultiSelect"),
+            "preModifierGroupReference": obj.get("preModifierGroupReference"),
+            "modifierOptionReferences": obj.get("modifierOptionReferences")
         })
         return _obj
 

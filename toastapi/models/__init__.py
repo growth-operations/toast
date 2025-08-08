@@ -78,9 +78,6 @@ from toastapi.models.refund_details import RefundDetails
 from toastapi.models.restaurant import Restaurant
 from toastapi.models.restaurant_basic import RestaurantBasic
 from toastapi.models.restaurant_info import RestaurantInfo
-from toastapi.models.restaurant_modifier_group_references import RestaurantModifierGroupReferences
-from toastapi.models.restaurant_modifier_option_references import RestaurantModifierOptionReferences
-from toastapi.models.restaurant_pre_modifier_group_references import RestaurantPreModifierGroupReferences
 from toastapi.models.restaurant_service import RestaurantService
 from toastapi.models.revenue_center import RevenueCenter
 from toastapi.models.sales_category import SalesCategory

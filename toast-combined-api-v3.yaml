@@ -5222,30 +5222,76 @@ components:
           items:
             $ref: "#/components/schemas/Menu"
         modifierGroupReferences:
+          type: object
           description: |
             A map of `ModifierGroup` objects that define the modifier groups used by this restaurant. Each `ModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
-            ...
-          properties:
-            identifier:
-              type: integer
+            ```
+            "modifierGroupReferences": {
+              "3": {
+                "referenceId": 3,
+                "name": "Toppings",
+                "guid": "58b79986-f88f-411d-ba18-14b1e2441e9d",
+                "modifierOptionReferences": [10, 11],
+                ...
+              },
+              "4": {
+                "referenceId": 4,
+                "name": "Size",
+                "guid": "23c02762-9d6a-4d3f-a298-71c989bf31b0",
+                "modifierOptionReferences": [12, 13],
+                ...
+              }
+            }
+            ```
+            
+            Other menu entities refer to modifier groups using their `referenceId`. Having a key that matches the `referenceId` allows you to locate the correct modifier group in the `modifierGroupReferences` map.
           additionalProperties:
             $ref: "#/components/schemas/ModifierGroup"
         modifierOptionReferences:
+          type: object
           description: |
             A map of `ModifierOption` objects that define the modifier options used by this restaurant. Each `ModifierOption` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
-            ...
-          properties:
-            identifier:
-              type: integer
+            ```
+            "modifierOptionReferences": {
+              "10": {
+                "referenceId": 10,
+                "name": "Mushrooms",
+                "guid": "fa24fee9-76c4-40ba-ae3c-7dfccafdd8d3",
+                "price": 1.50,
+                ...
+              },
+              "11": {
+                "referenceId": 11,
+                "name": "Onions",
+                "guid": "afee6be7-8280-4c69-a170-9fdf4c76bf7b",
+                "price": 0.75,
+                ...
+              }
+            }
+            ```
           additionalProperties:
             $ref: "#/components/schemas/ModifierOption"
         preModifierGroupReferences:
+          type: object
           description: |
             A map of `PreModifierGroup` objects that define the premodifier groups used by this restaurant. Each `PreModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below:
-            ...
-          properties:
-            identifier:
-              type: integer
+            ```
+            "preModifierGroupReferences": {
+              "22": {
+                "referenceId": 22,
+                "guid": "07a1a94d-6f7b-46d5-a916-a07fa16bb8e8",
+                "name": "PreModGroup",
+                "preModifiers": [
+                  {
+                    "guid": "ad45e697-9356-468e-b7b4-1b23f4d4b8a5",
+                    "name": "EXTRA",
+                    "fixedPrice": 1.0,
+                    "multiplicationFactor": null
+                  }
+                ]
+              }
+            }
+            ```
           additionalProperties:
             $ref: "#/components/schemas/PreModifierGroup"
     Menu:
@@ -5468,13 +5514,61 @@ components:
           description: |
             A `PricingRules` object with information for calculating the prices for the modifier options contained in this modifier group. You use a modifier group's `pricingRules` object, in conjunction with its `pricingStrategy` value, to calculate prices for the group's modifier options when the group uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy.
           $ref: '#/components/schemas/PricingRules'
-        modifierOptions:
+        defaultOptionsChargePrice:
+          description: |
+            Indicates whether the prices associated with any default modifiers in this group are added to the cost of the menu items they modify.
+
+            Values are:
+              * NO: The default modifier price is ignored. No change is made to the cost of the menu item.
+              * YES: The default modifier price is added to the menu item price. YES is the default setting for `defaultOptionsChargePrice`.
+          type: string
+          enum:
+            - NO
+            - YES
+        defaultOptionsSubstitutionPricing:
+          description: |
+            Indicates whether substitution pricing is enabled for the modifier group.
+          type: string
+          enum:
+            - NO
+            - YES
+        minSelections:
+          type: integer
+          description: |
+            The minimum number of modifier options that a customer can choose from this modifier group.
+
+            If a server is not required to select a modifier option from this modifier group, `minSelections` is set to 0.
+
+            If a server must select a modifier option from this modifier group, `minSelections` must be set to 1 or higher.
+        maxSelections:
+          type: integer
+          nullable: true
+          description: |
+            The maximum number of modifier options that a customer can choose from this modifier group. `maxSelections` is null if a customer can choose an unlimited number of modifier options from this modifier group.
+        requiredMode:
+          description: |
+            Specifies how the modifier group appears and behaves in the Toast POS app.
+          type: string
+          enum:
+            - REQUIRED
+            - OPTIONAL_FORCE_SHOW
+            - OPTIONAL
+        isMultiSelect:
+          type: boolean
+          description: |
+            Indicates whether you can select more than one modifier option from this modifier group.
+        preModifierGroupReference:
+          type: integer
+          nullable: true
+          description: |
+            The `referenceId` of a `PreModifierGroup` object. This object defines the premodifiers that can be applied to the modifier options contained in this modifier group.
+        modifierOptionReferences:
           type: array
           description: |
-            An array of `ModifierOption` objects that are contained in this modifier group. Modifier options are the individual selections available to a restaurant guest within a modifier group. For example, the modifier options in a "Pizza Toppings" modifier group might be pepperoni, mushrooms, or extra cheese.
+            An array of `referenceId`s for `ModifierOption` objects. These objects define the modifier options contained in this modifier group.
           minItems: 0
           items:
-            $ref: '#/components/schemas/ModifierOption'
+            type: integer
     ModifierOption:
       type: object
       description: |

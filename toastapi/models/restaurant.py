@@ -20,9 +20,9 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from toastapi.models.menu import Menu
-from toastapi.models.restaurant_modifier_group_references import RestaurantModifierGroupReferences
-from toastapi.models.restaurant_modifier_option_references import RestaurantModifierOptionReferences
-from toastapi.models.restaurant_pre_modifier_group_references import RestaurantPreModifierGroupReferences
+from toastapi.models.modifier_group import ModifierGroup
+from toastapi.models.modifier_option import ModifierOption
+from toastapi.models.pre_modifier_group import PreModifierGroup
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -34,9 +34,9 @@ class Restaurant(BaseModel):
     last_updated: Optional[StrictStr] = Field(default=None, description="The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href=\"https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html\">Dates and timestamps</a> section of the Toast Developer Guide. ", alias="lastUpdated")
     restaurant_time_zone: Optional[StrictStr] = Field(default=None, description="The name of the restaurant's time zone in the IANA time zone database https://www.iana.org/time-zones. For example, \"America/New_York\". ", alias="restaurantTimeZone")
     menus: Optional[List[Menu]] = Field(default=None, description="An array of `Menu` objects that represent the published menus used by this restaurant. ")
-    modifier_group_references: Optional[RestaurantModifierGroupReferences] = Field(default=None, alias="modifierGroupReferences")
-    modifier_option_references: Optional[RestaurantModifierOptionReferences] = Field(default=None, alias="modifierOptionReferences")
-    pre_modifier_group_references: Optional[RestaurantPreModifierGroupReferences] = Field(default=None, alias="preModifierGroupReferences")
+    modifier_group_references: Optional[Dict[str, ModifierGroup]] = Field(default=None, description="A map of `ModifierGroup` objects that define the modifier groups used by this restaurant. Each `ModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below: ``` \"modifierGroupReferences\": {   \"3\": {     \"referenceId\": 3,     \"name\": \"Toppings\",     \"guid\": \"58b79986-f88f-411d-ba18-14b1e2441e9d\",     \"modifierOptionReferences\": [10, 11],     ...   },   \"4\": {     \"referenceId\": 4,     \"name\": \"Size\",     \"guid\": \"23c02762-9d6a-4d3f-a298-71c989bf31b0\",     \"modifierOptionReferences\": [12, 13],     ...   } } ```  Other menu entities refer to modifier groups using their `referenceId`. Having a key that matches the `referenceId` allows you to locate the correct modifier group in the `modifierGroupReferences` map. ", alias="modifierGroupReferences")
+    modifier_option_references: Optional[Dict[str, ModifierOption]] = Field(default=None, description="A map of `ModifierOption` objects that define the modifier options used by this restaurant. Each `ModifierOption` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below: ``` \"modifierOptionReferences\": {   \"10\": {     \"referenceId\": 10,     \"name\": \"Mushrooms\",     \"guid\": \"fa24fee9-76c4-40ba-ae3c-7dfccafdd8d3\",     \"price\": 1.50,     ...   },   \"11\": {     \"referenceId\": 11,     \"name\": \"Onions\",     \"guid\": \"afee6be7-8280-4c69-a170-9fdf4c76bf7b\",     \"price\": 0.75,     ...   } } ``` ", alias="modifierOptionReferences")
+    pre_modifier_group_references: Optional[Dict[str, PreModifierGroup]] = Field(default=None, description="A map of `PreModifierGroup` objects that define the premodifier groups used by this restaurant. Each `PreModifierGroup` object is presented as a key/value pair. A pair's key matches the `referenceId` of the object contained in the pair's value, as shown below: ``` \"preModifierGroupReferences\": {   \"22\": {     \"referenceId\": 22,     \"guid\": \"07a1a94d-6f7b-46d5-a916-a07fa16bb8e8\",     \"name\": \"PreModGroup\",     \"preModifiers\": [       {         \"guid\": \"ad45e697-9356-468e-b7b4-1b23f4d4b8a5\",         \"name\": \"EXTRA\",         \"fixedPrice\": 1.0,         \"multiplicationFactor\": null       }     ]   } } ``` ", alias="preModifierGroupReferences")
     __properties: ClassVar[List[str]] = ["restaurantGuid", "lastUpdated", "restaurantTimeZone", "menus", "modifierGroupReferences", "modifierOptionReferences", "preModifierGroupReferences"]
 
     model_config = ConfigDict(
@@ -85,15 +85,27 @@ class Restaurant(BaseModel):
                 if _item_menus:
                     _items.append(_item_menus.to_dict())
             _dict['menus'] = _items
-        # override the default output from pydantic by calling `to_dict()` of modifier_group_references
+        # override the default output from pydantic by calling `to_dict()` of each value in modifier_group_references (dict)
+        _field_dict = {}
         if self.modifier_group_references:
-            _dict['modifierGroupReferences'] = self.modifier_group_references.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of modifier_option_references
+            for _key_modifier_group_references in self.modifier_group_references:
+                if self.modifier_group_references[_key_modifier_group_references]:
+                    _field_dict[_key_modifier_group_references] = self.modifier_group_references[_key_modifier_group_references].to_dict()
+            _dict['modifierGroupReferences'] = _field_dict
+        # override the default output from pydantic by calling `to_dict()` of each value in modifier_option_references (dict)
+        _field_dict = {}
         if self.modifier_option_references:
-            _dict['modifierOptionReferences'] = self.modifier_option_references.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of pre_modifier_group_references
+            for _key_modifier_option_references in self.modifier_option_references:
+                if self.modifier_option_references[_key_modifier_option_references]:
+                    _field_dict[_key_modifier_option_references] = self.modifier_option_references[_key_modifier_option_references].to_dict()
+            _dict['modifierOptionReferences'] = _field_dict
+        # override the default output from pydantic by calling `to_dict()` of each value in pre_modifier_group_references (dict)
+        _field_dict = {}
         if self.pre_modifier_group_references:
-            _dict['preModifierGroupReferences'] = self.pre_modifier_group_references.to_dict()
+            for _key_pre_modifier_group_references in self.pre_modifier_group_references:
+                if self.pre_modifier_group_references[_key_pre_modifier_group_references]:
+                    _field_dict[_key_pre_modifier_group_references] = self.pre_modifier_group_references[_key_pre_modifier_group_references].to_dict()
+            _dict['preModifierGroupReferences'] = _field_dict
         return _dict
 
     @classmethod
@@ -110,9 +122,24 @@ class Restaurant(BaseModel):
             "lastUpdated": obj.get("lastUpdated"),
             "restaurantTimeZone": obj.get("restaurantTimeZone"),
             "menus": [Menu.from_dict(_item) for _item in obj["menus"]] if obj.get("menus") is not None else None,
-            "modifierGroupReferences": RestaurantModifierGroupReferences.from_dict(obj["modifierGroupReferences"]) if obj.get("modifierGroupReferences") is not None else None,
-            "modifierOptionReferences": RestaurantModifierOptionReferences.from_dict(obj["modifierOptionReferences"]) if obj.get("modifierOptionReferences") is not None else None,
-            "preModifierGroupReferences": RestaurantPreModifierGroupReferences.from_dict(obj["preModifierGroupReferences"]) if obj.get("preModifierGroupReferences") is not None else None
+            "modifierGroupReferences": dict(
+                (_k, ModifierGroup.from_dict(_v))
+                for _k, _v in obj["modifierGroupReferences"].items()
+            )
+            if obj.get("modifierGroupReferences") is not None
+            else None,
+            "modifierOptionReferences": dict(
+                (_k, ModifierOption.from_dict(_v))
+                for _k, _v in obj["modifierOptionReferences"].items()
+            )
+            if obj.get("modifierOptionReferences") is not None
+            else None,
+            "preModifierGroupReferences": dict(
+                (_k, PreModifierGroup.from_dict(_v))
+                for _k, _v in obj["preModifierGroupReferences"].items()
+            )
+            if obj.get("preModifierGroupReferences") is not None
+            else None
         })
         return _obj
 

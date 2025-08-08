@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.13"
+__version__ = "1.0.14"
 
 # Define package exports
 __all__ = [
@@ -122,9 +122,6 @@ __all__ = [
     "Restaurant",
     "RestaurantBasic",
     "RestaurantInfo",
-    "RestaurantModifierGroupReferences",
-    "RestaurantModifierOptionReferences",
-    "RestaurantPreModifierGroupReferences",
     "RestaurantService",
     "RevenueCenter",
     "SalesCategory",
@@ -261,9 +258,6 @@ from toastapi.models.refund_details import RefundDetails as RefundDetails
 from toastapi.models.restaurant import Restaurant as Restaurant
 from toastapi.models.restaurant_basic import RestaurantBasic as RestaurantBasic
 from toastapi.models.restaurant_info import RestaurantInfo as RestaurantInfo
-from toastapi.models.restaurant_modifier_group_references import RestaurantModifierGroupReferences as RestaurantModifierGroupReferences
-from toastapi.models.restaurant_modifier_option_references import RestaurantModifierOptionReferences as RestaurantModifierOptionReferences
-from toastapi.models.restaurant_pre_modifier_group_references import RestaurantPreModifierGroupReferences as RestaurantPreModifierGroupReferences
 from toastapi.models.restaurant_service import RestaurantService as RestaurantService
 from toastapi.models.revenue_center import RevenueCenter as RevenueCenter
 from toastapi.models.sales_category import SalesCategory as SalesCategory

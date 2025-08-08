@@ -87,9 +87,6 @@ docs/RefundDetails.md
 docs/Restaurant.md
 docs/RestaurantBasic.md
 docs/RestaurantInfo.md
-docs/RestaurantModifierGroupReferences.md
-docs/RestaurantModifierOptionReferences.md
-docs/RestaurantPreModifierGroupReferences.md
 docs/RestaurantService.md
 docs/RestaurantServicesApi.md
 docs/RestaurantsApi.md
@@ -235,9 +232,6 @@ toastapi/models/refund_details.py
 toastapi/models/restaurant.py
 toastapi/models/restaurant_basic.py
 toastapi/models/restaurant_info.py
-toastapi/models/restaurant_modifier_group_references.py
-toastapi/models/restaurant_modifier_option_references.py
-toastapi/models/restaurant_pre_modifier_group_references.py
 toastapi/models/restaurant_service.py
 toastapi/models/revenue_center.py
 toastapi/models/sales_category.py
