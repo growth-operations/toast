@@ -45,6 +45,7 @@ docs/General.md
 docs/GiftCardInfo.md
 docs/Hours.md
 docs/Image.md
+docs/ItemTag.md
 docs/Job.md
 docs/JobWageOverride.md
 docs/JobsApi.md
@@ -61,6 +62,7 @@ docs/MenusV3Api.md
 docs/Metadata.md
 docs/ModifierGroup.md
 docs/ModifierOption.md
+docs/ModifierOptionTaxInfo.md
 docs/NoSaleReason.md
 docs/NoSaleReasonsApi.md
 docs/OnlineOrdering.md
@@ -73,6 +75,7 @@ docs/PaymentOptions.md
 docs/PaymentsApi.md
 docs/PayoutReason.md
 docs/PayoutReasonsApi.md
+docs/Portion.md
 docs/PreModifier.md
 docs/PreModifierGroup.md
 docs/PreModifierGroupsApi.md
@@ -203,6 +206,7 @@ toastapi/models/general.py
 toastapi/models/gift_card_info.py
 toastapi/models/hours.py
 toastapi/models/image.py
+toastapi/models/item_tag.py
 toastapi/models/job.py
 toastapi/models/job_wage_override.py
 toastapi/models/location.py
@@ -214,6 +218,7 @@ toastapi/models/menu_item.py
 toastapi/models/metadata.py
 toastapi/models/modifier_group.py
 toastapi/models/modifier_option.py
+toastapi/models/modifier_option_tax_info.py
 toastapi/models/no_sale_reason.py
 toastapi/models/online_ordering.py
 toastapi/models/order.py
@@ -222,6 +227,7 @@ toastapi/models/orders_order_guid_delivery_info_patch_request.py
 toastapi/models/payment.py
 toastapi/models/payment_options.py
 toastapi/models/payout_reason.py
+toastapi/models/portion.py
 toastapi/models/pre_modifier.py
 toastapi/models/pre_modifier_group.py
 toastapi/models/prep_times.py

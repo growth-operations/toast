@@ -12,30 +12,42 @@
 """  # noqa: E501
 
 
-from __future__ import annotations
-import json
-from enum import Enum
-from typing_extensions import Self
+import unittest
 
+from toastapi.models.modifier_option_tax_info import ModifierOptionTaxInfo
 
-class DimensionUnitOfMeasureV2(str, Enum):
-    """
-    The unit of measure for dimensions.
-    """
+class TestModifierOptionTaxInfo(unittest.TestCase):
+    """ModifierOptionTaxInfo unit test stubs"""
 
-    """
-    allowed enum values
-    """
-    IN = 'IN'
-    CM = 'CM'
-    MM = 'MM'
-    M = 'M'
-    FT = 'FT'
-    YD = 'YD'
+    def setUp(self):
+        pass
 
-    @classmethod
-    def from_json(cls, json_str: str) -> Self:
-        """Create an instance of DimensionUnitOfMeasureV2 from a JSON string"""
-        return cls(json.loads(json_str))
+    def tearDown(self):
+        pass
 
+    def make_instance(self, include_optional) -> ModifierOptionTaxInfo:
+        """Test ModifierOptionTaxInfo
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
+        # uncomment below to create an instance of `ModifierOptionTaxInfo`
+        """
+        model = ModifierOptionTaxInfo()
+        if include_optional:
+            return ModifierOptionTaxInfo(
+                tax_rate_guids = [
+                    ''
+                    ]
+            )
+        else:
+            return ModifierOptionTaxInfo(
+        )
+        """
 
+    def testModifierOptionTaxInfo(self):
+        """Test ModifierOptionTaxInfo"""
+        # inst_req_only = self.make_instance(include_optional=False)
+        # inst_req_and_optional = self.make_instance(include_optional=True)
+
+if __name__ == '__main__':
+    unittest.main()

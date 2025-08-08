@@ -22,13 +22,13 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class MetadataV2(BaseModel):
+class ItemTag(BaseModel):
     """
-    Information about the last date and time that this restaurant's menu data was updated. 
+    Information about an item tag that can be assigned to menu items and modifier options. 
     """ # noqa: E501
-    restaurant_guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this restaurant, assigned by the Toast POS system. ", alias="restaurantGuid")
-    last_updated: Optional[StrictStr] = Field(default=None, description="The most recent date and time that this menu's data was published. Use this value to determine if you need to refresh your menu data. The `lastUpdated` value uses the absolute timestamp format describe in the <a href=\"https://doc.toasttab.com/doc/devguide/api_dates_and_timestamps.html\">Dates and timestamps</a> section of the Toast Developer Guide. ", alias="lastUpdated")
-    __properties: ClassVar[List[str]] = ["restaurantGuid", "lastUpdated"]
+    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this item tag.")
+    name: Optional[StrictStr] = Field(default=None, description="The name of this item tag.")
+    __properties: ClassVar[List[str]] = ["guid", "name"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +48,7 @@ class MetadataV2(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MetadataV2 from a JSON string"""
+        """Create an instance of ItemTag from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,7 +73,7 @@ class MetadataV2(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MetadataV2 from a dict"""
+        """Create an instance of ItemTag from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +81,8 @@ class MetadataV2(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "restaurantGuid": obj.get("restaurantGuid"),
-            "lastUpdated": obj.get("lastUpdated")
+            "guid": obj.get("guid"),
+            "name": obj.get("name")
         })
         return _obj
 

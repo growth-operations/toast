@@ -17,20 +17,18 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-class PortionV2(BaseModel):
+class Portion(BaseModel):
     """
-    A container for the modifier groups that can be applied to a portion of a menu item. 
+    Information about a portion that can be defined for menu items and modifier options. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this portion, for example, \"1st Half\" or \"2nd Half\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this portion, assigned by the Toast POS system. ")
-    modifier_group_references: Optional[Annotated[List[StrictInt], Field(min_length=0)]] = Field(default=None, description="An array of `referenceId`s for `ModifierGroup` objects. These objects define the modifier groups that can be applied to this portion. ", alias="modifierGroupReferences")
-    __properties: ClassVar[List[str]] = ["name", "guid", "modifierGroupReferences"]
+    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this portion.")
+    name: Optional[StrictStr] = Field(default=None, description="The name of this portion.")
+    __properties: ClassVar[List[str]] = ["guid", "name"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +48,7 @@ class PortionV2(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PortionV2 from a JSON string"""
+        """Create an instance of Portion from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,7 +73,7 @@ class PortionV2(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PortionV2 from a dict"""
+        """Create an instance of Portion from a dict"""
         if obj is None:
             return None
 
@@ -83,9 +81,8 @@ class PortionV2(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
             "guid": obj.get("guid"),
-            "modifierGroupReferences": obj.get("modifierGroupReferences")
+            "name": obj.get("name")
         })
         return _obj
 

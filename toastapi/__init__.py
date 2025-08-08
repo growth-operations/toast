@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.14"
+__version__ = "1.0.16"
 
 # Define package exports
 __all__ = [
@@ -93,6 +93,7 @@ __all__ = [
     "GiftCardInfo",
     "Hours",
     "Image",
+    "ItemTag",
     "Job",
     "JobWageOverride",
     "Location",
@@ -104,6 +105,7 @@ __all__ = [
     "Metadata",
     "ModifierGroup",
     "ModifierOption",
+    "ModifierOptionTaxInfo",
     "NoSaleReason",
     "OnlineOrdering",
     "Order",
@@ -112,6 +114,7 @@ __all__ = [
     "Payment",
     "PaymentOptions",
     "PayoutReason",
+    "Portion",
     "PreModifier",
     "PreModifierGroup",
     "PrepTimes",
@@ -229,6 +232,7 @@ from toastapi.models.general import General as General
 from toastapi.models.gift_card_info import GiftCardInfo as GiftCardInfo
 from toastapi.models.hours import Hours as Hours
 from toastapi.models.image import Image as Image
+from toastapi.models.item_tag import ItemTag as ItemTag
 from toastapi.models.job import Job as Job
 from toastapi.models.job_wage_override import JobWageOverride as JobWageOverride
 from toastapi.models.location import Location as Location
@@ -240,6 +244,7 @@ from toastapi.models.menu_item import MenuItem as MenuItem
 from toastapi.models.metadata import Metadata as Metadata
 from toastapi.models.modifier_group import ModifierGroup as ModifierGroup
 from toastapi.models.modifier_option import ModifierOption as ModifierOption
+from toastapi.models.modifier_option_tax_info import ModifierOptionTaxInfo as ModifierOptionTaxInfo
 from toastapi.models.no_sale_reason import NoSaleReason as NoSaleReason
 from toastapi.models.online_ordering import OnlineOrdering as OnlineOrdering
 from toastapi.models.order import Order as Order
@@ -248,6 +253,7 @@ from toastapi.models.orders_order_guid_delivery_info_patch_request import Orders
 from toastapi.models.payment import Payment as Payment
 from toastapi.models.payment_options import PaymentOptions as PaymentOptions
 from toastapi.models.payout_reason import PayoutReason as PayoutReason
+from toastapi.models.portion import Portion as Portion
 from toastapi.models.pre_modifier import PreModifier as PreModifier
 from toastapi.models.pre_modifier_group import PreModifierGroup as PreModifierGroup
 from toastapi.models.prep_times import PrepTimes as PrepTimes

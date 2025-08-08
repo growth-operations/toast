@@ -12,28 +12,41 @@
 """  # noqa: E501
 
 
-from __future__ import annotations
-import json
-from enum import Enum
-from typing_extensions import Self
+import unittest
 
+from toastapi.models.portion import Portion
 
-class WeightUnitOfMeasureV2(str, Enum):
-    """
-    The unit of measure for weight.
-    """
+class TestPortion(unittest.TestCase):
+    """Portion unit test stubs"""
 
-    """
-    allowed enum values
-    """
-    LB = 'LB'
-    OZ = 'OZ'
-    KG = 'KG'
-    G = 'G'
+    def setUp(self):
+        pass
 
-    @classmethod
-    def from_json(cls, json_str: str) -> Self:
-        """Create an instance of WeightUnitOfMeasureV2 from a JSON string"""
-        return cls(json.loads(json_str))
+    def tearDown(self):
+        pass
 
+    def make_instance(self, include_optional) -> Portion:
+        """Test Portion
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
+        # uncomment below to create an instance of `Portion`
+        """
+        model = Portion()
+        if include_optional:
+            return Portion(
+                guid = '',
+                name = ''
+            )
+        else:
+            return Portion(
+        )
+        """
 
+    def testPortion(self):
+        """Test Portion"""
+        # inst_req_only = self.make_instance(include_optional=False)
+        # inst_req_and_optional = self.make_instance(include_optional=True)
+
+if __name__ == '__main__':
+    unittest.main()

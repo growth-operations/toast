@@ -5574,23 +5574,140 @@ components:
       description: |
         Information about a modifier option configured for this restaurant.
       properties:
+        referenceId:
+          description: |
+            An integer identifier that is used to refer to this modifier option by modifier option groups that contain it.
+          type: integer
         name:
           description: |
-            A descriptive name for this modifier option.
+            A descriptive name for this modifier option, for example, "Cheese" or "Pepperoni".
+          type: string
+        kitchenName:
+          description: |
+            The name of the modifier option as it appears on kitchen tickets. The `kitchenName` can include both numbers and letters. This value contains an empty string if a kitchen name has not been configured for the modifier option.
           type: string
         guid:
           description: |
-            A unique identifier for this modifier option, assigned by the Toast POS system.
+            A unique identifier for this modifier option's item reference, assigned by the Toast POS system.
           type: string
-        referenceId:
+        multiLocationId:
+          $ref: '#/components/schemas/MultiLocationId'
+        masterId:
+          $ref: '#/components/schemas/MasterId'
+        description:
           description: |
-            A reference identifier for this modifier option.
-          type: integer
+            An optional short description of this modifier option.
+          type: string
+        posName:
+          $ref: '#/components/schemas/PosName'
+        posButtonColorLight:
+          $ref: '#/components/schemas/PosButtonColorLight'
+        posButtonColorDark:
+          $ref: '#/components/schemas/PosButtonColorDark'
+        prepStations:
+          type: array
+          description: |
+            An array of GUIDs for the prep stations that have been assigned to this modifier option.
+          items:
+            type: string
+        image:
+          $ref: '#/components/schemas/Image'
+        visibility:
+          $ref: '#/components/schemas/Visibility'
         price:
-          description: |
-            The price of this modifier option.
           type: number
           format: double
+          nullable: true
+          description: |
+            The price of this modifier option.
+            
+            In Toast Web, a modifier option may:
+              * Inherit its price from a parent modifier group.
+              * Use the price specified for its modifier option item reference.
+              * Specify a price that overrides the price defined for its item reference.
+
+            The `price` value is populated differently depending on which of these pricing scenarios is used for the modifier option.
+        pricingStrategy:
+          type: string
+          description: |
+            A string that indicates how this modifier option has been priced. If `pricingStrategy` is:
+              * GROUP_PRICE, then the modifier option inherits its price from a parent modifier group.
+              * Any value other than GROUP_PRICE, then the modifier option is using either the price specified for its item reference or an override price.
+        pricingRules:
+          type: object
+          nullable: true
+          description: |
+            A `PricingRules` object with information about how to calculate the price for this modifier option.
+          $ref: '#/components/schemas/PricingRules'
+        salesCategory:
+          $ref: '#/components/schemas/SalesCategory'
+        taxInfo:
+          type: array
+          description: |              
+            The `taxInfo` value on the `ModifierOption` object has been deprecated. Your integration should switch to using the `modifierOptionTaxInfo` value instead.
+          items:
+            type: string
+        modifierOptionTaxInfo:
+          $ref: '#/components/schemas/ModifierOptionTaxInfo'
+        itemTags:
+          type: array
+          description: |
+            An array of `ItemTag` objects that are assigned to this modifier option. Item tags are used to assign identifying characteristics to a modifier option, for example, vegetarian, gluten-free, alcohol.
+          items:
+            $ref: '#/components/schemas/ItemTag'
+        plu:
+          type: string
+          description: |
+            The price lookup (PLU) code for this modifier option. The PLU code can contain both numbers and letters. This value contains an empty string if a PLU code has not been defined.
+        sku:
+          type: string
+          description: |
+            The stock keeping unit (SKU) identifier for this modifier option. The SKU identifier can contain both numbers and letters. This value contains an empty string if a SKU has not been defined.
+        calories:
+          type: integer
+          nullable: true
+          description: |
+            The number of calories in this modifier option. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the modifier option.
+        contentAdvisories:
+          $ref: '#/components/schemas/ContentAdvisories'
+        unitOfMeasure:
+          type: string
+          enum:
+            - NONE
+            - LB
+            - OZ
+            - KG
+            - G
+          description: |
+            The unit of measure used to determine the price of the modifier option. For example, $10.00 per gram.
+        isDefault:
+          type: boolean
+          description: |
+            Indicates whether this modifier option is included on the menu item by default.
+        allowsDuplicates:
+          type: boolean
+          description: |
+            Indicates whether the modifier option may be added to a menu item multiple times.
+        portions:
+          type: array
+          description: |
+            An array of `Portion` objects that define the portions that this modifier option can be added to.
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/Portion'
+        prepTime:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            The amount of time, in seconds, that it takes to prepare this modifier option. This value is null if a prep time has not been specified for the modifier option.
+        modifierGroupReferences:
+          type: array
+          description: |
+            An array of `referenceId`s for `ModifierGroup` objects. These objects define nested modifier groups contained in this modifier option.
+          minItems: 0
+          items:
+            type: integer
     PreModifierGroup:
       type: object
       description: |
@@ -8690,3 +8807,40 @@ components:
       type: object
       description: |
         An `Availability` object with information about the days and times a menu entity is available.
+    ModifierOptionTaxInfo:
+      type: object
+      description: |
+        Information about the tax rates and tax behavior of this modifier option.
+      properties:
+        taxRateGuids:
+          type: array
+          description: |
+            An array of GUIDs for the tax rates that apply to this modifier option.
+          items:
+            type: string
+    ItemTag:
+      type: object
+      description: |
+        Information about an item tag that can be assigned to menu items and modifier options.
+      properties:
+        guid:
+          type: string
+          description: A unique identifier for this item tag.
+        name:
+          type: string
+          description: The name of this item tag.
+    ContentAdvisories:
+      type: object
+      description: |
+        Content advisory information for menu items and modifier options.
+    Portion:
+      type: object
+      description: |
+        Information about a portion that can be defined for menu items and modifier options.
+      properties:
+        guid:
+          type: string
+          description: A unique identifier for this portion.
+        name:
+          type: string
+          description: The name of this portion.

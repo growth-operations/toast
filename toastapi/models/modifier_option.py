@@ -17,8 +17,15 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from typing_extensions import Annotated
+from toastapi.models.image import Image
+from toastapi.models.item_tag import ItemTag
+from toastapi.models.modifier_option_tax_info import ModifierOptionTaxInfo
+from toastapi.models.portion import Portion
+from toastapi.models.sales_category import SalesCategory
+from toastapi.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,11 +33,47 @@ class ModifierOption(BaseModel):
     """
     Information about a modifier option configured for this restaurant. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this modifier option. ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this modifier option, assigned by the Toast POS system. ")
-    reference_id: Optional[StrictInt] = Field(default=None, description="A reference identifier for this modifier option. ", alias="referenceId")
-    price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of this modifier option. ")
-    __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "price"]
+    reference_id: Optional[StrictInt] = Field(default=None, description="An integer identifier that is used to refer to this modifier option by modifier option groups that contain it. ", alias="referenceId")
+    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this modifier option, for example, \"Cheese\" or \"Pepperoni\". ")
+    kitchen_name: Optional[StrictStr] = Field(default=None, description="The name of the modifier option as it appears on kitchen tickets. The `kitchenName` can include both numbers and letters. This value contains an empty string if a kitchen name has not been configured for the modifier option. ", alias="kitchenName")
+    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this modifier option's item reference, assigned by the Toast POS system. ")
+    multi_location_id: Optional[StrictStr] = Field(default=None, description="An identifier that is used to identify and consolidate menu entities that are versions of each other.  `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.  Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.  You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations. ", alias="multiLocationId")
+    master_id: Optional[StrictInt] = Field(default=None, description="This value is deprecated. Instead of `masterId`, use `multiLocationId`.  An identifier that is used to identify and consolidate menu entities that are versions of each other. ", alias="masterId")
+    description: Optional[StrictStr] = Field(default=None, description="An optional short description of this modifier option. ")
+    pos_name: Optional[StrictStr] = Field(default=None, description="The button label name that appears for this menu entity in the Toast POS app. `posName` contains an empty string if a `posName` has not been defined for the menu entity and the `name` value is used for the button label instead. ", alias="posName")
+    pos_button_color_light: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in light mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorLight` contains the HEX code for the light mode color. ", alias="posButtonColorLight")
+    pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
+    prep_stations: Optional[List[StrictStr]] = Field(default=None, description="An array of GUIDs for the prep stations that have been assigned to this modifier option. ", alias="prepStations")
+    image: Optional[Image] = None
+    visibility: Optional[Visibility] = None
+    price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of this modifier option.  In Toast Web, a modifier option may:   * Inherit its price from a parent modifier group.   * Use the price specified for its modifier option item reference.   * Specify a price that overrides the price defined for its item reference.  The `price` value is populated differently depending on which of these pricing scenarios is used for the modifier option. ")
+    pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that indicates how this modifier option has been priced. If `pricingStrategy` is:   * GROUP_PRICE, then the modifier option inherits its price from a parent modifier group.   * Any value other than GROUP_PRICE, then the modifier option is using either the price specified for its item reference or an override price. ", alias="pricingStrategy")
+    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, description="A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used. ", alias="pricingRules")
+    sales_category: Optional[SalesCategory] = Field(default=None, alias="salesCategory")
+    tax_info: Optional[List[StrictStr]] = Field(default=None, description="The `taxInfo` value on the `ModifierOption` object has been deprecated. Your integration should switch to using the `modifierOptionTaxInfo` value instead. ", alias="taxInfo")
+    modifier_option_tax_info: Optional[ModifierOptionTaxInfo] = Field(default=None, alias="modifierOptionTaxInfo")
+    item_tags: Optional[List[ItemTag]] = Field(default=None, description="An array of `ItemTag` objects that are assigned to this modifier option. Item tags are used to assign identifying characteristics to a modifier option, for example, vegetarian, gluten-free, alcohol. ", alias="itemTags")
+    plu: Optional[StrictStr] = Field(default=None, description="The price lookup (PLU) code for this modifier option. The PLU code can contain both numbers and letters. This value contains an empty string if a PLU code has not been defined. ")
+    sku: Optional[StrictStr] = Field(default=None, description="The stock keeping unit (SKU) identifier for this modifier option. The SKU identifier can contain both numbers and letters. This value contains an empty string if a SKU has not been defined. ")
+    calories: Optional[StrictInt] = Field(default=None, description="The number of calories in this modifier option. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the modifier option. ")
+    content_advisories: Optional[Dict[str, Any]] = Field(default=None, description="Content advisory information for menu items and modifier options. ", alias="contentAdvisories")
+    unit_of_measure: Optional[StrictStr] = Field(default=None, description="The unit of measure used to determine the price of the modifier option. For example, $10.00 per gram. ", alias="unitOfMeasure")
+    is_default: Optional[StrictBool] = Field(default=None, description="Indicates whether this modifier option is included on the menu item by default. ", alias="isDefault")
+    allows_duplicates: Optional[StrictBool] = Field(default=None, description="Indicates whether the modifier option may be added to a menu item multiple times. ", alias="allowsDuplicates")
+    portions: Optional[Annotated[List[Portion], Field(min_length=0)]] = Field(default=None, description="An array of `Portion` objects that define the portions that this modifier option can be added to. ")
+    prep_time: Optional[StrictInt] = Field(default=None, description="The amount of time, in seconds, that it takes to prepare this modifier option. This value is null if a prep time has not been specified for the modifier option. ", alias="prepTime")
+    modifier_group_references: Optional[Annotated[List[StrictInt], Field(min_length=0)]] = Field(default=None, description="An array of `referenceId`s for `ModifierGroup` objects. These objects define nested modifier groups contained in this modifier option. ", alias="modifierGroupReferences")
+    __properties: ClassVar[List[str]] = ["referenceId", "name", "kitchenName", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "prepStations", "image", "visibility", "price", "pricingStrategy", "pricingRules", "salesCategory", "taxInfo", "modifierOptionTaxInfo", "itemTags", "plu", "sku", "calories", "contentAdvisories", "unitOfMeasure", "isDefault", "allowsDuplicates", "portions", "prepTime", "modifierGroupReferences"]
+
+    @field_validator('unit_of_measure')
+    def unit_of_measure_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['NONE', 'LB', 'OZ', 'KG', 'G']):
+            raise ValueError("must be one of enum values ('NONE', 'LB', 'OZ', 'KG', 'G')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -71,6 +114,44 @@ class ModifierOption(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of image
+        if self.image:
+            _dict['image'] = self.image.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of sales_category
+        if self.sales_category:
+            _dict['salesCategory'] = self.sales_category.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of modifier_option_tax_info
+        if self.modifier_option_tax_info:
+            _dict['modifierOptionTaxInfo'] = self.modifier_option_tax_info.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in item_tags (list)
+        _items = []
+        if self.item_tags:
+            for _item_item_tags in self.item_tags:
+                if _item_item_tags:
+                    _items.append(_item_item_tags.to_dict())
+            _dict['itemTags'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in portions (list)
+        _items = []
+        if self.portions:
+            for _item_portions in self.portions:
+                if _item_portions:
+                    _items.append(_item_portions.to_dict())
+            _dict['portions'] = _items
+        # set to None if price (nullable) is None
+        # and model_fields_set contains the field
+        if self.price is None and "price" in self.model_fields_set:
+            _dict['price'] = None
+
+        # set to None if calories (nullable) is None
+        # and model_fields_set contains the field
+        if self.calories is None and "calories" in self.model_fields_set:
+            _dict['calories'] = None
+
+        # set to None if prep_time (nullable) is None
+        # and model_fields_set contains the field
+        if self.prep_time is None and "prep_time" in self.model_fields_set:
+            _dict['prepTime'] = None
+
         return _dict
 
     @classmethod
@@ -83,10 +164,36 @@ class ModifierOption(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid"),
             "referenceId": obj.get("referenceId"),
-            "price": obj.get("price")
+            "name": obj.get("name"),
+            "kitchenName": obj.get("kitchenName"),
+            "guid": obj.get("guid"),
+            "multiLocationId": obj.get("multiLocationId"),
+            "masterId": obj.get("masterId"),
+            "description": obj.get("description"),
+            "posName": obj.get("posName"),
+            "posButtonColorLight": obj.get("posButtonColorLight"),
+            "posButtonColorDark": obj.get("posButtonColorDark"),
+            "prepStations": obj.get("prepStations"),
+            "image": Image.from_dict(obj["image"]) if obj.get("image") is not None else None,
+            "visibility": obj.get("visibility"),
+            "price": obj.get("price"),
+            "pricingStrategy": obj.get("pricingStrategy"),
+            "pricingRules": obj.get("pricingRules"),
+            "salesCategory": SalesCategory.from_dict(obj["salesCategory"]) if obj.get("salesCategory") is not None else None,
+            "taxInfo": obj.get("taxInfo"),
+            "modifierOptionTaxInfo": ModifierOptionTaxInfo.from_dict(obj["modifierOptionTaxInfo"]) if obj.get("modifierOptionTaxInfo") is not None else None,
+            "itemTags": [ItemTag.from_dict(_item) for _item in obj["itemTags"]] if obj.get("itemTags") is not None else None,
+            "plu": obj.get("plu"),
+            "sku": obj.get("sku"),
+            "calories": obj.get("calories"),
+            "contentAdvisories": obj.get("contentAdvisories"),
+            "unitOfMeasure": obj.get("unitOfMeasure"),
+            "isDefault": obj.get("isDefault"),
+            "allowsDuplicates": obj.get("allowsDuplicates"),
+            "portions": [Portion.from_dict(_item) for _item in obj["portions"]] if obj.get("portions") is not None else None,
+            "prepTime": obj.get("prepTime"),
+            "modifierGroupReferences": obj.get("modifierGroupReferences")
         })
         return _obj
 
