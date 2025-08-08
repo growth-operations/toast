@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.12"
+__version__ = "1.0.13"
 
 # Define package exports
 __all__ = [
@@ -58,7 +58,6 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
-    "AlcoholV2",
     "AlternatePaymentType",
     "ApplicableDiscount",
     "ApplicableDiscountsRequest",
@@ -77,7 +76,6 @@ __all__ = [
     "CashDrawer",
     "Check",
     "ConfigReference",
-    "ContentAdvisoriesV2",
     "CurbsidePickupInfo",
     "Customer",
     "DaySchedule",
@@ -86,7 +84,6 @@ __all__ = [
     "DeliveryPaymentOptions",
     "DeliveryServiceInfo",
     "Device",
-    "DimensionUnitOfMeasureV2",
     "DiningOption",
     "Discount",
     "Employee",
@@ -96,8 +93,6 @@ __all__ = [
     "GiftCardInfo",
     "Hours",
     "Image",
-    "ImagesV2",
-    "ItemTagV2",
     "Job",
     "JobWageOverride",
     "Location",
@@ -105,18 +100,10 @@ __all__ = [
     "MarketplaceFacilitatorTaxInfo",
     "Menu",
     "MenuGroup",
-    "MenuGroupV2",
     "MenuItem",
-    "MenuItemV2",
-    "MenuItemV2PricingRules",
-    "MenuV2",
-    "MenuV2Availability",
     "Metadata",
-    "MetadataV2",
     "ModifierGroup",
-    "ModifierGroupV2",
     "ModifierOption",
-    "ModifierOptionV2",
     "NoSaleReason",
     "OnlineOrdering",
     "Order",
@@ -125,11 +112,8 @@ __all__ = [
     "Payment",
     "PaymentOptions",
     "PayoutReason",
-    "PortionV2",
     "PreModifier",
     "PreModifierGroup",
-    "PreModifierGroupV2",
-    "PreModifierV2",
     "PrepTimes",
     "PriceGroup",
     "Printer",
@@ -142,37 +126,30 @@ __all__ = [
     "RestaurantModifierOptionReferences",
     "RestaurantPreModifierGroupReferences",
     "RestaurantService",
-    "RestaurantV2",
     "RevenueCenter",
     "SalesCategory",
-    "SalesCategoryV2",
-    "ScheduleV2",
     "Schedules",
     "Selection",
-    "SequencePriceV2",
     "Service",
     "ServiceArea",
     "ServiceCharge",
     "ServiceChargeCriteria",
     "Shift",
-    "SizeSequencePricingRuleV2",
     "Table",
     "TakeoutPaymentOptions",
     "TaxRate",
     "TimeEntry",
     "TimeEntryBreak",
-    "TimeRangeV2",
-    "TimeSpecificPriceV2",
     "TipWithholding",
     "ToastReference",
     "URLs",
     "UpdatePaymentRequest",
+    "Visibility",
     "VoidInformation",
     "VoidOrderRequest",
     "VoidOrderRequestSelections",
     "VoidReason",
     "WeekSchedule",
-    "WeightUnitOfMeasureV2",
 ]
 
 # import apis into sdk package
@@ -220,7 +197,6 @@ from toastapi.exceptions import ApiAttributeError as ApiAttributeError
 from toastapi.exceptions import ApiException as ApiException
 
 # import models into sdk package
-from toastapi.models.alcohol_v2 import AlcoholV2 as AlcoholV2
 from toastapi.models.alternate_payment_type import AlternatePaymentType as AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount as ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest as ApplicableDiscountsRequest
@@ -239,7 +215,6 @@ from toastapi.models.break_type import BreakType as BreakType
 from toastapi.models.cash_drawer import CashDrawer as CashDrawer
 from toastapi.models.check import Check as Check
 from toastapi.models.config_reference import ConfigReference as ConfigReference
-from toastapi.models.content_advisories_v2 import ContentAdvisoriesV2 as ContentAdvisoriesV2
 from toastapi.models.curbside_pickup_info import CurbsidePickupInfo as CurbsidePickupInfo
 from toastapi.models.customer import Customer as Customer
 from toastapi.models.day_schedule import DaySchedule as DaySchedule
@@ -248,7 +223,6 @@ from toastapi.models.delivery_info import DeliveryInfo as DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions as DeliveryPaymentOptions
 from toastapi.models.delivery_service_info import DeliveryServiceInfo as DeliveryServiceInfo
 from toastapi.models.device import Device as Device
-from toastapi.models.dimension_unit_of_measure_v2 import DimensionUnitOfMeasureV2 as DimensionUnitOfMeasureV2
 from toastapi.models.dining_option import DiningOption as DiningOption
 from toastapi.models.discount import Discount as Discount
 from toastapi.models.employee import Employee as Employee
@@ -258,8 +232,6 @@ from toastapi.models.general import General as General
 from toastapi.models.gift_card_info import GiftCardInfo as GiftCardInfo
 from toastapi.models.hours import Hours as Hours
 from toastapi.models.image import Image as Image
-from toastapi.models.images_v2 import ImagesV2 as ImagesV2
-from toastapi.models.item_tag_v2 import ItemTagV2 as ItemTagV2
 from toastapi.models.job import Job as Job
 from toastapi.models.job_wage_override import JobWageOverride as JobWageOverride
 from toastapi.models.location import Location as Location
@@ -267,18 +239,10 @@ from toastapi.models.loyalty_details import LoyaltyDetails as LoyaltyDetails
 from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilitatorTaxInfo as MarketplaceFacilitatorTaxInfo
 from toastapi.models.menu import Menu as Menu
 from toastapi.models.menu_group import MenuGroup as MenuGroup
-from toastapi.models.menu_group_v2 import MenuGroupV2 as MenuGroupV2
 from toastapi.models.menu_item import MenuItem as MenuItem
-from toastapi.models.menu_item_v2 import MenuItemV2 as MenuItemV2
-from toastapi.models.menu_item_v2_pricing_rules import MenuItemV2PricingRules as MenuItemV2PricingRules
-from toastapi.models.menu_v2 import MenuV2 as MenuV2
-from toastapi.models.menu_v2_availability import MenuV2Availability as MenuV2Availability
 from toastapi.models.metadata import Metadata as Metadata
-from toastapi.models.metadata_v2 import MetadataV2 as MetadataV2
 from toastapi.models.modifier_group import ModifierGroup as ModifierGroup
-from toastapi.models.modifier_group_v2 import ModifierGroupV2 as ModifierGroupV2
 from toastapi.models.modifier_option import ModifierOption as ModifierOption
-from toastapi.models.modifier_option_v2 import ModifierOptionV2 as ModifierOptionV2
 from toastapi.models.no_sale_reason import NoSaleReason as NoSaleReason
 from toastapi.models.online_ordering import OnlineOrdering as OnlineOrdering
 from toastapi.models.order import Order as Order
@@ -287,11 +251,8 @@ from toastapi.models.orders_order_guid_delivery_info_patch_request import Orders
 from toastapi.models.payment import Payment as Payment
 from toastapi.models.payment_options import PaymentOptions as PaymentOptions
 from toastapi.models.payout_reason import PayoutReason as PayoutReason
-from toastapi.models.portion_v2 import PortionV2 as PortionV2
 from toastapi.models.pre_modifier import PreModifier as PreModifier
 from toastapi.models.pre_modifier_group import PreModifierGroup as PreModifierGroup
-from toastapi.models.pre_modifier_group_v2 import PreModifierGroupV2 as PreModifierGroupV2
-from toastapi.models.pre_modifier_v2 import PreModifierV2 as PreModifierV2
 from toastapi.models.prep_times import PrepTimes as PrepTimes
 from toastapi.models.price_group import PriceGroup as PriceGroup
 from toastapi.models.printer import Printer as Printer
@@ -304,34 +265,27 @@ from toastapi.models.restaurant_modifier_group_references import RestaurantModif
 from toastapi.models.restaurant_modifier_option_references import RestaurantModifierOptionReferences as RestaurantModifierOptionReferences
 from toastapi.models.restaurant_pre_modifier_group_references import RestaurantPreModifierGroupReferences as RestaurantPreModifierGroupReferences
 from toastapi.models.restaurant_service import RestaurantService as RestaurantService
-from toastapi.models.restaurant_v2 import RestaurantV2 as RestaurantV2
 from toastapi.models.revenue_center import RevenueCenter as RevenueCenter
 from toastapi.models.sales_category import SalesCategory as SalesCategory
-from toastapi.models.sales_category_v2 import SalesCategoryV2 as SalesCategoryV2
-from toastapi.models.schedule_v2 import ScheduleV2 as ScheduleV2
 from toastapi.models.schedules import Schedules as Schedules
 from toastapi.models.selection import Selection as Selection
-from toastapi.models.sequence_price_v2 import SequencePriceV2 as SequencePriceV2
 from toastapi.models.service import Service as Service
 from toastapi.models.service_area import ServiceArea as ServiceArea
 from toastapi.models.service_charge import ServiceCharge as ServiceCharge
 from toastapi.models.service_charge_criteria import ServiceChargeCriteria as ServiceChargeCriteria
 from toastapi.models.shift import Shift as Shift
-from toastapi.models.size_sequence_pricing_rule_v2 import SizeSequencePricingRuleV2 as SizeSequencePricingRuleV2
 from toastapi.models.table import Table as Table
 from toastapi.models.takeout_payment_options import TakeoutPaymentOptions as TakeoutPaymentOptions
 from toastapi.models.tax_rate import TaxRate as TaxRate
 from toastapi.models.time_entry import TimeEntry as TimeEntry
 from toastapi.models.time_entry_break import TimeEntryBreak as TimeEntryBreak
-from toastapi.models.time_range_v2 import TimeRangeV2 as TimeRangeV2
-from toastapi.models.time_specific_price_v2 import TimeSpecificPriceV2 as TimeSpecificPriceV2
 from toastapi.models.tip_withholding import TipWithholding as TipWithholding
 from toastapi.models.toast_reference import ToastReference as ToastReference
 from toastapi.models.urls import URLs as URLs
 from toastapi.models.update_payment_request import UpdatePaymentRequest as UpdatePaymentRequest
+from toastapi.models.visibility import Visibility as Visibility
 from toastapi.models.void_information import VoidInformation as VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest as VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections as VoidOrderRequestSelections
 from toastapi.models.void_reason import VoidReason as VoidReason
 from toastapi.models.week_schedule import WeekSchedule as WeekSchedule
-from toastapi.models.weight_unit_of_measure_v2 import WeightUnitOfMeasureV2 as WeightUnitOfMeasureV2

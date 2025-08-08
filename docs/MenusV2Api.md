@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **menus_v2_get**
-> RestaurantV2 menus_v2_get(toast_restaurant_external_id)
+> Restaurant menus_v2_get(toast_restaurant_external_id)
 
 Get menus (V2)
 
@@ -24,7 +24,7 @@ _Important:_ Ordering integrations should use menus API V3. Other integration ty
 
 ```python
 import toastapi
-from toastapi.models.restaurant_v2 import RestaurantV2
+from toastapi.models.restaurant import Restaurant
 from toastapi.rest import ApiException
 from pprint import pprint
 
@@ -67,7 +67,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RestaurantV2**](RestaurantV2.md)
+[**Restaurant**](Restaurant.md)
 
 ### Authorization
 
@@ -89,7 +89,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **menus_v2_metadata_get**
-> MetadataV2 menus_v2_metadata_get(toast_restaurant_external_id)
+> Metadata menus_v2_metadata_get(toast_restaurant_external_id)
 
 Get menu last modified timestamp (V2)
 
@@ -102,7 +102,7 @@ A lightweight endpoint that allows you to determine if a restaurant's menu data 
 
 ```python
 import toastapi
-from toastapi.models.metadata_v2 import MetadataV2
+from toastapi.models.metadata import Metadata
 from toastapi.rest import ApiException
 from pprint import pprint
 
@@ -145,7 +145,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**MetadataV2**](MetadataV2.md)
+[**Metadata**](Metadata.md)
 
 ### Authorization
 

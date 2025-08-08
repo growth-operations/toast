@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from toastapi.models.pre_modifier import PreModifier
 from typing import Optional, Set
@@ -25,13 +25,13 @@ from typing_extensions import Self
 
 class PreModifierGroup(BaseModel):
     """
-    Information about a pre-modifier group configured for this restaurant. 
+    Information about a pre-modifier group configured for this restaurant, including an array of pre-modifiers contained in the group. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this pre-modifier group. ")
+    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this pre-modifier group, for example, \"Sandwich Pre-mods\". ")
     guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this pre-modifier group, assigned by the Toast POS system. ")
-    reference_id: Optional[StrictInt] = Field(default=None, description="A reference identifier for this pre-modifier group. ", alias="referenceId")
-    pre_modifiers: Optional[List[PreModifier]] = Field(default=None, description="An array of pre-modifier options in this group. ", alias="preModifiers")
-    __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "preModifiers"]
+    multi_location_id: Optional[StrictStr] = Field(default=None, description="An identifier that is used to identify and consolidate menu entities that are versions of each other.  `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.  Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.  You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations. ", alias="multiLocationId")
+    pre_modifiers: Optional[List[PreModifier]] = Field(default=None, description="An array of `PreModifier` objects that are contained in this pre-modifier group. Pre-modifiers alter the display of modifier options on receipts and tickets to satisfy guest requests such as EXTRA or ON THE SIDE for modifier options. Pre-modifiers can also be configured to modify the cost of the modifier options they are applied to, for example, by charging more for an EXTRA serving of a modifier option. ", alias="preModifiers")
+    __properties: ClassVar[List[str]] = ["name", "guid", "multiLocationId", "preModifiers"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -93,7 +93,7 @@ class PreModifierGroup(BaseModel):
         _obj = cls.model_validate({
             "name": obj.get("name"),
             "guid": obj.get("guid"),
-            "referenceId": obj.get("referenceId"),
+            "multiLocationId": obj.get("multiLocationId"),
             "preModifiers": [PreModifier.from_dict(_item) for _item in obj["preModifiers"]] if obj.get("preModifiers") is not None else None
         })
         return _obj

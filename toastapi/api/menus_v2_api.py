@@ -18,8 +18,8 @@ from typing_extensions import Annotated
 
 from pydantic import Field, StrictStr
 from typing_extensions import Annotated
-from toastapi.models.metadata_v2 import MetadataV2
-from toastapi.models.restaurant_v2 import RestaurantV2
+from toastapi.models.metadata import Metadata
+from toastapi.models.restaurant import Restaurant
 
 from toastapi.api_client import ApiClient, RequestSerialized
 from toastapi.api_response import ApiResponse
@@ -55,7 +55,7 @@ class MenusV2Api:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RestaurantV2:
+    ) -> Restaurant:
         """Get menus (V2)
 
         Get menus  _Important:_ Ordering integrations should use menus API V3. Other integration types should continue to use menus API V2 until further notice. See <a href=\"https://doc.toasttab.com/doc/devguide/apiComparingMenusAPIV2AndV3.html\">Comparing menus API V2 and V3</a> for more information. 
@@ -93,7 +93,7 @@ class MenusV2Api:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "RestaurantV2",
+            '200': "Restaurant",
             '404': None,
             '503': None,
         }
@@ -124,7 +124,7 @@ class MenusV2Api:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[RestaurantV2]:
+    ) -> ApiResponse[Restaurant]:
         """Get menus (V2)
 
         Get menus  _Important:_ Ordering integrations should use menus API V3. Other integration types should continue to use menus API V2 until further notice. See <a href=\"https://doc.toasttab.com/doc/devguide/apiComparingMenusAPIV2AndV3.html\">Comparing menus API V2 and V3</a> for more information. 
@@ -162,7 +162,7 @@ class MenusV2Api:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "RestaurantV2",
+            '200': "Restaurant",
             '404': None,
             '503': None,
         }
@@ -231,7 +231,7 @@ class MenusV2Api:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "RestaurantV2",
+            '200': "Restaurant",
             '404': None,
             '503': None,
         }
@@ -322,7 +322,7 @@ class MenusV2Api:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> MetadataV2:
+    ) -> Metadata:
         """Get menu last modified timestamp (V2)
 
         A lightweight endpoint that allows you to determine if a restaurant's menu data has been updated. Toast support strongly recommends that you do not make a call to the `/menus` endpoint unless the date and time returned by the `/metadata` endpoint is more recent than the `lastUpdated` date and time. While this recommendation applies to all clients of the menus API, it is particularly important for clients that have limited bandwidth. 
@@ -360,7 +360,7 @@ class MenusV2Api:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "MetadataV2",
+            '200': "Metadata",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -389,7 +389,7 @@ class MenusV2Api:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[MetadataV2]:
+    ) -> ApiResponse[Metadata]:
         """Get menu last modified timestamp (V2)
 
         A lightweight endpoint that allows you to determine if a restaurant's menu data has been updated. Toast support strongly recommends that you do not make a call to the `/menus` endpoint unless the date and time returned by the `/metadata` endpoint is more recent than the `lastUpdated` date and time. While this recommendation applies to all clients of the menus API, it is particularly important for clients that have limited bandwidth. 
@@ -427,7 +427,7 @@ class MenusV2Api:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "MetadataV2",
+            '200': "Metadata",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -494,7 +494,7 @@ class MenusV2Api:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "MetadataV2",
+            '200': "Metadata",
         }
         response_data = await self.api_client.call_api(
             *_param,

@@ -24,13 +24,15 @@ from typing_extensions import Self
 
 class PreModifier(BaseModel):
     """
-    Information about a pre-modifier option configured for this restaurant. 
+    Information about a pre-modifier configured for this restaurant. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this pre-modifier option. ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this pre-modifier option, assigned by the Toast POS system. ")
-    fixed_price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The fixed price of this pre-modifier option. ", alias="fixedPrice")
+    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this pre-modifier, for example, \"NO\" or \"EXTRA\". ")
+    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this pre-modifier group, assigned by the Toast POS system. ")
+    multi_location_id: Optional[StrictStr] = Field(default=None, description="An identifier that is used to identify and consolidate menu entities that are versions of each other.  `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.  Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.  You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations. ", alias="multiLocationId")
+    fixed_price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="An optional fixed price for this pre-modifier. The fixed price is added to the cost of the modifier option that the pre-modifier is applied to.  A PreModifier object has two optional values, `fixedPrice` and `multiplicationFactor`, that both alter the price of a modifier option when the pre-modifier is applied to it. However, these values cannot be used at the same time. If you specify a `fixedPrice` value for a premodifier, then `multiplicationFactor` is null. If you specify a `multiplicationFactor` for a pre-modifier, then `fixedPrice` is null. If you choose not to assign either a fixed price or a multiplication factor to a pre-modifier, then the `fixedPrice` value is 0 and the `multiplicationFactor` is null. ", alias="fixedPrice")
+    multiplication_factor: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="An optional number that specifies how much the cost of a modifier option is multiplied by when this pre-modifier is applied to it. For example, an EXTRA pre-modifier option could specify a `multiplicationFactor` of 1.5 to indicate that adding extra cheese to a menu item costs one and a half times the regular price of the cheese modifier option.  A PreModifier object has two optional values, `fixedPrice` and `multiplicationFactor`, that both alter the price of a modifier option when the pre-modifier is applied to it. However, these values cannot be used at the same time. If you specify a `fixedPrice` value for a premodifier, then `multiplicationFactor` is null. If you specify a `multiplicationFactor` for a premodifier, then `fixedPrice` is null. If you choose not to assign either a fixed price or a multiplication factor to a pre-modifier, then the `fixedPrice` value is 0 and the `multiplicationFactor` is null. ", alias="multiplicationFactor")
     display_mode: Optional[StrictStr] = Field(default=None, description="The display mode for this pre-modifier option. ", alias="displayMode")
-    __properties: ClassVar[List[str]] = ["name", "guid", "fixedPrice", "displayMode"]
+    __properties: ClassVar[List[str]] = ["name", "guid", "multiLocationId", "fixedPrice", "multiplicationFactor", "displayMode"]
 
     @field_validator('display_mode')
     def display_mode_validate_enum(cls, value):
@@ -81,6 +83,16 @@ class PreModifier(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if fixed_price (nullable) is None
+        # and model_fields_set contains the field
+        if self.fixed_price is None and "fixed_price" in self.model_fields_set:
+            _dict['fixedPrice'] = None
+
+        # set to None if multiplication_factor (nullable) is None
+        # and model_fields_set contains the field
+        if self.multiplication_factor is None and "multiplication_factor" in self.model_fields_set:
+            _dict['multiplicationFactor'] = None
+
         return _dict
 
     @classmethod
@@ -95,7 +107,9 @@ class PreModifier(BaseModel):
         _obj = cls.model_validate({
             "name": obj.get("name"),
             "guid": obj.get("guid"),
+            "multiLocationId": obj.get("multiLocationId"),
             "fixedPrice": obj.get("fixedPrice"),
+            "multiplicationFactor": obj.get("multiplicationFactor"),
             "displayMode": obj.get("displayMode")
         })
         return _obj

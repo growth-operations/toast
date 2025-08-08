@@ -17,10 +17,12 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from toastapi.models.image import Image
 from toastapi.models.menu_group import MenuGroup
+from toastapi.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,9 +32,18 @@ class Menu(BaseModel):
     """ # noqa: E501
     name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this menu, for example, \"Food\" or \"Drinks\". ")
     guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this menu, assigned by the Toast POS system. ")
+    multi_location_id: Optional[StrictStr] = Field(default=None, description="An identifier that is used to identify and consolidate menu entities that are versions of each other.  `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.  Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.  You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations. ", alias="multiLocationId")
+    master_id: Optional[StrictInt] = Field(default=None, description="This value is deprecated. Instead of `masterId`, use `multiLocationId`.  An identifier that is used to identify and consolidate menu entities that are versions of each other. ", alias="masterId")
     description: Optional[StrictStr] = Field(default=None, description="An optional short description for this menu. ")
+    pos_name: Optional[StrictStr] = Field(default=None, description="The button label name that appears for this menu entity in the Toast POS app. `posName` contains an empty string if a `posName` has not been defined for the menu entity and the `name` value is used for the button label instead. ", alias="posName")
+    pos_button_color_light: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in light mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorLight` contains the HEX code for the light mode color. ", alias="posButtonColorLight")
+    pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
+    high_res_image: Optional[StrictStr] = Field(default=None, description="The URL to a high resolution image that has been uploaded for this menu. The image file must be in JPG, PNG, or SVG format. The `highResImage` value is only available if the Toast Kiosk module has been enabled for this restaurant. This value is null if no high resolution image has been specified. ", alias="highResImage")
+    image: Optional[Image] = None
+    visibility: Optional[Visibility] = None
+    availability: Optional[Dict[str, Any]] = Field(default=None, description="An `Availability` object with information about the days and times a menu entity is available. ")
     menu_groups: Optional[Annotated[List[MenuGroup], Field(min_length=0)]] = Field(default=None, description="An array of the `MenuGroup` objects contained in this menu. ", alias="menuGroups")
-    __properties: ClassVar[List[str]] = ["name", "guid", "description", "menuGroups"]
+    __properties: ClassVar[List[str]] = ["name", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "highResImage", "image", "visibility", "availability", "menuGroups"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -73,6 +84,9 @@ class Menu(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of image
+        if self.image:
+            _dict['image'] = self.image.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in menu_groups (list)
         _items = []
         if self.menu_groups:
@@ -80,6 +94,11 @@ class Menu(BaseModel):
                 if _item_menu_groups:
                     _items.append(_item_menu_groups.to_dict())
             _dict['menuGroups'] = _items
+        # set to None if high_res_image (nullable) is None
+        # and model_fields_set contains the field
+        if self.high_res_image is None and "high_res_image" in self.model_fields_set:
+            _dict['highResImage'] = None
+
         return _dict
 
     @classmethod
@@ -94,7 +113,16 @@ class Menu(BaseModel):
         _obj = cls.model_validate({
             "name": obj.get("name"),
             "guid": obj.get("guid"),
+            "multiLocationId": obj.get("multiLocationId"),
+            "masterId": obj.get("masterId"),
             "description": obj.get("description"),
+            "posName": obj.get("posName"),
+            "posButtonColorLight": obj.get("posButtonColorLight"),
+            "posButtonColorDark": obj.get("posButtonColorDark"),
+            "highResImage": obj.get("highResImage"),
+            "image": Image.from_dict(obj["image"]) if obj.get("image") is not None else None,
+            "visibility": obj.get("visibility"),
+            "availability": obj.get("availability"),
             "menuGroups": [MenuGroup.from_dict(_item) for _item in obj["menuGroups"]] if obj.get("menuGroups") is not None else None
         })
         return _obj

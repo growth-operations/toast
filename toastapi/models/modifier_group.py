@@ -19,18 +19,29 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
+from toastapi.models.modifier_option import ModifierOption
+from toastapi.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
 
 class ModifierGroup(BaseModel):
     """
-    Information about a modifier group configured for this restaurant. 
+    Information about a modifier group configured for this restaurant, including an array of modifier options contained in the group. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this modifier group. ")
+    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this modifier group, for example, \"Pizza Toppings\" or \"Salad Dressings\". ")
     guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this modifier group, assigned by the Toast POS system. ")
-    reference_id: Optional[StrictInt] = Field(default=None, description="A reference identifier for this modifier group. ", alias="referenceId")
-    modifier_option_references: Optional[List[StrictInt]] = Field(default=None, description="An array of reference IDs for the modifier options in this group. ", alias="modifierOptionReferences")
-    __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "modifierOptionReferences"]
+    reference_id: Optional[StrictInt] = Field(default=None, description="An integer identifier that is used to refer to this modifier group by items and portions that use it. ", alias="referenceId")
+    multi_location_id: Optional[StrictStr] = Field(default=None, description="An identifier that is used to identify and consolidate menu entities that are versions of each other.  `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.  Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.  You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations. ", alias="multiLocationId")
+    master_id: Optional[StrictInt] = Field(default=None, description="This value is deprecated. Instead of `masterId`, use `multiLocationId`.  An identifier that is used to identify and consolidate menu entities that are versions of each other. ", alias="masterId")
+    pos_name: Optional[StrictStr] = Field(default=None, description="The button label name that appears for this menu entity in the Toast POS app. `posName` contains an empty string if a `posName` has not been defined for the menu entity and the `name` value is used for the button label instead. ", alias="posName")
+    pos_button_color_light: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in light mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorLight` contains the HEX code for the light mode color. ", alias="posButtonColorLight")
+    pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
+    visibility: Optional[Visibility] = None
+    pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that represents the pricing strategy used for this modifier group.  If there is no additional charge for the modifier options in this group, or if the modifier options in the group are priced individually, then the `pricingStrategy` value is NONE.  If the modifier group is priced at the group level and is using the:   * Fixed Price pricing strategy, then the `pricingStrategy` value is NONE.   * Sequence Price pricing strategy, then the `pricingStrategy` value is SEQUENCE_PRICE.   * Size Price pricing strategy, then the `pricingStrategy` value is SIZE_PRICE.   * Size/Sequence Price pricing strategy, then the `pricingStrategy` value is SIZE_SEQUENCE_PRICE.     If the `pricingStrategy` value is NONE,  then the prices for the modifier options in this group are resolved down to the modifier option level and you can retrieve them from the `price` value of the individual `ModifierOption` objects.  If the `pricingStrategy` value is SIZE_PRICE, SEQUENCE_PRICE, or SIZE_SEQUENCE_PRICE, then you must use the rules provided in _this modifier group's_ `pricingRules` value to calculate the prices for the modifier options in the group. ", alias="pricingStrategy")
+    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, description="A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used. ", alias="pricingRules")
+    modifier_options: Optional[Annotated[List[ModifierOption], Field(min_length=0)]] = Field(default=None, description="An array of `ModifierOption` objects that are contained in this modifier group. Modifier options are the individual selections available to a restaurant guest within a modifier group. For example, the modifier options in a \"Pizza Toppings\" modifier group might be pepperoni, mushrooms, or extra cheese. ", alias="modifierOptions")
+    __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "multiLocationId", "masterId", "posName", "posButtonColorLight", "posButtonColorDark", "visibility", "pricingStrategy", "pricingRules", "modifierOptions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -71,6 +82,13 @@ class ModifierGroup(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in modifier_options (list)
+        _items = []
+        if self.modifier_options:
+            for _item_modifier_options in self.modifier_options:
+                if _item_modifier_options:
+                    _items.append(_item_modifier_options.to_dict())
+            _dict['modifierOptions'] = _items
         return _dict
 
     @classmethod
@@ -86,7 +104,15 @@ class ModifierGroup(BaseModel):
             "name": obj.get("name"),
             "guid": obj.get("guid"),
             "referenceId": obj.get("referenceId"),
-            "modifierOptionReferences": obj.get("modifierOptionReferences")
+            "multiLocationId": obj.get("multiLocationId"),
+            "masterId": obj.get("masterId"),
+            "posName": obj.get("posName"),
+            "posButtonColorLight": obj.get("posButtonColorLight"),
+            "posButtonColorDark": obj.get("posButtonColorDark"),
+            "visibility": obj.get("visibility"),
+            "pricingStrategy": obj.get("pricingStrategy"),
+            "pricingRules": obj.get("pricingRules"),
+            "modifierOptions": [ModifierOption.from_dict(_item) for _item in obj["modifierOptions"]] if obj.get("modifierOptions") is not None else None
         })
         return _obj
 
