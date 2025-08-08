@@ -129,7 +129,6 @@ docs/TipWithholdingApi.md
 docs/ToastReference.md
 docs/URLs.md
 docs/UpdatePaymentRequest.md
-docs/Visibility.md
 docs/VoidInformation.md
 docs/VoidOrderRequest.md
 docs/VoidOrderRequestSelections.md
@@ -278,7 +277,6 @@ toastapi/models/tip_withholding.py
 toastapi/models/toast_reference.py
 toastapi/models/update_payment_request.py
 toastapi/models/urls.py
-toastapi/models/visibility.py
 toastapi/models/void_information.py
 toastapi/models/void_order_request.py
 toastapi/models/void_order_request_selections.py

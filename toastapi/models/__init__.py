@@ -110,7 +110,6 @@ from toastapi.models.tip_withholding import TipWithholding
 from toastapi.models.toast_reference import ToastReference
 from toastapi.models.urls import URLs
 from toastapi.models.update_payment_request import UpdatePaymentRequest
-from toastapi.models.visibility import Visibility
 from toastapi.models.void_information import VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections

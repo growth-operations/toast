@@ -5243,7 +5243,7 @@ components:
               }
             }
             ```
-            
+
             Other menu entities refer to modifier groups using their `referenceId`. Having a key that matches the `referenceId` allows you to locate the correct modifier group in the `modifierGroupReferences` map.
           additionalProperties:
             $ref: "#/components/schemas/ModifierGroup"
@@ -5308,30 +5308,30 @@ components:
             A unique identifier for this menu, assigned by the Toast POS system.
           type: string
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         masterId:
-          $ref: '#/components/schemas/MasterId'
+          $ref: "#/components/schemas/MasterId"
         description:
           description: |
             An optional short description for this menu.
           type: string
         posName:
-          $ref: '#/components/schemas/PosName'
+          $ref: "#/components/schemas/PosName"
         posButtonColorLight:
-          $ref: '#/components/schemas/PosButtonColorLight'
+          $ref: "#/components/schemas/PosButtonColorLight"
         posButtonColorDark:
-          $ref: '#/components/schemas/PosButtonColorDark'
+          $ref: "#/components/schemas/PosButtonColorDark"
         highResImage:
           type: string
           nullable: true
           description: |
             The URL to a high resolution image that has been uploaded for this menu. The image file must be in JPG, PNG, or SVG format. The `highResImage` value is only available if the Toast Kiosk module has been enabled for this restaurant. This value is null if no high resolution image has been specified.
         image:
-          $ref: '#/components/schemas/Image'
+          $ref: "#/components/schemas/Image"
         visibility:
-          $ref: '#/components/schemas/Visibility'
+          $ref: "#/components/schemas/Visibility"
         availability:
-          $ref: '#/components/schemas/Availability'
+          $ref: "#/components/schemas/Availability"
         menuGroups:
           type: array
           description: |
@@ -5353,36 +5353,36 @@ components:
             A unique identifier for this menu group, assigned by the Toast POS system.
           type: string
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         masterId:
-          $ref: '#/components/schemas/MasterId'
+          $ref: "#/components/schemas/MasterId"
         description:
           description: |
             An optional short description of this menu group.
           type: string
         posName:
-          $ref: '#/components/schemas/PosName'
+          $ref: "#/components/schemas/PosName"
         posButtonColorLight:
-          $ref: '#/components/schemas/PosButtonColorLight'
+          $ref: "#/components/schemas/PosButtonColorLight"
         posButtonColorDark:
-          $ref: '#/components/schemas/PosButtonColorDark'
+          $ref: "#/components/schemas/PosButtonColorDark"
         image:
-          $ref: '#/components/schemas/Image'
+          $ref: "#/components/schemas/Image"
         visibility:
-          $ref: '#/components/schemas/Visibility'
+          $ref: "#/components/schemas/Visibility"
         itemTags:
           type: array
           description: |
             An array of `ItemTag` objects that are assigned to this menu group. Item tags are used to assign identifying characteristics, for example, vegetarian, gluten-free, or alcohol.
           items:
-            $ref: '#/components/schemas/ItemTag'
+            $ref: "#/components/schemas/ItemTag"
         menuGroups:
           type: array
           description: |
             An array of the `MenuGroup` objects that are children of this menu group. The array is empty if the menu group has no child menu groups.
           minItems: 0
           items:
-            $ref: '#/components/schemas/MenuGroup'
+            $ref: "#/components/schemas/MenuGroup"
         menuItems:
           type: array
           description: |
@@ -5408,23 +5408,23 @@ components:
             A unique identifier for this menu item, assigned by the Toast POS system.
           type: string
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         masterId:
-          $ref: '#/components/schemas/MasterId'
+          $ref: "#/components/schemas/MasterId"
         description:
           description: |
             An optional short description of this menu item.
           type: string
         posName:
-          $ref: '#/components/schemas/PosName'
+          $ref: "#/components/schemas/PosName"
         posButtonColorLight:
-          $ref: '#/components/schemas/PosButtonColorLight'
+          $ref: "#/components/schemas/PosButtonColorLight"
         posButtonColorDark:
-          $ref: '#/components/schemas/PosButtonColorDark'
+          $ref: "#/components/schemas/PosButtonColorDark"
         image:
-          $ref: '#/components/schemas/Image'
+          $ref: "#/components/schemas/Image"
         visibility:
-          $ref: '#/components/schemas/Visibility'
+          $ref: "#/components/schemas/Visibility"
         price:
           type: number
           format: double
@@ -5462,7 +5462,7 @@ components:
             - OPEN_PRICE
           description: |
             A string that represents the pricing strategy used for this menu item.
-            
+
             You use the `pricingStrategy` value, in conjunction with the `pricingRules` value, to calculate the price for a menu item that uses the Time Specific Price or Size Price pricing strategy.
 
             In Toast Web, menu items may have pricing strategies assigned to them individually, or they may inherit them from a parent menu group. The `pricingStrategy` value indicates the menu item's fully resolved pricing strategy. If the menu item is priced using the:
@@ -5486,7 +5486,7 @@ components:
             A `PricingRules` object with information about how to calculate the price for this menu item. You use a menu item's `pricingRules` value, in conjunction with its `pricingStrategy` value, to calculate a price for a menu item that uses a size-specific or time-specific price.
 
             The `pricingRules` object takes different forms depending on the pricing strategy configured for the menu item. Use the `pricingStrategy` value to determine which pricing strategy has been used so that you can properly interpret the data in the `pricingRules` object. For the BASE_PRICE, and MENU_SPECIFIC_PRICE pricing strategies, the `pricingRules` object is null because you can retrieve the price from the `price` value without additional calculation. For the OPEN_PRICE pricing strategy, the `pricingRules` object is also null (the price of an open menu item is specified when it is ordered). For the TIME_SPECIFIC_PRICE and SIZE_PRICE pricing strategies, the `PricingRules` object contains additional values that you use to calculate the menu item's price.
-          $ref: '#/components/schemas/PricingRules'
+          $ref: "#/components/schemas/PricingRules"
         isDeferred:
           type: boolean
           description: |
@@ -5498,12 +5498,12 @@ components:
 
             **_Important_** The orders API _does not validate_ against the `isDiscountable` value. If you submit an order that applies a discount to a menu item whose `isDiscountable` value is FALSE, the orders API will not fail the order but it will set the discount amount on the menu item to $0.00. If you are using the menus API to build an ordering application, be sure to inspect the `isDiscountable` value of the menu items to ensure that your ordering application does not allow an item to be discounted if its `isDiscountable` value is FALSE.
         salesCategory:
-          $ref: '#/components/schemas/SalesCategory'
+          $ref: "#/components/schemas/SalesCategory"
         taxInfo:
           type: array
           description: |
             An array of GUIDs for the tax rates that apply to this menu item.
-            
+
             Note that a menu item's tax rates may get overridden if a modifier option is applied to it and that modifier option is configured so that it overrides its parent menu item's tax rates. See <a href="https://doc.toasttab.com/doc/devguide/apiUsingTaxInfoAndModifierOptionTaxInfoToCalculateTaxesForMenuItemsAndModOptions.html">Using taxInfo and modifierOptionTaxInfo to calculate taxes for menu items and modifier options</a> in the Toast Developer Guide for more information.   
                       
             To retrieve full configuration data for a tax rate, use the `/taxRates/{guid}` endpoint in the configuration API.
@@ -5519,20 +5519,20 @@ components:
             - SMART_TAX
           description: |
             A string that represents the tax inclusion setting for this menu item. Possible values include:
-            
+
             * `TAX_INCLUDED`: The menu item's price includes taxes. You should not display additional tax on top of the menu item price in your ordering UI.
             * `TAX_NOT_INCLUDED`: The menu item's price does not include taxes. You should display tax values alongside the menu item price in your ordering UI.
             * `SMART_TAX`: The menu item is using smart tax, a feature that allows a restaurant to configure menu item prices to include or not include taxes, depending on the section of the restaurant that the item is ordered in (for example, the bar or the dining room). For example, a guest can order an item at either the bar or in the main dining room. To prevent bartenders from having to handle coins, which can slow down service, and to make tipping easier, the restaurant wants the price of the item to be a whole number that includes tax when it is ordered at the bar. In the main dining room, where speed of service is less of a concern, the restaurant doesn't want the item's price to include tax, so that it doesn't lose out on the extra revenue.
-            
+
             Typically, the smart tax setting is used for in-store workflows where the efficiency of money handling is a priority. As such, it doesn't apply to online ordering integrations. If a menu item's `taxInclusion` value is set to `SMART_TAX`, your ordering integration should treat the menu item as if tax is not included. For more information on the smart tax feature, see <a href="https://doc.toasttab.com/doc/platformguide/adminSmartTax.html">Smart tax</a> in the Toast Platform Guide.
-            
+
             _Note:_ A menu item's tax inclusion setting is inherited by any modifiers that are applied to that menu item. For more information, see <a href="https://doc.toasttab.com/doc/platformguide/adminTaxesOnModifiers.html#adminModifierTaxInteraction">Tax functionality interaction</a> in the Toast Platform Guide.
         itemTags:
           type: array
           description: |
             An array of `ItemTag` objects that are assigned to this menu item. Item tags are used to assign identifying characteristics to a menu item, for example, vegetarian, gluten-free, or alcohol.
           items:
-            $ref: '#/components/schemas/ItemTag'
+            $ref: "#/components/schemas/ItemTag"
         plu:
           type: string
           description: |
@@ -5547,7 +5547,7 @@ components:
           description: |
             The number of calories in this menu item. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the menu item.
         contentAdvisories:
-          $ref: '#/components/schemas/ContentAdvisories'
+          $ref: "#/components/schemas/ContentAdvisories"
         unitOfMeasure:
           type: string
           enum:
@@ -5564,7 +5564,7 @@ components:
             An array of `Portion` objects that define the portions that can be used with this menu item. For example, for a pizza menu item, you could define 1st Half and 2nd Half portions. See <a href="https://doc.toasttab.com/doc/platformguide/adminPortionsOverview.html">Portions overview</a> in the Toast Platform Guide for more information on portions.
           minItems: 0
           items:
-            $ref: '#/components/schemas/Portion'    
+            $ref: "#/components/schemas/Portion"
         prepTime:
           type: integer
           format: int32
@@ -5594,29 +5594,29 @@ components:
           type: array
           description: |
             An array of strings that indicate which payment assistance programs may be used to pay for this menu item. Possible values include:
-            
+
             * `SNAP`: Supplemental Nutrition Assistance Program
             * `EBT_CASH`: Electronic Benefit Transfer Cash
-            
+
             The array is empty if no payment assistance programs have been assigned to the menu item.
           items:
             type: string
         length:
-          $ref: '#/components/schemas/Length'
+          $ref: "#/components/schemas/Length"
         height:
-          $ref: '#/components/schemas/Height'
+          $ref: "#/components/schemas/Height"
         width:
-          $ref: '#/components/schemas/Width'
+          $ref: "#/components/schemas/Width"
         dimensionUnitOfMeasure:
-          $ref: '#/components/schemas/DimensionUnitOfMeasure'
+          $ref: "#/components/schemas/DimensionUnitOfMeasure"
         weight:
-          $ref: '#/components/schemas/Weight'
+          $ref: "#/components/schemas/Weight"
         weightUnitOfMeasure:
-          $ref: '#/components/schemas/WeightUnitOfMeasure'
+          $ref: "#/components/schemas/WeightUnitOfMeasure"
         images:
-          $ref: '#/components/schemas/Images'
+          $ref: "#/components/schemas/Images"
         guestCount:
-          $ref: '#/components/schemas/GuestCount'
+          $ref: "#/components/schemas/GuestCount"
     ModifierGroup:
       type: object
       description: |
@@ -5635,19 +5635,19 @@ components:
             An integer identifier that is used to refer to this modifier group by items and portions that use it.
           type: integer
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         masterId:
-          $ref: '#/components/schemas/MasterId'
+          $ref: "#/components/schemas/MasterId"
         posName:
-          $ref: '#/components/schemas/PosName'
+          $ref: "#/components/schemas/PosName"
         posButtonColorLight:
-          $ref: '#/components/schemas/PosButtonColorLight'
+          $ref: "#/components/schemas/PosButtonColorLight"
         posButtonColorDark:
-          $ref: '#/components/schemas/PosButtonColorDark'
+          $ref: "#/components/schemas/PosButtonColorDark"
         visibility:
-          $ref: '#/components/schemas/Visibility'
+          $ref: "#/components/schemas/Visibility"
         pricingStrategy:
-          type: 'string'
+          type: "string"
           description: |
             A string that represents the pricing strategy used for this modifier group.
 
@@ -5661,14 +5661,14 @@ components:
 
               
             If the `pricingStrategy` value is NONE,  then the prices for the modifier options in this group are resolved down to the modifier option level and you can retrieve them from the `price` value of the individual `ModifierOption` objects.
-            
+
             If the `pricingStrategy` value is SIZE_PRICE, SEQUENCE_PRICE, or SIZE_SEQUENCE_PRICE, then you must use the rules provided in _this modifier group's_ `pricingRules` value to calculate the prices for the modifier options in the group.
         pricingRules:
           type: object
           nullable: true
           description: |
             A `PricingRules` object with information for calculating the prices for the modifier options contained in this modifier group. You use a modifier group's `pricingRules` object, in conjunction with its `pricingStrategy` value, to calculate prices for the group's modifier options when the group uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy.
-          $ref: '#/components/schemas/PricingRules'
+          $ref: "#/components/schemas/PricingRules"
         defaultOptionsChargePrice:
           description: |
             Indicates whether the prices associated with any default modifiers in this group are added to the cost of the menu items they modify.
@@ -5678,15 +5678,15 @@ components:
               * YES: The default modifier price is added to the menu item price. YES is the default setting for `defaultOptionsChargePrice`.
           type: string
           enum:
-            - NO
-            - YES
+            - "NO"
+            - "YES"
         defaultOptionsSubstitutionPricing:
           description: |
             Indicates whether substitution pricing is enabled for the modifier group.
           type: string
           enum:
-            - NO
-            - YES
+            - "NO"
+            - "YES"
         minSelections:
           type: integer
           description: |
@@ -5746,19 +5746,19 @@ components:
             A unique identifier for this modifier option's item reference, assigned by the Toast POS system.
           type: string
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         masterId:
-          $ref: '#/components/schemas/MasterId'
+          $ref: "#/components/schemas/MasterId"
         description:
           description: |
             An optional short description of this modifier option.
           type: string
         posName:
-          $ref: '#/components/schemas/PosName'
+          $ref: "#/components/schemas/PosName"
         posButtonColorLight:
-          $ref: '#/components/schemas/PosButtonColorLight'
+          $ref: "#/components/schemas/PosButtonColorLight"
         posButtonColorDark:
-          $ref: '#/components/schemas/PosButtonColorDark'
+          $ref: "#/components/schemas/PosButtonColorDark"
         prepStations:
           type: array
           description: |
@@ -5766,16 +5766,16 @@ components:
           items:
             type: string
         image:
-          $ref: '#/components/schemas/Image'
+          $ref: "#/components/schemas/Image"
         visibility:
-          $ref: '#/components/schemas/Visibility'
+          $ref: "#/components/schemas/Visibility"
         price:
           type: number
           format: double
           nullable: true
           description: |
             The price of this modifier option.
-            
+
             In Toast Web, a modifier option may:
               * Inherit its price from a parent modifier group.
               * Use the price specified for its modifier option item reference.
@@ -5793,23 +5793,23 @@ components:
           nullable: true
           description: |
             A `PricingRules` object with information about how to calculate the price for this modifier option.
-          $ref: '#/components/schemas/PricingRules'
+          $ref: "#/components/schemas/PricingRules"
         salesCategory:
-          $ref: '#/components/schemas/SalesCategory'
+          $ref: "#/components/schemas/SalesCategory"
         taxInfo:
           type: array
-          description: |              
+          description: |
             The `taxInfo` value on the `ModifierOption` object has been deprecated. Your integration should switch to using the `modifierOptionTaxInfo` value instead.
           items:
             type: string
         modifierOptionTaxInfo:
-          $ref: '#/components/schemas/ModifierOptionTaxInfo'
+          $ref: "#/components/schemas/ModifierOptionTaxInfo"
         itemTags:
           type: array
           description: |
             An array of `ItemTag` objects that are assigned to this modifier option. Item tags are used to assign identifying characteristics to a modifier option, for example, vegetarian, gluten-free, alcohol.
           items:
-            $ref: '#/components/schemas/ItemTag'
+            $ref: "#/components/schemas/ItemTag"
         plu:
           type: string
           description: |
@@ -5824,7 +5824,7 @@ components:
           description: |
             The number of calories in this modifier option. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the modifier option.
         contentAdvisories:
-          $ref: '#/components/schemas/ContentAdvisories'
+          $ref: "#/components/schemas/ContentAdvisories"
         unitOfMeasure:
           type: string
           enum:
@@ -5849,7 +5849,7 @@ components:
             An array of `Portion` objects that define the portions that this modifier option can be added to.
           minItems: 0
           items:
-            $ref: '#/components/schemas/Portion'
+            $ref: "#/components/schemas/Portion"
         prepTime:
           type: integer
           format: int32
@@ -5864,21 +5864,21 @@ components:
           items:
             type: integer
         length:
-          $ref: '#/components/schemas/Length'
+          $ref: "#/components/schemas/Length"
         height:
-          $ref: '#/components/schemas/Height'
+          $ref: "#/components/schemas/Height"
         width:
-          $ref: '#/components/schemas/Width'
+          $ref: "#/components/schemas/Width"
         dimensionUnitOfMeasure:
-          $ref: '#/components/schemas/DimensionUnitOfMeasure'
+          $ref: "#/components/schemas/DimensionUnitOfMeasure"
         weight:
-          $ref: '#/components/schemas/Weight'
+          $ref: "#/components/schemas/Weight"
         weightUnitOfMeasure:
-          $ref: '#/components/schemas/WeightUnitOfMeasure'
+          $ref: "#/components/schemas/WeightUnitOfMeasure"
         images:
-          $ref: '#/components/schemas/Images'
+          $ref: "#/components/schemas/Images"
         guestCount:
-          $ref: '#/components/schemas/GuestCount'
+          $ref: "#/components/schemas/GuestCount"
     PreModifierGroup:
       type: object
       description: |
@@ -5893,13 +5893,13 @@ components:
             A unique identifier for this pre-modifier group, assigned by the Toast POS system.
           type: string
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         preModifiers:
           description: |
             An array of `PreModifier` objects that are contained in this pre-modifier group. Pre-modifiers alter the display of modifier options on receipts and tickets to satisfy guest requests such as EXTRA or ON THE SIDE for modifier options. Pre-modifiers can also be configured to modify the cost of the modifier options they are applied to, for example, by charging more for an EXTRA serving of a modifier option.
           type: array
           items:
-            $ref: '#/components/schemas/PreModifier'
+            $ref: "#/components/schemas/PreModifier"
     PreModifier:
       type: object
       description: |
@@ -5914,11 +5914,11 @@ components:
             A unique identifier for this pre-modifier group, assigned by the Toast POS system.
           type: string
         multiLocationId:
-          $ref: '#/components/schemas/MultiLocationId'
+          $ref: "#/components/schemas/MultiLocationId"
         fixedPrice:
           description: |
             An optional fixed price for this pre-modifier. The fixed price is added to the cost of the modifier option that the pre-modifier is applied to.
-            
+
             A PreModifier object has two optional values, `fixedPrice` and `multiplicationFactor`, that both alter the price of a modifier option when the pre-modifier is applied to it. However, these values cannot be used at the same time. If you specify a `fixedPrice` value for a premodifier, then `multiplicationFactor` is null. If you specify a `multiplicationFactor` for a pre-modifier, then `fixedPrice` is null. If you choose not to assign either a fixed price or a multiplication factor to a pre-modifier, then the `fixedPrice` value is 0 and the `multiplicationFactor` is null.
           type: number
           format: double
@@ -5926,7 +5926,7 @@ components:
         multiplicationFactor:
           description: |
             An optional number that specifies how much the cost of a modifier option is multiplied by when this pre-modifier is applied to it. For example, an EXTRA pre-modifier option could specify a `multiplicationFactor` of 1.5 to indicate that adding extra cheese to a menu item costs one and a half times the regular price of the cheese modifier option.
-            
+
             A PreModifier object has two optional values, `fixedPrice` and `multiplicationFactor`, that both alter the price of a modifier option when the pre-modifier is applied to it. However, these values cannot be used at the same time. If you specify a `fixedPrice` value for a premodifier, then `multiplicationFactor` is null. If you specify a `multiplicationFactor` for a premodifier, then `fixedPrice` is null. If you choose not to assign either a fixed price or a multiplication factor to a pre-modifier, then the `fixedPrice` value is 0 and the `multiplicationFactor` is null.
           type: number
           format: double
@@ -8928,7 +8928,7 @@ components:
         voidReason:
           description: A reference to the configured void reason for the void.
           $ref: "#/components/schemas/ExternalReference"
-    
+
     # Menu API reference schemas
     MultiLocationId:
       type: string
@@ -8936,9 +8936,9 @@ components:
         An identifier that is used to identify and consolidate menu entities that are versions of each other.
 
         `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.
-        
+
         Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.
-        
+
         You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations.
     MasterId:
       type: integer
@@ -8964,15 +8964,45 @@ components:
              
         When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color.
     Visibility:
-      type: string
+      type: array
       description: |
-        A string that indicates whether a menu entity is visible in the Toast POS app.
+        An array of strings that indicate where this menu entity is visible:
 
-        The `visibility` value is HIDDEN if the menu entity is not displayed in the Toast POS app.
-        The `visibility` value is POS if the menu entity is displayed in the Toast POS app.
-      enum:
-        - HIDDEN
-        - POS
+        * POS: The menu entity is visible in the Toast POS app. 
+
+        * KIOSK: The menu entity is visible on a Toast kiosk. 
+
+        * TOAST_ONLINE_ORDERING: The menu entity is visible in the Toast online
+          ordering site for this restaurant. 
+
+        * ORDERING_PARTNERS: The restaurants wants this menu entity to be visible
+          on online ordering sites that integrate with the Toast POS system using the orders API. 
+
+        * GRUBHUB: Deprecated. The menu entity is included during a menu sync to
+          Grubhub and will be visible on the Grubhub online ordering service after a
+          menu sync has completed. _Note:_ Conceptually, the _Grubhub_ configuration
+          option that was associated with the `GRUBHUB` string in this array has
+          been replaced by the more general _Online orders: Ordering partners_
+          configuration option and restaurants that used the _Grubhub_ option have
+          been automatically migrated to the new _Online orders: Ordering partners_
+          option. This means that any menu entity that had the _Grubhub_ option set
+          to _Yes_ will now have the _Online orders: Ordering partners_ option
+          enabled and the `ORDERING_PARTNERS` enum will be present in the
+          `visibility` array for it. To support backwards compatibility, the
+          `visibility` array for these entities will also continue to contain the
+          `GRUBHUB` enum for a short period of time. See <a
+          href="https://doc.toasttab.com/doc/devguide/apiDeprecatedApiFunctions.html#apiMenuEntityVisibilityEnhancements">Menu
+          Visibility Enhancements (Rolled Out)</a> for more information.
+
+        The `visibility` array is empty if the menu entity is not configured to be visible for any of the use cases listed above.
+      items:
+        type: string
+        enum:
+          - POS
+          - KIOSK
+          - GRUBHUB
+          - TOAST_ONLINE_ORDERING
+          - ORDERING_PARTNERS
     PricingRules:
       type: object
       description: |
@@ -8985,7 +9015,7 @@ components:
             An array of `TimeSpecificPrice` objects that define the time-specific prices for a menu item or modifier option item reference that uses the Time Specific Price pricing strategy. If the menu item or modifier option item reference does not use time-specific prices, this array is empty.
           type: array
           items:
-            $ref: '#/components/schemas/TimeSpecificPrice'
+            $ref: "#/components/schemas/TimeSpecificPrice"
         sizeSpecificPricingGuid:
           description: |
             The GUID of a Size modifier group that defines sizes and prices for a menu item or a modifier option item reference that uses the Size Price pricing strategy.
@@ -8997,7 +9027,7 @@ components:
           description: |
             An array of `SizeSequencePricingRule` objects that define the prices for the modifier options in a modifier group that uses the Size Price, Sequence Price, or Size/Sequence Pricing pricing strategy. If the modifier group does not use one of these pricing strategies, this array is empty.
           items:
-            $ref: '#/components/schemas/SizeSequencePricingRule'
+            $ref: "#/components/schemas/SizeSequencePricingRule"
     Availability:
       type: object
       description: |
@@ -9012,7 +9042,7 @@ components:
           description: |
             An array of `Schedule` objects that indicate the specific days and times a menu is available. If `alwaysAvailable` is TRUE, then the menu is available 24 hours per day, 7 days per week, and this `schedule` value is omitted from the `Availability` object.
           items:
-            $ref: '#/components/schemas/Schedule'
+            $ref: "#/components/schemas/Schedule"
     ModifierOptionTaxInfo:
       type: object
       description: |
@@ -9041,7 +9071,7 @@ components:
         Information about the contents of this menu item or modifier, for example, whether it contains alcohol.
       properties:
         alcohol:
-          $ref: '#/components/schemas/Alcohol'
+          $ref: "#/components/schemas/Alcohol"
     Alcohol:
       type: object
       description: |
@@ -9056,7 +9086,7 @@ components:
           description: |
             A string that indicates whether the menu item or modifier contains alcohol. Possible values 
             include:
-            
+
             * `YES`: The menu item or modifier contains alcohol.
             * `NO`: The menu item or modifier does not contain alcohol.
                  
@@ -9081,9 +9111,9 @@ components:
       nullable: true
       description: |
         The length of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.
-        
+
         The `length` value is `null` if no length is specified for the item or modifier.
-        
+
         You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use.
     Height:
       type: number
@@ -9091,9 +9121,9 @@ components:
       nullable: true
       description: |
         The height of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.
-        
+
         The `height` value is `null` if no height is specified for the item or modifier.
-        
+
         You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use.
     Width:
       type: number
@@ -9101,9 +9131,9 @@ components:
       nullable: true
       description: |
         The width of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.
-        
+
         The `width` value is `null` if no width is specified for the item or modifier.
-        
+
         You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use.
     DimensionUnitOfMeasure:
       type: string
@@ -9122,7 +9152,7 @@ components:
       nullable: true
       description: |
         The weight of the item or modifier. Use the `weightUnitOfMeasure` value to determine the unit of measurement.
-        
+
         The `weight` value is `null` if no weight is specified for the item or modifier.
             
         You can use the `weight` value when determining shipping costs or choosing a delivery vehicle to use.
@@ -9168,9 +9198,9 @@ components:
         schedule:
           type: array
           description: |
-              An array of `Schedule` objects that indicate the specific days and times that a time-specific price is available.
+            An array of `Schedule` objects that indicate the specific days and times that a time-specific price is available.
           items:
-            $ref: '#/components/schemas/Schedule'
+            $ref: "#/components/schemas/Schedule"
     Schedule:
       type: object
       description: |
@@ -9178,11 +9208,11 @@ components:
 
         * Define when a menu is available.
         * Define when a time-specific price is available for a menu item or modifier option.
-        
+
         A `Schedule` object defines a set of days of the week and a set of time ranges for those days. Days that have identical time ranges are grouped into a single `Schedule` object.
-        
+
         Time ranges are in 24-hour HH:MM format.
-        
+
         If a day is not represented in the `Schedule` objects, the menu or time-specific price is not available on that day.
       properties:
         days:
@@ -9204,7 +9234,7 @@ components:
           description: |
             An array of time range objects that define the specific time periods for the days specified in the `days` array.
           items:
-            $ref: '#/components/schemas/TimeRange'
+            $ref: "#/components/schemas/TimeRange"
     TimeRange:
       type: object
       description: |
@@ -9240,7 +9270,7 @@ components:
           description: |
             An array of `SequencePrice` objects that define the size, sequence, or size/sequence prices for the modifier options in this modifier group.
           items:
-            $ref: '#/components/schemas/SequencePrice'
+            $ref: "#/components/schemas/SequencePrice"
     SequencePrice:
       type: object
       description: |

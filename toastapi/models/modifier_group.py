@@ -20,7 +20,6 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from toastapi.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -36,7 +35,7 @@ class ModifierGroup(BaseModel):
     pos_name: Optional[StrictStr] = Field(default=None, description="The button label name that appears for this menu entity in the Toast POS app. `posName` contains an empty string if a `posName` has not been defined for the menu entity and the `name` value is used for the button label instead. ", alias="posName")
     pos_button_color_light: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in light mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorLight` contains the HEX code for the light mode color. ", alias="posButtonColorLight")
     pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
-    visibility: Optional[Visibility] = None
+    visibility: Optional[List[StrictStr]] = Field(default=None, description="An array of strings that indicate where this menu entity is visible:  * POS: The menu entity is visible in the Toast POS app.   * KIOSK: The menu entity is visible on a Toast kiosk.   * TOAST_ONLINE_ORDERING: The menu entity is visible in the Toast online   ordering site for this restaurant.   * ORDERING_PARTNERS: The restaurants wants this menu entity to be visible   on online ordering sites that integrate with the Toast POS system using the orders API.   * GRUBHUB: Deprecated. The menu entity is included during a menu sync to   Grubhub and will be visible on the Grubhub online ordering service after a   menu sync has completed. _Note:_ Conceptually, the _Grubhub_ configuration   option that was associated with the `GRUBHUB` string in this array has   been replaced by the more general _Online orders: Ordering partners_   configuration option and restaurants that used the _Grubhub_ option have   been automatically migrated to the new _Online orders: Ordering partners_   option. This means that any menu entity that had the _Grubhub_ option set   to _Yes_ will now have the _Online orders: Ordering partners_ option   enabled and the `ORDERING_PARTNERS` enum will be present in the   `visibility` array for it. To support backwards compatibility, the   `visibility` array for these entities will also continue to contain the   `GRUBHUB` enum for a short period of time. See <a   href=\"https://doc.toasttab.com/doc/devguide/apiDeprecatedApiFunctions.html#apiMenuEntityVisibilityEnhancements\">Menu   Visibility Enhancements (Rolled Out)</a> for more information.  The `visibility` array is empty if the menu entity is not configured to be visible for any of the use cases listed above. ")
     pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that represents the pricing strategy used for this modifier group.  If there is no additional charge for the modifier options in this group, or if the modifier options in the group are priced individually, then the `pricingStrategy` value is NONE.  If the modifier group is priced at the group level and is using the:   * Fixed Price pricing strategy, then the `pricingStrategy` value is NONE.   * Sequence Price pricing strategy, then the `pricingStrategy` value is SEQUENCE_PRICE.   * Size Price pricing strategy, then the `pricingStrategy` value is SIZE_PRICE.   * Size/Sequence Price pricing strategy, then the `pricingStrategy` value is SIZE_SEQUENCE_PRICE.     If the `pricingStrategy` value is NONE,  then the prices for the modifier options in this group are resolved down to the modifier option level and you can retrieve them from the `price` value of the individual `ModifierOption` objects.  If the `pricingStrategy` value is SIZE_PRICE, SEQUENCE_PRICE, or SIZE_SEQUENCE_PRICE, then you must use the rules provided in _this modifier group's_ `pricingRules` value to calculate the prices for the modifier options in the group. ", alias="pricingStrategy")
     pricing_rules: Optional[Dict[str, Any]] = Field(default=None, alias="pricingRules")
     default_options_charge_price: Optional[StrictStr] = Field(default=None, description="Indicates whether the prices associated with any default modifiers in this group are added to the cost of the menu items they modify.  Values are:   * NO: The default modifier price is ignored. No change is made to the cost of the menu item.   * YES: The default modifier price is added to the menu item price. YES is the default setting for `defaultOptionsChargePrice`. ", alias="defaultOptionsChargePrice")
@@ -49,14 +48,25 @@ class ModifierGroup(BaseModel):
     modifier_option_references: Optional[Annotated[List[StrictInt], Field(min_length=0)]] = Field(default=None, description="An array of `referenceId`s for `ModifierOption` objects. These objects define the modifier options contained in this modifier group. ", alias="modifierOptionReferences")
     __properties: ClassVar[List[str]] = ["name", "guid", "referenceId", "multiLocationId", "masterId", "posName", "posButtonColorLight", "posButtonColorDark", "visibility", "pricingStrategy", "pricingRules", "defaultOptionsChargePrice", "defaultOptionsSubstitutionPricing", "minSelections", "maxSelections", "requiredMode", "isMultiSelect", "preModifierGroupReference", "modifierOptionReferences"]
 
+    @field_validator('visibility')
+    def visibility_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(['POS', 'KIOSK', 'GRUBHUB', 'TOAST_ONLINE_ORDERING', 'ORDERING_PARTNERS']):
+                raise ValueError("each list item must be one of ('POS', 'KIOSK', 'GRUBHUB', 'TOAST_ONLINE_ORDERING', 'ORDERING_PARTNERS')")
+        return value
+
     @field_validator('default_options_charge_price')
     def default_options_charge_price_validate_enum(cls, value):
         """Validates the enum"""
         if value is None:
             return value
 
-        if value not in set(['false', 'true']):
-            raise ValueError("must be one of enum values ('false', 'true')")
+        if value not in set(['NO', 'YES']):
+            raise ValueError("must be one of enum values ('NO', 'YES')")
         return value
 
     @field_validator('default_options_substitution_pricing')
@@ -65,8 +75,8 @@ class ModifierGroup(BaseModel):
         if value is None:
             return value
 
-        if value not in set(['false', 'true']):
-            raise ValueError("must be one of enum values ('false', 'true')")
+        if value not in set(['NO', 'YES']):
+            raise ValueError("must be one of enum values ('NO', 'YES')")
         return value
 
     @field_validator('required_mode')

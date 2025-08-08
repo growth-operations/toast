@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.23"
+__version__ = "1.0.24"
 
 # Define package exports
 __all__ = [
@@ -154,7 +154,6 @@ __all__ = [
     "ToastReference",
     "URLs",
     "UpdatePaymentRequest",
-    "Visibility",
     "VoidInformation",
     "VoidOrderRequest",
     "VoidOrderRequestSelections",
@@ -304,7 +303,6 @@ from toastapi.models.tip_withholding import TipWithholding as TipWithholding
 from toastapi.models.toast_reference import ToastReference as ToastReference
 from toastapi.models.urls import URLs as URLs
 from toastapi.models.update_payment_request import UpdatePaymentRequest as UpdatePaymentRequest
-from toastapi.models.visibility import Visibility as Visibility
 from toastapi.models.void_information import VoidInformation as VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest as VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections as VoidOrderRequestSelections
