@@ -19,16 +19,19 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.size_sequence_pricing_rule import SizeSequencePricingRule
+from toastapi.models.time_specific_price import TimeSpecificPrice
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class PricingRules(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    The PricingRules object is a multi-use object that provides pricing rules for:   * A menu item or modifier option item reference that uses the Time Specific Price or Size Price pricing strategy.   * A modifier group that uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    time_specific_pricing_rules: Optional[List[TimeSpecificPrice]] = Field(default=None, description="An array of `TimeSpecificPrice` objects that define the time-specific prices for a menu item or modifier option item reference that uses the Time Specific Price pricing strategy. If the menu item or modifier option item reference does not use time-specific prices, this array is empty. ", alias="timeSpecificPricingRules")
+    size_specific_pricing_guid: Optional[StrictStr] = Field(default=None, description="The GUID of a Size modifier group that defines sizes and prices for a menu item or a modifier option item reference that uses the Size Price pricing strategy. If the menu item or modifier option item reference does not use the Size Price pricing strategy, then `sizeSpecificPricingGuid` is null. ", alias="sizeSpecificPricingGuid")
+    size_sequence_pricing_rules: Optional[List[SizeSequencePricingRule]] = Field(default=None, description="An array of `SizeSequencePricingRule` objects that define the prices for the modifier options in a modifier group that uses the Size Price, Sequence Price, or Size/Sequence Pricing pricing strategy. If the modifier group does not use one of these pricing strategies, this array is empty. ", alias="sizeSequencePricingRules")
+    __properties: ClassVar[List[str]] = ["timeSpecificPricingRules", "sizeSpecificPricingGuid", "sizeSequencePricingRules"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +51,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of PricingRules from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,11 +72,30 @@ class SalesCategory(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in time_specific_pricing_rules (list)
+        _items = []
+        if self.time_specific_pricing_rules:
+            for _item_time_specific_pricing_rules in self.time_specific_pricing_rules:
+                if _item_time_specific_pricing_rules:
+                    _items.append(_item_time_specific_pricing_rules.to_dict())
+            _dict['timeSpecificPricingRules'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in size_sequence_pricing_rules (list)
+        _items = []
+        if self.size_sequence_pricing_rules:
+            for _item_size_sequence_pricing_rules in self.size_sequence_pricing_rules:
+                if _item_size_sequence_pricing_rules:
+                    _items.append(_item_size_sequence_pricing_rules.to_dict())
+            _dict['sizeSequencePricingRules'] = _items
+        # set to None if size_specific_pricing_guid (nullable) is None
+        # and model_fields_set contains the field
+        if self.size_specific_pricing_guid is None and "size_specific_pricing_guid" in self.model_fields_set:
+            _dict['sizeSpecificPricingGuid'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of PricingRules from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +103,9 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "timeSpecificPricingRules": [TimeSpecificPrice.from_dict(_item) for _item in obj["timeSpecificPricingRules"]] if obj.get("timeSpecificPricingRules") is not None else None,
+            "sizeSpecificPricingGuid": obj.get("sizeSpecificPricingGuid"),
+            "sizeSequencePricingRules": [SizeSequencePricingRule.from_dict(_item) for _item in obj["sizeSequencePricingRules"]] if obj.get("sizeSequencePricingRules") is not None else None
         })
         return _obj
 

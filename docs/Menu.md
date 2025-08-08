@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 **high_res_image** | **str** | The URL to a high resolution image that has been uploaded for this menu. The image file must be in JPG, PNG, or SVG format. The &#x60;highResImage&#x60; value is only available if the Toast Kiosk module has been enabled for this restaurant. This value is null if no high resolution image has been specified.  | [optional] 
 **image** | [**Image**](Image.md) |  | [optional] 
 **visibility** | [**Visibility**](Visibility.md) |  | [optional] 
-**availability** | **object** | An &#x60;Availability&#x60; object with information about the days and times a menu entity is available.  | [optional] 
+**availability** | [**Availability**](Availability.md) |  | [optional] 
 **menu_groups** | [**List[MenuGroup]**](MenuGroup.md) | An array of the &#x60;MenuGroup&#x60; objects contained in this menu.  | [optional] 
 
 ## Example

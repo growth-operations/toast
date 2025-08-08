@@ -17,18 +17,19 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.schedule import Schedule
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class Availability(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    Information about when a menu is available for use. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    always_available: Optional[StrictBool] = Field(default=None, description="Indicates whether this menu is available 24 hours per day, 7 days a week. If `alwaysAvailable` is FALSE, then a `schedule` value is included in the `Availability` object to define the specific times and days a menu is available. If `alwaysAvailable` is TRUE, then the `schedule` value is omitted. ", alias="alwaysAvailable")
+    schedule: Optional[List[Schedule]] = Field(default=None, description="An array of `Schedule` objects that indicate the specific days and times a menu is available. If `alwaysAvailable` is TRUE, then the menu is available 24 hours per day, 7 days per week, and this `schedule` value is omitted from the `Availability` object. ")
+    __properties: ClassVar[List[str]] = ["alwaysAvailable", "schedule"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +49,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of Availability from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,11 +70,18 @@ class SalesCategory(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in schedule (list)
+        _items = []
+        if self.schedule:
+            for _item_schedule in self.schedule:
+                if _item_schedule:
+                    _items.append(_item_schedule.to_dict())
+            _dict['schedule'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of Availability from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +89,8 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "alwaysAvailable": obj.get("alwaysAvailable"),
+            "schedule": [Schedule.from_dict(_item) for _item in obj["schedule"]] if obj.get("schedule") is not None else None
         })
         return _obj
 

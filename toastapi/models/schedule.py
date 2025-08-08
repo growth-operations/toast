@@ -17,18 +17,30 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.time_range import TimeRange
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class Schedule(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    A multi-use object that is used to:  * Define when a menu is available. * Define when a time-specific price is available for a menu item or modifier option.  A `Schedule` object defines a set of days of the week and a set of time ranges for those days. Days that have identical time ranges are grouped into a single `Schedule` object.  Time ranges are in 24-hour HH:MM format.  If a day is not represented in the `Schedule` objects, the menu or time-specific price is not available on that day. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    days: Optional[List[StrictStr]] = Field(default=None, description="An array of strings that represent the days of the week when this schedule is active. ")
+    time_ranges: Optional[List[TimeRange]] = Field(default=None, description="An array of time range objects that define the specific time periods for the days specified in the `days` array. ", alias="timeRanges")
+    __properties: ClassVar[List[str]] = ["days", "timeRanges"]
+
+    @field_validator('days')
+    def days_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']):
+                raise ValueError("each list item must be one of ('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +60,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of Schedule from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,11 +81,18 @@ class SalesCategory(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in time_ranges (list)
+        _items = []
+        if self.time_ranges:
+            for _item_time_ranges in self.time_ranges:
+                if _item_time_ranges:
+                    _items.append(_item_time_ranges.to_dict())
+            _dict['timeRanges'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of Schedule from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +100,8 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "days": obj.get("days"),
+            "timeRanges": [TimeRange.from_dict(_item) for _item in obj["timeRanges"]] if obj.get("timeRanges") is not None else None
         })
         return _obj
 

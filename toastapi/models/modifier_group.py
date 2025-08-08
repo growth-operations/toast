@@ -38,7 +38,7 @@ class ModifierGroup(BaseModel):
     pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
     visibility: Optional[Visibility] = None
     pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that represents the pricing strategy used for this modifier group.  If there is no additional charge for the modifier options in this group, or if the modifier options in the group are priced individually, then the `pricingStrategy` value is NONE.  If the modifier group is priced at the group level and is using the:   * Fixed Price pricing strategy, then the `pricingStrategy` value is NONE.   * Sequence Price pricing strategy, then the `pricingStrategy` value is SEQUENCE_PRICE.   * Size Price pricing strategy, then the `pricingStrategy` value is SIZE_PRICE.   * Size/Sequence Price pricing strategy, then the `pricingStrategy` value is SIZE_SEQUENCE_PRICE.     If the `pricingStrategy` value is NONE,  then the prices for the modifier options in this group are resolved down to the modifier option level and you can retrieve them from the `price` value of the individual `ModifierOption` objects.  If the `pricingStrategy` value is SIZE_PRICE, SEQUENCE_PRICE, or SIZE_SEQUENCE_PRICE, then you must use the rules provided in _this modifier group's_ `pricingRules` value to calculate the prices for the modifier options in the group. ", alias="pricingStrategy")
-    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, description="A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used. ", alias="pricingRules")
+    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, alias="pricingRules")
     default_options_charge_price: Optional[StrictStr] = Field(default=None, description="Indicates whether the prices associated with any default modifiers in this group are added to the cost of the menu items they modify.  Values are:   * NO: The default modifier price is ignored. No change is made to the cost of the menu item.   * YES: The default modifier price is added to the menu item price. YES is the default setting for `defaultOptionsChargePrice`. ", alias="defaultOptionsChargePrice")
     default_options_substitution_pricing: Optional[StrictStr] = Field(default=None, description="Indicates whether substitution pricing is enabled for the modifier group. ", alias="defaultOptionsSubstitutionPricing")
     min_selections: Optional[StrictInt] = Field(default=None, description="The minimum number of modifier options that a customer can choose from this modifier group.  If a server is not required to select a modifier option from this modifier group, `minSelections` is set to 0.  If a server must select a modifier option from this modifier group, `minSelections` must be set to 1 or higher. ", alias="minSelections")
@@ -118,6 +118,9 @@ class ModifierGroup(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of pricing_rules
+        if self.pricing_rules:
+            _dict['pricingRules'] = self.pricing_rules.to_dict()
         # set to None if max_selections (nullable) is None
         # and model_fields_set contains the field
         if self.max_selections is None and "max_selections" in self.model_fields_set:
@@ -150,7 +153,7 @@ class ModifierGroup(BaseModel):
             "posButtonColorDark": obj.get("posButtonColorDark"),
             "visibility": obj.get("visibility"),
             "pricingStrategy": obj.get("pricingStrategy"),
-            "pricingRules": obj.get("pricingRules"),
+            "pricingRules": PricingRules.from_dict(obj["pricingRules"]) if obj.get("pricingRules") is not None else None,
             "defaultOptionsChargePrice": obj.get("defaultOptionsChargePrice"),
             "defaultOptionsSubstitutionPricing": obj.get("defaultOptionsSubstitutionPricing"),
             "minSelections": obj.get("minSelections"),

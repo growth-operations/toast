@@ -1,13 +1,13 @@
 # SalesCategory
 
+A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
-**name** | **str** | The name of this sales category. | [optional] 
+**name** | **str** | A descriptive name for this sales category, for example, \&quot;Food\&quot; or \&quot;Liquor\&quot;.  | [optional] 
+**guid** | **str** | A unique identifier for this sales category, assigned by the Toast POS system.  | [optional] 
 
 ## Example
 

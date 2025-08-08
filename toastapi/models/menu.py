@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from toastapi.models.availability import Availability
 from toastapi.models.image import Image
 from toastapi.models.menu_group import MenuGroup
 from toastapi.models.visibility import Visibility
@@ -41,7 +42,7 @@ class Menu(BaseModel):
     high_res_image: Optional[StrictStr] = Field(default=None, description="The URL to a high resolution image that has been uploaded for this menu. The image file must be in JPG, PNG, or SVG format. The `highResImage` value is only available if the Toast Kiosk module has been enabled for this restaurant. This value is null if no high resolution image has been specified. ", alias="highResImage")
     image: Optional[Image] = None
     visibility: Optional[Visibility] = None
-    availability: Optional[Dict[str, Any]] = Field(default=None, description="An `Availability` object with information about the days and times a menu entity is available. ")
+    availability: Optional[Availability] = None
     menu_groups: Optional[Annotated[List[MenuGroup], Field(min_length=0)]] = Field(default=None, description="An array of the `MenuGroup` objects contained in this menu. ", alias="menuGroups")
     __properties: ClassVar[List[str]] = ["name", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "highResImage", "image", "visibility", "availability", "menuGroups"]
 
@@ -87,6 +88,9 @@ class Menu(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of image
         if self.image:
             _dict['image'] = self.image.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of availability
+        if self.availability:
+            _dict['availability'] = self.availability.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in menu_groups (list)
         _items = []
         if self.menu_groups:
@@ -122,7 +126,7 @@ class Menu(BaseModel):
             "highResImage": obj.get("highResImage"),
             "image": Image.from_dict(obj["image"]) if obj.get("image") is not None else None,
             "visibility": obj.get("visibility"),
-            "availability": obj.get("availability"),
+            "availability": Availability.from_dict(obj["availability"]) if obj.get("availability") is not None else None,
             "menuGroups": [MenuGroup.from_dict(_item) for _item in obj["menuGroups"]] if obj.get("menuGroups") is not None else None
         })
         return _obj

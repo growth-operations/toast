@@ -22,13 +22,13 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class TimeRange(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    Defines a time range with start and end times in 24-hour HH:MM format. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    start: Optional[StrictStr] = Field(default=None, description="The start time in 24-hour HH:MM format (e.g., \"09:00\"). ")
+    end: Optional[StrictStr] = Field(default=None, description="The end time in 24-hour HH:MM format (e.g., \"18:00\"). ")
+    __properties: ClassVar[List[str]] = ["start", "end"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +48,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of TimeRange from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,7 +73,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of TimeRange from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +81,8 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "start": obj.get("start"),
+            "end": obj.get("end")
         })
         return _obj
 

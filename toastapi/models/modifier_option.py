@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from toastapi.models.content_advisories import ContentAdvisories
 from toastapi.models.dimension_unit_of_measure import DimensionUnitOfMeasure
 from toastapi.models.image import Image
 from toastapi.models.item_tag import ItemTag
@@ -50,7 +51,7 @@ class ModifierOption(BaseModel):
     visibility: Optional[Visibility] = None
     price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of this modifier option.  In Toast Web, a modifier option may:   * Inherit its price from a parent modifier group.   * Use the price specified for its modifier option item reference.   * Specify a price that overrides the price defined for its item reference.  The `price` value is populated differently depending on which of these pricing scenarios is used for the modifier option. ")
     pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that indicates how this modifier option has been priced. If `pricingStrategy` is:   * GROUP_PRICE, then the modifier option inherits its price from a parent modifier group.   * Any value other than GROUP_PRICE, then the modifier option is using either the price specified for its item reference or an override price. ", alias="pricingStrategy")
-    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, description="A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used. ", alias="pricingRules")
+    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, alias="pricingRules")
     sales_category: Optional[SalesCategory] = Field(default=None, alias="salesCategory")
     tax_info: Optional[List[StrictStr]] = Field(default=None, description="The `taxInfo` value on the `ModifierOption` object has been deprecated. Your integration should switch to using the `modifierOptionTaxInfo` value instead. ", alias="taxInfo")
     modifier_option_tax_info: Optional[ModifierOptionTaxInfo] = Field(default=None, alias="modifierOptionTaxInfo")
@@ -58,7 +59,7 @@ class ModifierOption(BaseModel):
     plu: Optional[StrictStr] = Field(default=None, description="The price lookup (PLU) code for this modifier option. The PLU code can contain both numbers and letters. This value contains an empty string if a PLU code has not been defined. ")
     sku: Optional[StrictStr] = Field(default=None, description="The stock keeping unit (SKU) identifier for this modifier option. The SKU identifier can contain both numbers and letters. This value contains an empty string if a SKU has not been defined. ")
     calories: Optional[StrictInt] = Field(default=None, description="The number of calories in this modifier option. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the modifier option. ")
-    content_advisories: Optional[Dict[str, Any]] = Field(default=None, description="Content advisory information for menu items and modifier options. ", alias="contentAdvisories")
+    content_advisories: Optional[ContentAdvisories] = Field(default=None, alias="contentAdvisories")
     unit_of_measure: Optional[StrictStr] = Field(default=None, description="The unit of measure used to determine the price of the modifier option. For example, $10.00 per gram. ", alias="unitOfMeasure")
     is_default: Optional[StrictBool] = Field(default=None, description="Indicates whether this modifier option is included on the menu item by default. ", alias="isDefault")
     allows_duplicates: Optional[StrictBool] = Field(default=None, description="Indicates whether the modifier option may be added to a menu item multiple times. ", alias="allowsDuplicates")
@@ -127,6 +128,9 @@ class ModifierOption(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of image
         if self.image:
             _dict['image'] = self.image.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of pricing_rules
+        if self.pricing_rules:
+            _dict['pricingRules'] = self.pricing_rules.to_dict()
         # override the default output from pydantic by calling `to_dict()` of sales_category
         if self.sales_category:
             _dict['salesCategory'] = self.sales_category.to_dict()
@@ -140,6 +144,9 @@ class ModifierOption(BaseModel):
                 if _item_item_tags:
                     _items.append(_item_item_tags.to_dict())
             _dict['itemTags'] = _items
+        # override the default output from pydantic by calling `to_dict()` of content_advisories
+        if self.content_advisories:
+            _dict['contentAdvisories'] = self.content_advisories.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in portions (list)
         _items = []
         if self.portions:
@@ -214,7 +221,7 @@ class ModifierOption(BaseModel):
             "visibility": obj.get("visibility"),
             "price": obj.get("price"),
             "pricingStrategy": obj.get("pricingStrategy"),
-            "pricingRules": obj.get("pricingRules"),
+            "pricingRules": PricingRules.from_dict(obj["pricingRules"]) if obj.get("pricingRules") is not None else None,
             "salesCategory": SalesCategory.from_dict(obj["salesCategory"]) if obj.get("salesCategory") is not None else None,
             "taxInfo": obj.get("taxInfo"),
             "modifierOptionTaxInfo": ModifierOptionTaxInfo.from_dict(obj["modifierOptionTaxInfo"]) if obj.get("modifierOptionTaxInfo") is not None else None,
@@ -222,7 +229,7 @@ class ModifierOption(BaseModel):
             "plu": obj.get("plu"),
             "sku": obj.get("sku"),
             "calories": obj.get("calories"),
-            "contentAdvisories": obj.get("contentAdvisories"),
+            "contentAdvisories": ContentAdvisories.from_dict(obj["contentAdvisories"]) if obj.get("contentAdvisories") is not None else None,
             "unitOfMeasure": obj.get("unitOfMeasure"),
             "isDefault": obj.get("isDefault"),
             "allowsDuplicates": obj.get("allowsDuplicates"),

@@ -5331,12 +5331,6 @@ components:
         visibility:
           $ref: '#/components/schemas/Visibility'
         availability:
-          type: object
-          description: |
-            An `Availability` object with information about the days and times this menu is available. If the menu is available 24 hours per day, 7 days per week, this `Availability` object contains a single value, `alwaysAvailable`, that is set to TRUE. If the menu is not available 24 hours per day, 7 days per week, the `alwaysAvailable` value is set to FALSE and the object will also contain a `schedule` value that provides detailed information about the specific days and times this menu is available.
-
-            **_Important_**
-            The orders API does not validate against the availability settings of a menu, meaning it is possible to submit an order for an item on a menu when it is not currently available. For this reason, it is particularly important that you check a menu's `availability` value before placing an order from it.
           $ref: '#/components/schemas/Availability'
         menuGroups:
           type: array
@@ -8572,14 +8566,17 @@ components:
 
     SalesCategory:
       type: object
-      allOf:
-        - $ref: "#/components/schemas/ToastReference"
-        - type: object
-          description: A set of items that will be grouped together in sales reports. SalesCategories can be applied at any level, from entire menus to individual menu items.
-          properties:
-            name:
-              type: string
-              description: The name of this sales category.
+      description: |
+        A descriptive category, for example, "Food" or "Liquor" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined.
+      properties:
+        name:
+          description: |
+            A descriptive name for this sales category, for example, "Food" or "Liquor".
+          type: string
+        guid:
+          description: |
+            A unique identifier for this sales category, assigned by the Toast POS system.
+          type: string
 
     ServiceArea:
       type: object
@@ -8979,11 +8976,43 @@ components:
     PricingRules:
       type: object
       description: |
-        A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used.
+        The PricingRules object is a multi-use object that provides pricing rules for:
+          * A menu item or modifier option item reference that uses the Time Specific Price or Size Price pricing strategy.
+          * A modifier group that uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy.
+      properties:
+        timeSpecificPricingRules:
+          description: |
+            An array of `TimeSpecificPrice` objects that define the time-specific prices for a menu item or modifier option item reference that uses the Time Specific Price pricing strategy. If the menu item or modifier option item reference does not use time-specific prices, this array is empty.
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSpecificPrice'
+        sizeSpecificPricingGuid:
+          description: |
+            The GUID of a Size modifier group that defines sizes and prices for a menu item or a modifier option item reference that uses the Size Price pricing strategy.
+            If the menu item or modifier option item reference does not use the Size Price pricing strategy, then `sizeSpecificPricingGuid` is null.
+          type: string
+          nullable: true
+        sizeSequencePricingRules:
+          type: array
+          description: |
+            An array of `SizeSequencePricingRule` objects that define the prices for the modifier options in a modifier group that uses the Size Price, Sequence Price, or Size/Sequence Pricing pricing strategy. If the modifier group does not use one of these pricing strategies, this array is empty.
+          items:
+            $ref: '#/components/schemas/SizeSequencePricingRule'
     Availability:
       type: object
       description: |
-        An `Availability` object with information about the days and times a menu entity is available.
+        Information about when a menu is available for use.
+      properties:
+        alwaysAvailable:
+          type: boolean
+          description: |
+            Indicates whether this menu is available 24 hours per day, 7 days a week. If `alwaysAvailable` is FALSE, then a `schedule` value is included in the `Availability` object to define the specific times and days a menu is available. If `alwaysAvailable` is TRUE, then the `schedule` value is omitted.
+        schedule:
+          type: array
+          description: |
+            An array of `Schedule` objects that indicate the specific days and times a menu is available. If `alwaysAvailable` is TRUE, then the menu is available 24 hours per day, 7 days per week, and this `schedule` value is omitted from the `Availability` object.
+          items:
+            $ref: '#/components/schemas/Schedule'
     ModifierOptionTaxInfo:
       type: object
       description: |
@@ -9009,7 +9038,32 @@ components:
     ContentAdvisories:
       type: object
       description: |
-        Content advisory information for menu items and modifier options.
+        Information about the contents of this menu item or modifier, for example, whether it contains alcohol.
+      properties:
+        alcohol:
+          $ref: '#/components/schemas/Alcohol'
+    Alcohol:
+      type: object
+      description: |
+        Information about whether this menu item or modifier contains alcohol and may require, 
+        or benefit from, additional handling. For example, a delivery partner may need 
+        to identify a menu item or modifier as containing alcohol to ensure that delivery drivers
+        request identification before giving it to a customer.
+      properties:
+        containsAlcohol:
+          type: string
+          nullable: true
+          description: |
+            A string that indicates whether the menu item or modifier contains alcohol. Possible values 
+            include:
+            
+            * `YES`: The menu item or modifier contains alcohol.
+            * `NO`: The menu item or modifier does not contain alcohol.
+                 
+            The `containsAlcohol` value may also be `null`. A `null` value indicates that the corresponding UI option in Toast Web has not been configured for this menu item or modifier.
+          enum:
+            - YES
+            - NO
     Portion:
       type: object
       description: |
@@ -9096,3 +9150,108 @@ components:
       nullable: true
       description: |
         The number of guests the item or modifier is expected to serve. This value is `null` if no guest count is specified.
+    TimeSpecificPrice:
+      type: object
+      description: |
+        Represents the pricing rules for a menu item that uses a time-specific price.
+      properties:
+        timeSpecificPrice:
+          type: number
+          format: double
+          description: |
+            The price of the menu item during the periods of time defined by the associated `schedule` array.
+        basePrice:
+          type: number
+          format: double
+          description: |
+            The base price of the menu item, used for time periods when a time-specific price has not been defined.
+        schedule:
+          type: array
+          description: |
+              An array of `Schedule` objects that indicate the specific days and times that a time-specific price is available.
+          items:
+            $ref: '#/components/schemas/Schedule'
+    Schedule:
+      type: object
+      description: |
+        A multi-use object that is used to:
+
+        * Define when a menu is available.
+        * Define when a time-specific price is available for a menu item or modifier option.
+        
+        A `Schedule` object defines a set of days of the week and a set of time ranges for those days. Days that have identical time ranges are grouped into a single `Schedule` object.
+        
+        Time ranges are in 24-hour HH:MM format.
+        
+        If a day is not represented in the `Schedule` objects, the menu or time-specific price is not available on that day.
+      properties:
+        days:
+          type: array
+          description: |
+            An array of strings that represent the days of the week when this schedule is active.
+          items:
+            type: string
+            enum:
+              - SUNDAY
+              - MONDAY
+              - TUESDAY
+              - WEDNESDAY
+              - THURSDAY
+              - FRIDAY
+              - SATURDAY
+        timeRanges:
+          type: array
+          description: |
+            An array of time range objects that define the specific time periods for the days specified in the `days` array.
+          items:
+            $ref: '#/components/schemas/TimeRange'
+    TimeRange:
+      type: object
+      description: |
+        Defines a time range with start and end times in 24-hour HH:MM format.
+      properties:
+        start:
+          type: string
+          description: |
+            The start time in 24-hour HH:MM format (e.g., "09:00").
+        end:
+          type: string
+          description: |
+            The end time in 24-hour HH:MM format (e.g., "18:00").
+    SizeSequencePricingRule:
+      type: object
+      description: |
+        A multi-use object that defines the pricing rules for modifier options that belong to a modifier group that uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy. The contents of this object depend on the pricing strategy that is in effect.
+      properties:
+        sizeName:
+          type: string
+          nullable: true
+          description: |
+            A string that represents the size of a modifier option in this modifier group, for example, Small, Medium, or Large.
+
+            With Size Price and the Size/Sequence Price pricing strategies, the price of a modifier option changes based on the size of the menu item it is applied to. The `sizeName` value is null if the modifier group uses the Sequence Price pricing strategy because this strategy does not use sizes.
+        sizeGuid:
+          type: string
+          nullable: true
+          description: |
+            The GUID of the modifier option where a menu item size has been defined that matches the `sizeName` value. The `sizeGuid` value is null if the modifier group uses the Sequence Price pricing strategy because this strategy does not use sizes.
+        sequencePrices:
+          type: array
+          description: |
+            An array of `SequencePrice` objects that define the size, sequence, or size/sequence prices for the modifier options in this modifier group.
+          items:
+            $ref: '#/components/schemas/SequencePrice'
+    SequencePrice:
+      type: object
+      description: |
+        Defines pricing based on sequence for modifier options in a modifier group.
+      properties:
+        sequence:
+          type: integer
+          description: |
+            The sequence number for this pricing rule.
+        price:
+          type: number
+          format: double
+          description: |
+            The price for modifier options at this sequence position.

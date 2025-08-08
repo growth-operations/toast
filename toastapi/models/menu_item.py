@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from toastapi.models.content_advisories import ContentAdvisories
 from toastapi.models.dimension_unit_of_measure import DimensionUnitOfMeasure
 from toastapi.models.image import Image
 from toastapi.models.item_tag import ItemTag
@@ -47,7 +48,7 @@ class MenuItem(BaseModel):
     visibility: Optional[Visibility] = None
     price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of this menu item.  In Toast Web, menu items may have prices assigned to them individually, or they may inherit them from a parent menu group. The `price` value reflects the menu item's fully resolved pricing configuration in the following ways:    * For base prices, the `price` value is populated with the specified base price.      * For menu-specific prices, the `price` value is resolved based on the current menu. For example, consider a menu item that is included in both Lunch and Dinner menus and is priced at $10 for the Lunch menu and $12 for the Dinner menu. In the fully resolved JSON returned by the menus API, this menu item would appear twice, once as a child of the Lunch menu with a `price` value of $10, and again as a child of the Dinner menu with a `price` value of $12.      If this same menu item is added to a Breakfast menu but a menu-specific price is not defined for the Breakfast menu, then the `price` value for the instance of the menu item that appears in the Breakfast menu JSON is populated with the base price from the menu-specific price configuration. Menu-specific price configurations include a base price that functions as a default price when a menu-specific price cannot be resolved.    * For location-specific prices, the `price` value is resolved based on the current location. For example, consider a menu item that costs $15 in the Boston location and $20 in the New York location. When you retrieve menu data for the Boston location, this menu item's `price` value is $15. When you retrieve menu data for the New York location, the menu item's `price` value is $20.      * For time-specific prices, the `price` value is populated with the base price that is specified as part of the time-specific price configuration. This base price functions as a default price for the menu item during times of the day when a time-specific price has not been defined. For example, consider a menu item that costs $8 from noon to 2pm and $10 during the rest of the day. The `price` value for this item would be $10. You must use the `pricingStrategy` and `pricingRules` values for this menu item to calculate the price of the item during time periods for which a time-specific price has been defined.      * For size prices, the `price` value is null. You must use this menu item's `pricingStrategy` and `pricingRules` values to calculate the price of the item for different sizes.      * For open prices, the `price` value is null.       If the menu item is priced using a price level, the `price` value reflects the pricing strategy used for that price level, using the same logic described above. For example, consider a price level that applies a size price to the menu items it is assigned to. In this scenario, the `price` value is null and you must use the menu item's `pricingStrategy` and `pricingRules` values to calculate the price of the item for different sizes.    For more information on menu item pricing and pricing strategies, see the <a href=\"https://doc.toasttab.com/doc/platformguide/adminToastPosPricingFeatures.html\">Menu Pricing</a> section in the Toast Platform Guide. ")
     pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that represents the pricing strategy used for this menu item.  You use the `pricingStrategy` value, in conjunction with the `pricingRules` value, to calculate the price for a menu item that uses the Time Specific Price or Size Price pricing strategy.  In Toast Web, menu items may have pricing strategies assigned to them individually, or they may inherit them from a parent menu group. The `pricingStrategy` value indicates the menu item's fully resolved pricing strategy. If the menu item is priced using the:   * Base Price pricing strategy, then the `pricingStrategy` value is BASE_PRICE.   * Menu Specific Price pricing strategy, then the `pricingStrategy` value is MENU_SPECIFIC_PRICE.   * Time Specific Price pricing strategy, then the `pricingStrategy` value is TIME_SPECIFIC_PRICE.   * Size Price pricing strategy, then the `pricingStrategy` value is SIZE_PRICE.   * Open Price pricing strategy, then the `pricingStrategy` value is OPEN_PRICE.  If the menu item is priced using the Location Specific Price pricing strategy, then the `pricingStrategy` value indicates which pricing strategy is used at the current location. For example, consider a menu item that uses a menu-specific price at the Boston location and a base price at the New York location. When you retrieve the menu data for the Boston location, the `pricingStrategy` for the menu item is MENU_SPECIFIC_PRICE. When you retrieve menu data for the New York location, the `pricingStrategy` for the menu item is BASE_PRICE.  If the menu item is priced using a price level, then the `pricingStrategy` value indicates which pricing strategy is used for that price level. For example, if the \"Draft Beer\" pricing level uses a time-specific price, then the `pricingStrategy` value for a menu item that is assigned the \"Draft Beer\" pricing level is TIME_SPECIFIC_PRICE.  If the `pricingStrategy` value is BASE_PRICE or MENU_SPECIFIC_PRICE, you can retrieve the menu item's price from its `price` value.  If the `pricingStrategy` value is TIME_SPECIFIC_PRICE or SIZE_PRICE, you must use the rules provided in _this menu item's_ `pricingRules` value to calculate the price for it. ", alias="pricingStrategy")
-    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, description="A `PricingRules` object with information about how to calculate prices for menu entities. The structure of this object varies depending on the pricing strategy being used. ", alias="pricingRules")
+    pricing_rules: Optional[Dict[str, Any]] = Field(default=None, alias="pricingRules")
     is_deferred: Optional[StrictBool] = Field(default=None, description="Indicates whether this menu item should be considered deferred revenue. ", alias="isDeferred")
     is_discountable: Optional[StrictBool] = Field(default=None, description="Indicates whether this menu item can be discounted.  **_Important_** The orders API _does not validate_ against the `isDiscountable` value. If you submit an order that applies a discount to a menu item whose `isDiscountable` value is FALSE, the orders API will not fail the order but it will set the discount amount on the menu item to $0.00. If you are using the menus API to build an ordering application, be sure to inspect the `isDiscountable` value of the menu items to ensure that your ordering application does not allow an item to be discounted if its `isDiscountable` value is FALSE. ", alias="isDiscountable")
     sales_category: Optional[SalesCategory] = Field(default=None, alias="salesCategory")
@@ -57,7 +58,7 @@ class MenuItem(BaseModel):
     plu: Optional[StrictStr] = Field(default=None, description="The price lookup (PLU) code for this menu item. The PLU code can include both numbers and letters. This value contains an empty string if a PLU code has not been defined. ")
     sku: Optional[StrictStr] = Field(default=None, description="The stock keeping unit (SKU) identifier for this menu item. The SKU identifier can include both numbers and letters. This value contains an empty string if a SKU has not been defined. ")
     calories: Optional[StrictInt] = Field(default=None, description="The number of calories in this menu item. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the menu item. ")
-    content_advisories: Optional[Dict[str, Any]] = Field(default=None, description="Content advisory information for menu items and modifier options. ", alias="contentAdvisories")
+    content_advisories: Optional[ContentAdvisories] = Field(default=None, alias="contentAdvisories")
     unit_of_measure: Optional[StrictStr] = Field(default=None, description="The unit of measure used to determine the price of the item. For example, $10.00 per gram. ", alias="unitOfMeasure")
     portions: Optional[Annotated[List[Portion], Field(min_length=0)]] = Field(default=None, description="An array of `Portion` objects that define the portions that can be used with this menu item. For example, for a pizza menu item, you could define 1st Half and 2nd Half portions. See <a href=\"https://doc.toasttab.com/doc/platformguide/adminPortionsOverview.html\">Portions overview</a> in the Toast Platform Guide for more information on portions. ")
     prep_time: Optional[StrictInt] = Field(default=None, description="The amount of time, in seconds, that it takes to prepare this menu item. This value is null if a prep time has not been specified for the menu item.<br> <br> *Related topics*<br> <a href=\"https://doc.toasttab.com/doc/platformguide/adminFireByPrepTime.html\">Using prep times to automate item firing</a><br> ", alias="prepTime")
@@ -146,6 +147,9 @@ class MenuItem(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of image
         if self.image:
             _dict['image'] = self.image.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of pricing_rules
+        if self.pricing_rules:
+            _dict['pricingRules'] = self.pricing_rules.to_dict()
         # override the default output from pydantic by calling `to_dict()` of sales_category
         if self.sales_category:
             _dict['salesCategory'] = self.sales_category.to_dict()
@@ -156,6 +160,9 @@ class MenuItem(BaseModel):
                 if _item_item_tags:
                     _items.append(_item_item_tags.to_dict())
             _dict['itemTags'] = _items
+        # override the default output from pydantic by calling `to_dict()` of content_advisories
+        if self.content_advisories:
+            _dict['contentAdvisories'] = self.content_advisories.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in portions (list)
         _items = []
         if self.portions:
@@ -228,7 +235,7 @@ class MenuItem(BaseModel):
             "visibility": obj.get("visibility"),
             "price": obj.get("price"),
             "pricingStrategy": obj.get("pricingStrategy"),
-            "pricingRules": obj.get("pricingRules"),
+            "pricingRules": PricingRules.from_dict(obj["pricingRules"]) if obj.get("pricingRules") is not None else None,
             "isDeferred": obj.get("isDeferred"),
             "isDiscountable": obj.get("isDiscountable"),
             "salesCategory": SalesCategory.from_dict(obj["salesCategory"]) if obj.get("salesCategory") is not None else None,
@@ -238,7 +245,7 @@ class MenuItem(BaseModel):
             "plu": obj.get("plu"),
             "sku": obj.get("sku"),
             "calories": obj.get("calories"),
-            "contentAdvisories": obj.get("contentAdvisories"),
+            "contentAdvisories": ContentAdvisories.from_dict(obj["contentAdvisories"]) if obj.get("contentAdvisories") is not None else None,
             "unitOfMeasure": obj.get("unitOfMeasure"),
             "portions": [Portion.from_dict(_item) for _item in obj["portions"]] if obj.get("portions") is not None else None,
             "prepTime": obj.get("prepTime"),

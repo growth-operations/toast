@@ -14,6 +14,7 @@
 
 
 # import models into model package
+from toastapi.models.alcohol import Alcohol
 from toastapi.models.alternate_payment_type import AlternatePaymentType
 from toastapi.models.applicable_discount import ApplicableDiscount
 from toastapi.models.applicable_discounts_request import ApplicableDiscountsRequest
@@ -28,10 +29,12 @@ from toastapi.models.applied_tax_rate import AppliedTaxRate
 from toastapi.models.authentication_request import AuthenticationRequest
 from toastapi.models.authentication_response import AuthenticationResponse
 from toastapi.models.authentication_token import AuthenticationToken
+from toastapi.models.availability import Availability
 from toastapi.models.break_type import BreakType
 from toastapi.models.cash_drawer import CashDrawer
 from toastapi.models.check import Check
 from toastapi.models.config_reference import ConfigReference
+from toastapi.models.content_advisories import ContentAdvisories
 from toastapi.models.curbside_pickup_info import CurbsidePickupInfo
 from toastapi.models.customer import Customer
 from toastapi.models.day_schedule import DaySchedule
@@ -76,6 +79,7 @@ from toastapi.models.pre_modifier import PreModifier
 from toastapi.models.pre_modifier_group import PreModifierGroup
 from toastapi.models.prep_times import PrepTimes
 from toastapi.models.price_group import PriceGroup
+from toastapi.models.pricing_rules import PricingRules
 from toastapi.models.printer import Printer
 from toastapi.models.refund import Refund
 from toastapi.models.refund_details import RefundDetails
@@ -85,18 +89,23 @@ from toastapi.models.restaurant_info import RestaurantInfo
 from toastapi.models.restaurant_service import RestaurantService
 from toastapi.models.revenue_center import RevenueCenter
 from toastapi.models.sales_category import SalesCategory
+from toastapi.models.schedule import Schedule
 from toastapi.models.schedules import Schedules
 from toastapi.models.selection import Selection
+from toastapi.models.sequence_price import SequencePrice
 from toastapi.models.service import Service
 from toastapi.models.service_area import ServiceArea
 from toastapi.models.service_charge import ServiceCharge
 from toastapi.models.service_charge_criteria import ServiceChargeCriteria
 from toastapi.models.shift import Shift
+from toastapi.models.size_sequence_pricing_rule import SizeSequencePricingRule
 from toastapi.models.table import Table
 from toastapi.models.takeout_payment_options import TakeoutPaymentOptions
 from toastapi.models.tax_rate import TaxRate
 from toastapi.models.time_entry import TimeEntry
 from toastapi.models.time_entry_break import TimeEntryBreak
+from toastapi.models.time_range import TimeRange
+from toastapi.models.time_specific_price import TimeSpecificPrice
 from toastapi.models.tip_withholding import TipWithholding
 from toastapi.models.toast_reference import ToastReference
 from toastapi.models.urls import URLs

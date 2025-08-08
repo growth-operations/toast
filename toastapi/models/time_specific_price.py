@@ -17,18 +17,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from typing import Any, ClassVar, Dict, List, Optional, Union
+from toastapi.models.schedule import Schedule
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class TimeSpecificPrice(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    Represents the pricing rules for a menu item that uses a time-specific price. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    time_specific_price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of the menu item during the periods of time defined by the associated `schedule` array. ", alias="timeSpecificPrice")
+    base_price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The base price of the menu item, used for time periods when a time-specific price has not been defined. ", alias="basePrice")
+    schedule: Optional[List[Schedule]] = Field(default=None, description="An array of `Schedule` objects that indicate the specific days and times that a time-specific price is available. ")
+    __properties: ClassVar[List[str]] = ["timeSpecificPrice", "basePrice", "schedule"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +50,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of TimeSpecificPrice from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,11 +71,18 @@ class SalesCategory(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in schedule (list)
+        _items = []
+        if self.schedule:
+            for _item_schedule in self.schedule:
+                if _item_schedule:
+                    _items.append(_item_schedule.to_dict())
+            _dict['schedule'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of TimeSpecificPrice from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +90,9 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "timeSpecificPrice": obj.get("timeSpecificPrice"),
+            "basePrice": obj.get("basePrice"),
+            "schedule": [Schedule.from_dict(_item) for _item in obj["schedule"]] if obj.get("schedule") is not None else None
         })
         return _obj
 

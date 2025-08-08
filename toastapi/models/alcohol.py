@@ -17,18 +17,27 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class Alcohol(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    Information about whether this menu item or modifier contains alcohol and may require,  or benefit from, additional handling. For example, a delivery partner may need  to identify a menu item or modifier as containing alcohol to ensure that delivery drivers request identification before giving it to a customer. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    contains_alcohol: Optional[StrictStr] = Field(default=None, description="A string that indicates whether the menu item or modifier contains alcohol. Possible values  include:  * `YES`: The menu item or modifier contains alcohol. * `NO`: The menu item or modifier does not contain alcohol.       The `containsAlcohol` value may also be `null`. A `null` value indicates that the corresponding UI option in Toast Web has not been configured for this menu item or modifier. ", alias="containsAlcohol")
+    __properties: ClassVar[List[str]] = ["containsAlcohol"]
+
+    @field_validator('contains_alcohol')
+    def contains_alcohol_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['true', 'false']):
+            raise ValueError("must be one of enum values ('true', 'false')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +57,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of Alcohol from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,11 +78,16 @@ class SalesCategory(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if contains_alcohol (nullable) is None
+        # and model_fields_set contains the field
+        if self.contains_alcohol is None and "contains_alcohol" in self.model_fields_set:
+            _dict['containsAlcohol'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of Alcohol from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +95,7 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "containsAlcohol": obj.get("containsAlcohol")
         })
         return _obj
 

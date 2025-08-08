@@ -19,16 +19,18 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.sequence_price import SequencePrice
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SalesCategory(BaseModel):
+class SizeSequencePricingRule(BaseModel):
     """
-    A descriptive category, for example, \"Food\" or \"Liquor\" that, when applied to the menu items and modifier options in your menu, allow you to view sales data by category. Null if no sales category has been defined. 
+    A multi-use object that defines the pricing rules for modifier options that belong to a modifier group that uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy. The contents of this object depend on the pricing strategy that is in effect. 
     """ # noqa: E501
-    name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this sales category, for example, \"Food\" or \"Liquor\". ")
-    guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this sales category, assigned by the Toast POS system. ")
-    __properties: ClassVar[List[str]] = ["name", "guid"]
+    size_name: Optional[StrictStr] = Field(default=None, description="A string that represents the size of a modifier option in this modifier group, for example, Small, Medium, or Large.  With Size Price and the Size/Sequence Price pricing strategies, the price of a modifier option changes based on the size of the menu item it is applied to. The `sizeName` value is null if the modifier group uses the Sequence Price pricing strategy because this strategy does not use sizes. ", alias="sizeName")
+    size_guid: Optional[StrictStr] = Field(default=None, description="The GUID of the modifier option where a menu item size has been defined that matches the `sizeName` value. The `sizeGuid` value is null if the modifier group uses the Sequence Price pricing strategy because this strategy does not use sizes. ", alias="sizeGuid")
+    sequence_prices: Optional[List[SequencePrice]] = Field(default=None, description="An array of `SequencePrice` objects that define the size, sequence, or size/sequence prices for the modifier options in this modifier group. ", alias="sequencePrices")
+    __properties: ClassVar[List[str]] = ["sizeName", "sizeGuid", "sequencePrices"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +50,7 @@ class SalesCategory(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SalesCategory from a JSON string"""
+        """Create an instance of SizeSequencePricingRule from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,11 +71,28 @@ class SalesCategory(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in sequence_prices (list)
+        _items = []
+        if self.sequence_prices:
+            for _item_sequence_prices in self.sequence_prices:
+                if _item_sequence_prices:
+                    _items.append(_item_sequence_prices.to_dict())
+            _dict['sequencePrices'] = _items
+        # set to None if size_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.size_name is None and "size_name" in self.model_fields_set:
+            _dict['sizeName'] = None
+
+        # set to None if size_guid (nullable) is None
+        # and model_fields_set contains the field
+        if self.size_guid is None and "size_guid" in self.model_fields_set:
+            _dict['sizeGuid'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SalesCategory from a dict"""
+        """Create an instance of SizeSequencePricingRule from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +100,9 @@ class SalesCategory(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "guid": obj.get("guid")
+            "sizeName": obj.get("sizeName"),
+            "sizeGuid": obj.get("sizeGuid"),
+            "sequencePrices": [SequencePrice.from_dict(_item) for _item in obj["sequencePrices"]] if obj.get("sequencePrices") is not None else None
         })
         return _obj
 
