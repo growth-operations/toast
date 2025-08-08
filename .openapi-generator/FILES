@@ -33,6 +33,7 @@ docs/DeliveryInfo.md
 docs/DeliveryPaymentOptions.md
 docs/DeliveryServiceInfo.md
 docs/Device.md
+docs/DimensionUnitOfMeasure.md
 docs/DiningOption.md
 docs/DiningOptionsApi.md
 docs/Discount.md
@@ -126,6 +127,7 @@ docs/VoidOrderRequestSelections.md
 docs/VoidReason.md
 docs/VoidReasonsApi.md
 docs/WeekSchedule.md
+docs/WeightUnitOfMeasure.md
 git_push.sh
 pyproject.toml
 requirements.txt
@@ -197,6 +199,7 @@ toastapi/models/delivery_info.py
 toastapi/models/delivery_payment_options.py
 toastapi/models/delivery_service_info.py
 toastapi/models/device.py
+toastapi/models/dimension_unit_of_measure.py
 toastapi/models/dining_option.py
 toastapi/models/discount.py
 toastapi/models/employee.py
@@ -263,6 +266,7 @@ toastapi/models/void_order_request.py
 toastapi/models/void_order_request_selections.py
 toastapi/models/void_reason.py
 toastapi/models/week_schedule.py
+toastapi/models/weight_unit_of_measure.py
 toastapi/py.typed
 toastapi/rest.py
 tox.ini

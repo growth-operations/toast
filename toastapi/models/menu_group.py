@@ -17,10 +17,13 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from toastapi.models.image import Image
+from toastapi.models.item_tag import ItemTag
 from toastapi.models.menu_item import MenuItem
+from toastapi.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,8 +33,18 @@ class MenuGroup(BaseModel):
     """ # noqa: E501
     name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this menu group, for example, \"Appetizers\" or \"Sandwiches\". ")
     guid: Optional[StrictStr] = Field(default=None, description="A unique identifier for this menu group, assigned by the Toast POS system. ")
+    multi_location_id: Optional[StrictStr] = Field(default=None, description="An identifier that is used to identify and consolidate menu entities that are versions of each other.  `multiLocationId` replaces `masterId`. `multiLocationId` and `masterId` always have the same value.  Menu entities can be versioned. Those versions can be assigned to specific restaurant locations, or groups of locations, in a management group. For example, you could have two versions of a burger, one for a Boston location and another for a New York City location. Versioned menu entities share the majority of, but not all of, their data. For example, the Boston version is called the Minuteman Burger and has pickles, while the New York City version is called the Empire Burger and does not.  You use the `multiLocationId` to identify menu entities that are versions of each other. To continue the example above, the Minuteman Burger in the JSON returned for the Boston location has the same `multilocationId` as the Empire Burger in the JSON returned for the New York City location. These matching `multlocationId` values indicate that the two items are related versions of the same item. In Toast reports, this allows a restaurant to track sales of the burger across both locations. ", alias="multiLocationId")
+    master_id: Optional[StrictInt] = Field(default=None, description="This value is deprecated. Instead of `masterId`, use `multiLocationId`.  An identifier that is used to identify and consolidate menu entities that are versions of each other. ", alias="masterId")
+    description: Optional[StrictStr] = Field(default=None, description="An optional short description of this menu group. ")
+    pos_name: Optional[StrictStr] = Field(default=None, description="The button label name that appears for this menu entity in the Toast POS app. `posName` contains an empty string if a `posName` has not been defined for the menu entity and the `name` value is used for the button label instead. ", alias="posName")
+    pos_button_color_light: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in light mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorLight` contains the HEX code for the light mode color. ", alias="posButtonColorLight")
+    pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
+    image: Optional[Image] = None
+    visibility: Optional[Visibility] = None
+    item_tags: Optional[List[ItemTag]] = Field(default=None, description="An array of `ItemTag` objects that are assigned to this menu group. Item tags are used to assign identifying characteristics, for example, vegetarian, gluten-free, or alcohol. ", alias="itemTags")
+    menu_groups: Optional[Annotated[List[MenuGroup], Field(min_length=0)]] = Field(default=None, description="An array of the `MenuGroup` objects that are children of this menu group. The array is empty if the menu group has no child menu groups. ", alias="menuGroups")
     menu_items: Optional[Annotated[List[MenuItem], Field(min_length=0)]] = Field(default=None, description="An array of the `MenuItem` objects contained in this menu group. ", alias="menuItems")
-    __properties: ClassVar[List[str]] = ["name", "guid", "menuItems"]
+    __properties: ClassVar[List[str]] = ["name", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "image", "visibility", "itemTags", "menuGroups", "menuItems"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -72,6 +85,23 @@ class MenuGroup(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of image
+        if self.image:
+            _dict['image'] = self.image.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in item_tags (list)
+        _items = []
+        if self.item_tags:
+            for _item_item_tags in self.item_tags:
+                if _item_item_tags:
+                    _items.append(_item_item_tags.to_dict())
+            _dict['itemTags'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in menu_groups (list)
+        _items = []
+        if self.menu_groups:
+            for _item_menu_groups in self.menu_groups:
+                if _item_menu_groups:
+                    _items.append(_item_menu_groups.to_dict())
+            _dict['menuGroups'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in menu_items (list)
         _items = []
         if self.menu_items:
@@ -93,8 +123,20 @@ class MenuGroup(BaseModel):
         _obj = cls.model_validate({
             "name": obj.get("name"),
             "guid": obj.get("guid"),
+            "multiLocationId": obj.get("multiLocationId"),
+            "masterId": obj.get("masterId"),
+            "description": obj.get("description"),
+            "posName": obj.get("posName"),
+            "posButtonColorLight": obj.get("posButtonColorLight"),
+            "posButtonColorDark": obj.get("posButtonColorDark"),
+            "image": Image.from_dict(obj["image"]) if obj.get("image") is not None else None,
+            "visibility": obj.get("visibility"),
+            "itemTags": [ItemTag.from_dict(_item) for _item in obj["itemTags"]] if obj.get("itemTags") is not None else None,
+            "menuGroups": [MenuGroup.from_dict(_item) for _item in obj["menuGroups"]] if obj.get("menuGroups") is not None else None,
             "menuItems": [MenuItem.from_dict(_item) for _item in obj["menuItems"]] if obj.get("menuItems") is not None else None
         })
         return _obj
 
+# TODO: Rewrite to not use raise_errors
+MenuGroup.model_rebuild(raise_errors=False)
 

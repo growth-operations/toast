@@ -40,6 +40,7 @@ from toastapi.models.delivery_info import DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions
 from toastapi.models.delivery_service_info import DeliveryServiceInfo
 from toastapi.models.device import Device
+from toastapi.models.dimension_unit_of_measure import DimensionUnitOfMeasure
 from toastapi.models.dining_option import DiningOption
 from toastapi.models.discount import Discount
 from toastapi.models.employee import Employee
@@ -106,3 +107,4 @@ from toastapi.models.void_order_request import VoidOrderRequest
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections
 from toastapi.models.void_reason import VoidReason
 from toastapi.models.week_schedule import WeekSchedule
+from toastapi.models.weight_unit_of_measure import WeightUnitOfMeasure

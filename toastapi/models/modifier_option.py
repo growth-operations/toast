@@ -20,12 +20,14 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from toastapi.models.dimension_unit_of_measure import DimensionUnitOfMeasure
 from toastapi.models.image import Image
 from toastapi.models.item_tag import ItemTag
 from toastapi.models.modifier_option_tax_info import ModifierOptionTaxInfo
 from toastapi.models.portion import Portion
 from toastapi.models.sales_category import SalesCategory
 from toastapi.models.visibility import Visibility
+from toastapi.models.weight_unit_of_measure import WeightUnitOfMeasure
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -63,7 +65,15 @@ class ModifierOption(BaseModel):
     portions: Optional[Annotated[List[Portion], Field(min_length=0)]] = Field(default=None, description="An array of `Portion` objects that define the portions that this modifier option can be added to. ")
     prep_time: Optional[StrictInt] = Field(default=None, description="The amount of time, in seconds, that it takes to prepare this modifier option. This value is null if a prep time has not been specified for the modifier option. ", alias="prepTime")
     modifier_group_references: Optional[Annotated[List[StrictInt], Field(min_length=0)]] = Field(default=None, description="An array of `referenceId`s for `ModifierGroup` objects. These objects define nested modifier groups contained in this modifier option. ", alias="modifierGroupReferences")
-    __properties: ClassVar[List[str]] = ["referenceId", "name", "kitchenName", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "prepStations", "image", "visibility", "price", "pricingStrategy", "pricingRules", "salesCategory", "taxInfo", "modifierOptionTaxInfo", "itemTags", "plu", "sku", "calories", "contentAdvisories", "unitOfMeasure", "isDefault", "allowsDuplicates", "portions", "prepTime", "modifierGroupReferences"]
+    length: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The length of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.  The `length` value is `null` if no length is specified for the item or modifier.  You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use. ")
+    height: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The height of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.  The `height` value is `null` if no height is specified for the item or modifier.  You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use. ")
+    width: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The width of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.  The `width` value is `null` if no width is specified for the item or modifier.  You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use. ")
+    dimension_unit_of_measure: Optional[DimensionUnitOfMeasure] = Field(default=None, alias="dimensionUnitOfMeasure")
+    weight: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The weight of the item or modifier. Use the `weightUnitOfMeasure` value to determine the unit of measurement.  The `weight` value is `null` if no weight is specified for the item or modifier.      You can use the `weight` value when determining shipping costs or choosing a delivery vehicle to use. ")
+    weight_unit_of_measure: Optional[WeightUnitOfMeasure] = Field(default=None, alias="weightUnitOfMeasure")
+    images: Optional[List[StrictStr]] = Field(default=None, description="An array of strings that contain URLs for images that have been uploaded for this item or modifier. The array is empty if no images have been uploaded.      _Note:_ The `images` array contains multiple URLs for multiple images for the same item or modifier. The older `image` value contains a single URL for a single image. ")
+    guest_count: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The number of guests the item or modifier is expected to serve. This value is `null` if no guest count is specified. ", alias="guestCount")
+    __properties: ClassVar[List[str]] = ["referenceId", "name", "kitchenName", "guid", "multiLocationId", "masterId", "description", "posName", "posButtonColorLight", "posButtonColorDark", "prepStations", "image", "visibility", "price", "pricingStrategy", "pricingRules", "salesCategory", "taxInfo", "modifierOptionTaxInfo", "itemTags", "plu", "sku", "calories", "contentAdvisories", "unitOfMeasure", "isDefault", "allowsDuplicates", "portions", "prepTime", "modifierGroupReferences", "length", "height", "width", "dimensionUnitOfMeasure", "weight", "weightUnitOfMeasure", "images", "guestCount"]
 
     @field_validator('unit_of_measure')
     def unit_of_measure_validate_enum(cls, value):
@@ -152,6 +162,31 @@ class ModifierOption(BaseModel):
         if self.prep_time is None and "prep_time" in self.model_fields_set:
             _dict['prepTime'] = None
 
+        # set to None if length (nullable) is None
+        # and model_fields_set contains the field
+        if self.length is None and "length" in self.model_fields_set:
+            _dict['length'] = None
+
+        # set to None if height (nullable) is None
+        # and model_fields_set contains the field
+        if self.height is None and "height" in self.model_fields_set:
+            _dict['height'] = None
+
+        # set to None if width (nullable) is None
+        # and model_fields_set contains the field
+        if self.width is None and "width" in self.model_fields_set:
+            _dict['width'] = None
+
+        # set to None if weight (nullable) is None
+        # and model_fields_set contains the field
+        if self.weight is None and "weight" in self.model_fields_set:
+            _dict['weight'] = None
+
+        # set to None if guest_count (nullable) is None
+        # and model_fields_set contains the field
+        if self.guest_count is None and "guest_count" in self.model_fields_set:
+            _dict['guestCount'] = None
+
         return _dict
 
     @classmethod
@@ -193,7 +228,15 @@ class ModifierOption(BaseModel):
             "allowsDuplicates": obj.get("allowsDuplicates"),
             "portions": [Portion.from_dict(_item) for _item in obj["portions"]] if obj.get("portions") is not None else None,
             "prepTime": obj.get("prepTime"),
-            "modifierGroupReferences": obj.get("modifierGroupReferences")
+            "modifierGroupReferences": obj.get("modifierGroupReferences"),
+            "length": obj.get("length"),
+            "height": obj.get("height"),
+            "width": obj.get("width"),
+            "dimensionUnitOfMeasure": obj.get("dimensionUnitOfMeasure"),
+            "weight": obj.get("weight"),
+            "weightUnitOfMeasure": obj.get("weightUnitOfMeasure"),
+            "images": obj.get("images"),
+            "guestCount": obj.get("guestCount")
         })
         return _obj
 

@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.16"
+__version__ = "1.0.20"
 
 # Define package exports
 __all__ = [
@@ -84,6 +84,7 @@ __all__ = [
     "DeliveryPaymentOptions",
     "DeliveryServiceInfo",
     "Device",
+    "DimensionUnitOfMeasure",
     "DiningOption",
     "Discount",
     "Employee",
@@ -150,6 +151,7 @@ __all__ = [
     "VoidOrderRequestSelections",
     "VoidReason",
     "WeekSchedule",
+    "WeightUnitOfMeasure",
 ]
 
 # import apis into sdk package
@@ -223,6 +225,7 @@ from toastapi.models.delivery_info import DeliveryInfo as DeliveryInfo
 from toastapi.models.delivery_payment_options import DeliveryPaymentOptions as DeliveryPaymentOptions
 from toastapi.models.delivery_service_info import DeliveryServiceInfo as DeliveryServiceInfo
 from toastapi.models.device import Device as Device
+from toastapi.models.dimension_unit_of_measure import DimensionUnitOfMeasure as DimensionUnitOfMeasure
 from toastapi.models.dining_option import DiningOption as DiningOption
 from toastapi.models.discount import Discount as Discount
 from toastapi.models.employee import Employee as Employee
@@ -289,3 +292,4 @@ from toastapi.models.void_order_request import VoidOrderRequest as VoidOrderRequ
 from toastapi.models.void_order_request_selections import VoidOrderRequestSelections as VoidOrderRequestSelections
 from toastapi.models.void_reason import VoidReason as VoidReason
 from toastapi.models.week_schedule import WeekSchedule as WeekSchedule
+from toastapi.models.weight_unit_of_measure import WeightUnitOfMeasure as WeightUnitOfMeasure

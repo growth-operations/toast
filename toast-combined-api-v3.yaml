@@ -5358,6 +5358,37 @@ components:
           description: |
             A unique identifier for this menu group, assigned by the Toast POS system.
           type: string
+        multiLocationId:
+          $ref: '#/components/schemas/MultiLocationId'
+        masterId:
+          $ref: '#/components/schemas/MasterId'
+        description:
+          description: |
+            An optional short description of this menu group.
+          type: string
+        posName:
+          $ref: '#/components/schemas/PosName'
+        posButtonColorLight:
+          $ref: '#/components/schemas/PosButtonColorLight'
+        posButtonColorDark:
+          $ref: '#/components/schemas/PosButtonColorDark'
+        image:
+          $ref: '#/components/schemas/Image'
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        itemTags:
+          type: array
+          description: |
+            An array of `ItemTag` objects that are assigned to this menu group. Item tags are used to assign identifying characteristics, for example, vegetarian, gluten-free, or alcohol.
+          items:
+            $ref: '#/components/schemas/ItemTag'
+        menuGroups:
+          type: array
+          description: |
+            An array of the `MenuGroup` objects that are children of this menu group. The array is empty if the menu group has no child menu groups.
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/MenuGroup'
         menuItems:
           type: array
           description: |
@@ -5462,6 +5493,136 @@ components:
 
             The `pricingRules` object takes different forms depending on the pricing strategy configured for the menu item. Use the `pricingStrategy` value to determine which pricing strategy has been used so that you can properly interpret the data in the `pricingRules` object. For the BASE_PRICE, and MENU_SPECIFIC_PRICE pricing strategies, the `pricingRules` object is null because you can retrieve the price from the `price` value without additional calculation. For the OPEN_PRICE pricing strategy, the `pricingRules` object is also null (the price of an open menu item is specified when it is ordered). For the TIME_SPECIFIC_PRICE and SIZE_PRICE pricing strategies, the `PricingRules` object contains additional values that you use to calculate the menu item's price.
           $ref: '#/components/schemas/PricingRules'
+        isDeferred:
+          type: boolean
+          description: |
+            Indicates whether this menu item should be considered deferred revenue.
+        isDiscountable:
+          type: boolean
+          description: |
+            Indicates whether this menu item can be discounted.
+
+            **_Important_** The orders API _does not validate_ against the `isDiscountable` value. If you submit an order that applies a discount to a menu item whose `isDiscountable` value is FALSE, the orders API will not fail the order but it will set the discount amount on the menu item to $0.00. If you are using the menus API to build an ordering application, be sure to inspect the `isDiscountable` value of the menu items to ensure that your ordering application does not allow an item to be discounted if its `isDiscountable` value is FALSE.
+        salesCategory:
+          $ref: '#/components/schemas/SalesCategory'
+        taxInfo:
+          type: array
+          description: |
+            An array of GUIDs for the tax rates that apply to this menu item.
+            
+            Note that a menu item's tax rates may get overridden if a modifier option is applied to it and that modifier option is configured so that it overrides its parent menu item's tax rates. See <a href="https://doc.toasttab.com/doc/devguide/apiUsingTaxInfoAndModifierOptionTaxInfoToCalculateTaxesForMenuItemsAndModOptions.html">Using taxInfo and modifierOptionTaxInfo to calculate taxes for menu items and modifier options</a> in the Toast Developer Guide for more information.   
+                      
+            To retrieve full configuration data for a tax rate, use the `/taxRates/{guid}` endpoint in the configuration API.
+
+            _Important:_ The `taxInfo` value is intended to help you display prices but the `/prices` endpoint of the orders API is the only supported way to determine the prices of orders that you submit to the orders API. See <a href="https://doc.toasttab.com/doc/devguide/apiOrderPrices.html">Order prices</a> in the Toast Developer Guide for more information.
+          items:
+            type: string
+        taxInclusion:
+          type: string
+          enum:
+            - TAX_INCLUDED
+            - TAX_NOT_INCLUDED
+            - SMART_TAX
+          description: |
+            A string that represents the tax inclusion setting for this menu item. Possible values include:
+            
+            * `TAX_INCLUDED`: The menu item's price includes taxes. You should not display additional tax on top of the menu item price in your ordering UI.
+            * `TAX_NOT_INCLUDED`: The menu item's price does not include taxes. You should display tax values alongside the menu item price in your ordering UI.
+            * `SMART_TAX`: The menu item is using smart tax, a feature that allows a restaurant to configure menu item prices to include or not include taxes, depending on the section of the restaurant that the item is ordered in (for example, the bar or the dining room). For example, a guest can order an item at either the bar or in the main dining room. To prevent bartenders from having to handle coins, which can slow down service, and to make tipping easier, the restaurant wants the price of the item to be a whole number that includes tax when it is ordered at the bar. In the main dining room, where speed of service is less of a concern, the restaurant doesn't want the item's price to include tax, so that it doesn't lose out on the extra revenue.
+            
+            Typically, the smart tax setting is used for in-store workflows where the efficiency of money handling is a priority. As such, it doesn't apply to online ordering integrations. If a menu item's `taxInclusion` value is set to `SMART_TAX`, your ordering integration should treat the menu item as if tax is not included. For more information on the smart tax feature, see <a href="https://doc.toasttab.com/doc/platformguide/adminSmartTax.html">Smart tax</a> in the Toast Platform Guide.
+            
+            _Note:_ A menu item's tax inclusion setting is inherited by any modifiers that are applied to that menu item. For more information, see <a href="https://doc.toasttab.com/doc/platformguide/adminTaxesOnModifiers.html#adminModifierTaxInteraction">Tax functionality interaction</a> in the Toast Platform Guide.
+        itemTags:
+          type: array
+          description: |
+            An array of `ItemTag` objects that are assigned to this menu item. Item tags are used to assign identifying characteristics to a menu item, for example, vegetarian, gluten-free, or alcohol.
+          items:
+            $ref: '#/components/schemas/ItemTag'
+        plu:
+          type: string
+          description: |
+            The price lookup (PLU) code for this menu item. The PLU code can include both numbers and letters. This value contains an empty string if a PLU code has not been defined.
+        sku:
+          type: string
+          description: |
+            The stock keeping unit (SKU) identifier for this menu item. The SKU identifier can include both numbers and letters. This value contains an empty string if a SKU has not been defined.
+        calories:
+          type: integer
+          nullable: true
+          description: |
+            The number of calories in this menu item. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the menu item.
+        contentAdvisories:
+          $ref: '#/components/schemas/ContentAdvisories'
+        unitOfMeasure:
+          type: string
+          enum:
+            - NONE
+            - LB
+            - OZ
+            - KG
+            - G
+          description: |
+            The unit of measure used to determine the price of the item. For example, $10.00 per gram.
+        portions:
+          type: array
+          description: |
+            An array of `Portion` objects that define the portions that can be used with this menu item. For example, for a pizza menu item, you could define 1st Half and 2nd Half portions. See <a href="https://doc.toasttab.com/doc/platformguide/adminPortionsOverview.html">Portions overview</a> in the Toast Platform Guide for more information on portions.
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/Portion'    
+        prepTime:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            The amount of time, in seconds, that it takes to prepare this menu item. This value is null if a prep time has not been specified for the menu item.<br>
+            <br>
+            *Related topics*<br>
+            <a href="https://doc.toasttab.com/doc/platformguide/adminFireByPrepTime.html">Using prep times to automate item firing</a><br>
+        prepStations:
+          type: array
+          description: |
+            An array of GUIDs for the prep stations that have been assigned to this menu item. This array is empty if no prep stations have been assigned.<br>
+            <br>
+            *Related topics:*<br>
+            <a href="https://doc.toasttab.com/doc/platformguide/platformKitchenRoutingOverview.html">Routing to prep stations</a>
+          items:
+            type: string
+        modifierGroupReferences:
+          type: array
+          description: |
+            An array of `referenceId`s for `ModifierGroup` objects. These objects define the modifier groups that apply to this menu item.
+          minItems: 0
+          items:
+            type: integer
+        eligiblePaymentAssistancePrograms:
+          type: array
+          description: |
+            An array of strings that indicate which payment assistance programs may be used to pay for this menu item. Possible values include:
+            
+            * `SNAP`: Supplemental Nutrition Assistance Program
+            * `EBT_CASH`: Electronic Benefit Transfer Cash
+            
+            The array is empty if no payment assistance programs have been assigned to the menu item.
+          items:
+            type: string
+        length:
+          $ref: '#/components/schemas/Length'
+        height:
+          $ref: '#/components/schemas/Height'
+        width:
+          $ref: '#/components/schemas/Width'
+        dimensionUnitOfMeasure:
+          $ref: '#/components/schemas/DimensionUnitOfMeasure'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        weightUnitOfMeasure:
+          $ref: '#/components/schemas/WeightUnitOfMeasure'
+        images:
+          $ref: '#/components/schemas/Images'
+        guestCount:
+          $ref: '#/components/schemas/GuestCount'
     ModifierGroup:
       type: object
       description: |
@@ -5708,6 +5869,22 @@ components:
           minItems: 0
           items:
             type: integer
+        length:
+          $ref: '#/components/schemas/Length'
+        height:
+          $ref: '#/components/schemas/Height'
+        width:
+          $ref: '#/components/schemas/Width'
+        dimensionUnitOfMeasure:
+          $ref: '#/components/schemas/DimensionUnitOfMeasure'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        weightUnitOfMeasure:
+          $ref: '#/components/schemas/WeightUnitOfMeasure'
+        images:
+          $ref: '#/components/schemas/Images'
+        guestCount:
+          $ref: '#/components/schemas/GuestCount'
     PreModifierGroup:
       type: object
       description: |
@@ -8844,3 +9021,78 @@ components:
         name:
           type: string
           description: The name of this portion.
+    Length:
+      type: number
+      format: float
+      nullable: true
+      description: |
+        The length of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.
+        
+        The `length` value is `null` if no length is specified for the item or modifier.
+        
+        You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use.
+    Height:
+      type: number
+      format: float
+      nullable: true
+      description: |
+        The height of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.
+        
+        The `height` value is `null` if no height is specified for the item or modifier.
+        
+        You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use.
+    Width:
+      type: number
+      format: float
+      nullable: true
+      description: |
+        The width of the item or modifier. Use the `dimensionUnitOfMeasure` value to determine the unit of measurement.
+        
+        The `width` value is `null` if no width is specified for the item or modifier.
+        
+        You can use the `length`, `height`, and `width` values to determine the overall size of the item or modifier. This information is useful, for example, when determining shipping costs or choosing the size of delivery vehicle to use.
+    DimensionUnitOfMeasure:
+      type: string
+      enum:
+        - IN
+        - CM
+        - FT
+        - M
+        - MM
+        - YD
+      description: |
+        The unit of measure assigned to the `length`, `height`, and `width` values.
+    Weight:
+      type: number
+      format: float
+      nullable: true
+      description: |
+        The weight of the item or modifier. Use the `weightUnitOfMeasure` value to determine the unit of measurement.
+        
+        The `weight` value is `null` if no weight is specified for the item or modifier.
+            
+        You can use the `weight` value when determining shipping costs or choosing a delivery vehicle to use.
+    WeightUnitOfMeasure:
+      type: string
+      enum:
+        - NONE
+        - LB
+        - OZ
+        - KG
+        - G
+      description: |
+        The unit of measure assigned to the `weight` value.
+    Images:
+      type: array
+      description: |
+        An array of strings that contain URLs for images that have been uploaded for this item or modifier. The array is empty if no images have been uploaded.
+            
+        _Note:_ The `images` array contains multiple URLs for multiple images for the same item or modifier. The older `image` value contains a single URL for a single image.
+      items:
+        type: string
+    GuestCount:
+      type: number
+      format: float
+      nullable: true
+      description: |
+        The number of guests the item or modifier is expected to serve. This value is `null` if no guest count is specified.
