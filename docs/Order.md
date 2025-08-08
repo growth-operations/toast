@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **modified_date** | **datetime** | The most recent date that the order, or a check or menu item selection in the order, was modified. | [optional] 
 **promised_date** | **datetime** | For scheduled orders, the date and time that the order is scheduled to be fulfilled.  For dine-in and as soon as possible (ASAP) orders, &#x60;promisedDate&#x60; is &#x60;null&#x60;.  | [optional] 
 **channel_guid** | **str** | Reserved for future use.  | [optional] 
-**dining_option** | [**ExternalReference**](ExternalReference.md) |  | 
+**dining_option** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **checks** | [**List[Check]**](Check.md) | The checks for this order. Most orders have one check.  If the check is split, then there are multiple checks.  | 
 **table** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
 **service_area** | [**ExternalReference**](ExternalReference.md) |  | [optional] 
