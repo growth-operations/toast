@@ -16,7 +16,6 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from datetime import datetime
 from pydantic import Field, StrictStr
 from typing import List, Optional
 from typing_extensions import Annotated
@@ -46,7 +45,7 @@ class ServiceAreasApi:
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         limit: Annotated[Optional[Annotated[int, Field(le=300, strict=True)]], Field(description="The maximum number of objects to return. The default value is 300. The maximum value is 300.")] = None,
         page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.")] = None,
-        last_modified: Annotated[Optional[datetime], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'.")] = None,
+        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -70,8 +69,8 @@ class ServiceAreasApi:
         :type limit: int
         :param page_token: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
         :type page_token: str
-        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'.
-        :type last_modified: datetime
+        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'.
+        :type last_modified: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -125,7 +124,7 @@ class ServiceAreasApi:
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         limit: Annotated[Optional[Annotated[int, Field(le=300, strict=True)]], Field(description="The maximum number of objects to return. The default value is 300. The maximum value is 300.")] = None,
         page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.")] = None,
-        last_modified: Annotated[Optional[datetime], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'.")] = None,
+        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -149,8 +148,8 @@ class ServiceAreasApi:
         :type limit: int
         :param page_token: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
         :type page_token: str
-        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'.
-        :type last_modified: datetime
+        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'.
+        :type last_modified: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -204,7 +203,7 @@ class ServiceAreasApi:
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         limit: Annotated[Optional[Annotated[int, Field(le=300, strict=True)]], Field(description="The maximum number of objects to return. The default value is 300. The maximum value is 300.")] = None,
         page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.")] = None,
-        last_modified: Annotated[Optional[datetime], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'.")] = None,
+        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -228,8 +227,8 @@ class ServiceAreasApi:
         :type limit: int
         :param page_token: A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
         :type page_token: str
-        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'.
-        :type last_modified: datetime
+        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'.
+        :type last_modified: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -310,17 +309,8 @@ class ServiceAreasApi:
             _query_params.append(('pageToken', page_token))
             
         if last_modified is not None:
-            if isinstance(last_modified, datetime):
-                _query_params.append(
-                    (
-                        'lastModified',
-                        last_modified.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('lastModified', last_modified))
+            
+            _query_params.append(('lastModified', last_modified))
             
         # process the header parameters
         if toast_restaurant_external_id is not None:

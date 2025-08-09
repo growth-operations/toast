@@ -45,7 +45,7 @@ async with toastapi.ApiClient(configuration) as api_client:
     toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
     limit = 300 # int | The maximum number of objects to return. The default value is 300. The maximum value is 300. (optional) (default to 300)
     page_token = 'page_token_example' # str | A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \"pageToken\" parameter from the \"Toast-Next-Page-Token\" header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. (optional)
-    last_modified = '2013-10-20T19:20:30+01:00' # datetime | Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'. (optional)
+    last_modified = '2024-06-20T00:00:00.000+0000' # str | Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'. (optional)
 
     try:
         # Get restaurant services
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
  **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
  **limit** | **int**| The maximum number of objects to return. The default value is 300. The maximum value is 300. | [optional] [default to 300]
  **page_token** | **str**| A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the \&quot;pageToken\&quot; parameter from the \&quot;Toast-Next-Page-Token\&quot; header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. | [optional] 
- **last_modified** | **datetime**| Limits the return data to objects created or modified after a specific date and time. For example: &#39;2024-06-20T00:00:00.000%2B0000&#39;. | [optional] 
+ **last_modified** | **str**| Limits the return data to objects created or modified after a specific date and time. For example: &#39;2024-06-20T00:00:00.000+0000&#39;. | [optional] 
 
 ### Return type
 

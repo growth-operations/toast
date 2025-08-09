@@ -3143,12 +3143,12 @@ paths:
           description: |
             Limits the return data to objects created or modified after
             a specific date and time. For example:
-            `2024-06-20T00:00:00.000%2B0000`.
+            `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `AlternatePaymentType` objects.
@@ -3251,12 +3251,12 @@ paths:
           description: |
             Limits the return data to objects created or modified after
             a specific date and time. For example:
-            `2024-06-20T00:00:00.000%2B0000`.
+            `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `BreakType` objects.
@@ -3351,12 +3351,12 @@ paths:
             type: string
         - name: lastModified
           description: |
-            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `CashDrawer` objects.
@@ -3439,12 +3439,12 @@ paths:
             type: string
         - name: lastModified
           description: |
-            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `DiningOption` objects.
@@ -3504,12 +3504,12 @@ paths:
           description: |
             Limits the return data to objects created or modified after
             a specific date and time. For example:
-            `2024-06-20T00:00:00.000%2B0000`.
+            `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `Discount` objects.
@@ -3631,12 +3631,12 @@ paths:
             type: string
         - name: lastModified
           description: |
-            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `MenuGroup` objects.
@@ -3719,12 +3719,12 @@ paths:
             type: string
         - name: lastModified
           description: |
-            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `MenuItem` objects.
@@ -3807,12 +3807,12 @@ paths:
             type: string
         - name: lastModified
           description: |
-            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `Printer` objects.
@@ -3895,12 +3895,12 @@ paths:
             type: string
         - name: lastModified
           description: |
-            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`.
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `Table` objects.
@@ -3945,12 +3945,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `PreModifier` objects.
@@ -4022,12 +4022,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `PreModifierGroup` objects.
@@ -4099,12 +4099,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `NoSaleReason` objects.
@@ -4195,12 +4195,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `PayoutReason` objects.
@@ -4291,12 +4291,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000%2B0000`."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `PriceGroup` objects.
@@ -4385,12 +4385,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `TaxRate` objects.
@@ -4479,12 +4479,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `ServiceArea` objects.
@@ -4573,12 +4573,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: "Returns an array of `ServiceCharge` objects."
@@ -4667,12 +4667,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `RevenueCenter` objects.
@@ -4761,12 +4761,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `RestaurantService` objects.
@@ -4886,12 +4886,12 @@ paths:
           schema:
             type: string
         - name: lastModified
-          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000%2B0000'."
+          description: "Limits the return data to objects created or modified after a specific date and time. For example: '2024-06-20T00:00:00.000+0000'."
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
           description: Returns an array of `VoidReason` objects.
