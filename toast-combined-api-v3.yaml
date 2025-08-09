@@ -7224,14 +7224,13 @@ components:
     Customer:
       type: object
       allOf:
-        - $ref: "#/components/schemas/ToastReference"
         - type: object
           required:
-            - firstName
-            - lastName
-            - email
-            - phone
+            - guid
           properties:
+            guid:
+              type: string
+              description: The GUID of the customer.
             firstName:
               type: string
               description: |

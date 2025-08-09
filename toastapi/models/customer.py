@@ -26,14 +26,13 @@ class Customer(BaseModel):
     """
     Customer
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
-    first_name: StrictStr = Field(description="The first name, or given name, of the guest. ", alias="firstName")
-    last_name: StrictStr = Field(description="The last name, or surname, of the guest. ", alias="lastName")
-    phone: StrictStr = Field(description="The telephone number of the guest. ")
+    guid: StrictStr = Field(description="The GUID of the customer.")
+    first_name: Optional[StrictStr] = Field(default=None, description="The first name, or given name, of the guest. ", alias="firstName")
+    last_name: Optional[StrictStr] = Field(default=None, description="The last name, or surname, of the guest. ", alias="lastName")
+    phone: Optional[StrictStr] = Field(default=None, description="The telephone number of the guest. ")
     phone_country_code: Optional[StrictStr] = Field(default=None, description="The international phone country code for the telephone number of the guest. ", alias="phoneCountryCode")
-    email: StrictStr = Field(description="The email address corresponding to the guest who placed the order. ")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "firstName", "lastName", "phone", "phoneCountryCode", "email"]
+    email: Optional[StrictStr] = Field(default=None, description="The email address corresponding to the guest who placed the order. ")
+    __properties: ClassVar[List[str]] = ["guid", "firstName", "lastName", "phone", "phoneCountryCode", "email"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -87,7 +86,6 @@ class Customer(BaseModel):
 
         _obj = cls.model_validate({
             "guid": obj.get("guid"),
-            "entityType": obj.get("entityType"),
             "firstName": obj.get("firstName"),
             "lastName": obj.get("lastName"),
             "phone": obj.get("phone"),

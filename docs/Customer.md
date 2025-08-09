@@ -5,13 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
-**first_name** | **str** | The first name, or given name, of the guest.  | 
-**last_name** | **str** | The last name, or surname, of the guest.  | 
-**phone** | **str** | The telephone number of the guest.  | 
+**guid** | **str** | The GUID of the customer. | 
+**first_name** | **str** | The first name, or given name, of the guest.  | [optional] 
+**last_name** | **str** | The last name, or surname, of the guest.  | [optional] 
+**phone** | **str** | The telephone number of the guest.  | [optional] 
 **phone_country_code** | **str** | The international phone country code for the telephone number of the guest.  | [optional] 
-**email** | **str** | The email address corresponding to the guest who placed the order.  | 
+**email** | **str** | The email address corresponding to the guest who placed the order.  | [optional] 
 
 ## Example
 
