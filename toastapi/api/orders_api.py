@@ -16,7 +16,6 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from datetime import datetime
 from pydantic import Field, StrictInt, StrictStr
 from typing import List, Optional
 from typing_extensions import Annotated
@@ -48,8 +47,8 @@ class OrdersApi:
     async def orders_bulk_get(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant that processed the orders. ")],
-        start_date: Annotated[Optional[datetime], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
         business_date: Annotated[Optional[StrictStr], Field(description="The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyymmdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. ")] = None,
         page_size: Annotated[Optional[StrictInt], Field(description="The maximum number of objects to return in the array. If the number of objects selected by your request is greater than the `pageSize`, the API uses response pagination for the remaining objects.  The maximum `pageSize` is `100`.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). ")] = None,
         page: Annotated[Optional[StrictInt], Field(description="The sequence number of the set of objects to return in paginated response data.  For example, if you set the `pageSize` parameter to `10`, and you set `page` to `2`, the API returns a set of objects that starts with the eleventh object.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). ")] = None,
@@ -73,9 +72,9 @@ class OrdersApi:
         :param toast_restaurant_external_id: The identifier for the restaurant that processed the orders.  (required)
         :type toast_restaurant_external_id: str
         :param start_date: The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. 
-        :type end_date: datetime
+        :type end_date: str
         :param business_date: The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyymmdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. 
         :type business_date: str
         :param page_size: The maximum number of objects to return in the array. If the number of objects selected by your request is greater than the `pageSize`, the API uses response pagination for the remaining objects.  The maximum `pageSize` is `100`.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). 
@@ -137,8 +136,8 @@ class OrdersApi:
     async def orders_bulk_get_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant that processed the orders. ")],
-        start_date: Annotated[Optional[datetime], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
         business_date: Annotated[Optional[StrictStr], Field(description="The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyymmdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. ")] = None,
         page_size: Annotated[Optional[StrictInt], Field(description="The maximum number of objects to return in the array. If the number of objects selected by your request is greater than the `pageSize`, the API uses response pagination for the remaining objects.  The maximum `pageSize` is `100`.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). ")] = None,
         page: Annotated[Optional[StrictInt], Field(description="The sequence number of the set of objects to return in paginated response data.  For example, if you set the `pageSize` parameter to `10`, and you set `page` to `2`, the API returns a set of objects that starts with the eleventh object.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). ")] = None,
@@ -162,9 +161,9 @@ class OrdersApi:
         :param toast_restaurant_external_id: The identifier for the restaurant that processed the orders.  (required)
         :type toast_restaurant_external_id: str
         :param start_date: The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. 
-        :type end_date: datetime
+        :type end_date: str
         :param business_date: The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyymmdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. 
         :type business_date: str
         :param page_size: The maximum number of objects to return in the array. If the number of objects selected by your request is greater than the `pageSize`, the API uses response pagination for the remaining objects.  The maximum `pageSize` is `100`.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). 
@@ -226,8 +225,8 @@ class OrdersApi:
     async def orders_bulk_get_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant that processed the orders. ")],
-        start_date: Annotated[Optional[datetime], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
         business_date: Annotated[Optional[StrictStr], Field(description="The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyymmdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. ")] = None,
         page_size: Annotated[Optional[StrictInt], Field(description="The maximum number of objects to return in the array. If the number of objects selected by your request is greater than the `pageSize`, the API uses response pagination for the remaining objects.  The maximum `pageSize` is `100`.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). ")] = None,
         page: Annotated[Optional[StrictInt], Field(description="The sequence number of the set of objects to return in paginated response data.  For example, if you set the `pageSize` parameter to `10`, and you set `page` to `2`, the API returns a set of objects that starts with the eleventh object.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). ")] = None,
@@ -251,9 +250,9 @@ class OrdersApi:
         :param toast_restaurant_external_id: The identifier for the restaurant that processed the orders.  (required)
         :type toast_restaurant_external_id: str
         :param start_date: The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: The exclusive end date and time. The results exclude any orders that have a modified date and time that occurs at or after `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. 
-        :type end_date: datetime
+        :type end_date: str
         :param business_date: The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyymmdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. 
         :type business_date: str
         :param page_size: The maximum number of objects to return in the array. If the number of objects selected by your request is greater than the `pageSize`, the API uses response pagination for the remaining objects.  The maximum `pageSize` is `100`.  For more information, see [the _Toast Developer Guide_](https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html). 
@@ -338,30 +337,12 @@ class OrdersApi:
         # process the path parameters
         # process the query parameters
         if start_date is not None:
-            if isinstance(start_date, datetime):
-                _query_params.append(
-                    (
-                        'startDate',
-                        start_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('startDate', start_date))
+            
+            _query_params.append(('startDate', start_date))
             
         if end_date is not None:
-            if isinstance(end_date, datetime):
-                _query_params.append(
-                    (
-                        'endDate',
-                        end_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('endDate', end_date))
+            
+            _query_params.append(('endDate', end_date))
             
         if business_date is not None:
             
@@ -418,8 +399,8 @@ class OrdersApi:
     async def orders_get(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant to retrieve orders from.")],
-        start_date: Annotated[Optional[datetime], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
-        end_date: Annotated[Optional[datetime], Field(description=" The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description=" The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
         business_date: Annotated[Optional[StrictStr], Field(description="The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyyMMdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and by the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. ")] = None,
         _request_timeout: Union[
             None,
@@ -441,9 +422,9 @@ class OrdersApi:
         :param toast_restaurant_external_id: The identifier for the restaurant to retrieve orders from. (required)
         :type toast_restaurant_external_id: str
         :param start_date: \\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.
-        :type start_date: datetime
+        :type start_date: str
         :param end_date:  The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. 
-        :type end_date: datetime
+        :type end_date: str
         :param business_date: The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyyMMdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and by the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. 
         :type business_date: str
         :param _request_timeout: timeout setting for this request. If one
@@ -500,8 +481,8 @@ class OrdersApi:
     async def orders_get_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant to retrieve orders from.")],
-        start_date: Annotated[Optional[datetime], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
-        end_date: Annotated[Optional[datetime], Field(description=" The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description=" The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
         business_date: Annotated[Optional[StrictStr], Field(description="The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyyMMdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and by the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. ")] = None,
         _request_timeout: Union[
             None,
@@ -523,9 +504,9 @@ class OrdersApi:
         :param toast_restaurant_external_id: The identifier for the restaurant to retrieve orders from. (required)
         :type toast_restaurant_external_id: str
         :param start_date: \\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.
-        :type start_date: datetime
+        :type start_date: str
         :param end_date:  The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. 
-        :type end_date: datetime
+        :type end_date: str
         :param business_date: The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyyMMdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and by the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. 
         :type business_date: str
         :param _request_timeout: timeout setting for this request. If one
@@ -582,8 +563,8 @@ class OrdersApi:
     async def orders_get_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant to retrieve orders from.")],
-        start_date: Annotated[Optional[datetime], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
-        end_date: Annotated[Optional[datetime], Field(description=" The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description=" The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. ")] = None,
         business_date: Annotated[Optional[StrictStr], Field(description="The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyyMMdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and by the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. ")] = None,
         _request_timeout: Union[
             None,
@@ -605,9 +586,9 @@ class OrdersApi:
         :param toast_restaurant_external_id: The identifier for the restaurant to retrieve orders from. (required)
         :type toast_restaurant_external_id: str
         :param start_date: \\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.
-        :type start_date: datetime
+        :type start_date: str
         :param end_date:  The exclusive end date and time. The results exclude orders with an equal or later modified date and time.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The `endDate` date and time must be later than the `startDate` parameter value. 
-        :type end_date: datetime
+        :type end_date: str
         :param business_date: The business date that same-day orders opened or that scheduled orders are promised, in the format `yyyyMMdd`.  The business day of an order is determined by the time the order is opened or promised in the local time zone, and by the restaurant's business day cutoff time, which is available from  the `General` object of the restaurants API in the `closeoutHour` property. 
         :type business_date: str
         :param _request_timeout: timeout setting for this request. If one
@@ -685,30 +666,12 @@ class OrdersApi:
         # process the path parameters
         # process the query parameters
         if start_date is not None:
-            if isinstance(start_date, datetime):
-                _query_params.append(
-                    (
-                        'startDate',
-                        start_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('startDate', start_date))
+            
+            _query_params.append(('startDate', start_date))
             
         if end_date is not None:
-            if isinstance(end_date, datetime):
-                _query_params.append(
-                    (
-                        'endDate',
-                        end_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('endDate', end_date))
+            
+            _query_params.append(('endDate', end_date))
             
         if business_date is not None:
             

@@ -533,7 +533,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
           required: false
         - name: endDate
           description: >
@@ -556,7 +555,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
           required: false
         - name: businessDate
           description: |
@@ -1458,7 +1456,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
           required: false
         - name: endDate
           description: >
@@ -1481,7 +1478,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
           required: false
         - name: businessDate
           description: >
@@ -2259,7 +2255,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
         - name: endDate
           description: |
             Optional end date and time of time period to match shifts. 
@@ -2272,7 +2267,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
       responses:
         "200":
           description: |
@@ -2810,7 +2804,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
         - name: endDate
           description: |
             Optional end date and time of time period to match time 
@@ -2821,7 +2814,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
         - name: modifiedStartDate
           description: |
             Start date and time of the time period to match modified 
@@ -2833,7 +2825,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
         - name: modifiedEndDate
           description: |
             End date and time of the time period to match modified time 
@@ -2845,7 +2836,6 @@ paths:
           in: query
           schema:
             type: string
-            format: date-time
         - name: businessDate
           description: |
             Optional date to match time entries. A time entry matches 

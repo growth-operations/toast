@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from datetime import date, datetime
+from datetime import date
 from pydantic import Field, StrictBool, StrictStr
 from typing import List, Optional
 from typing_extensions import Annotated
@@ -45,10 +45,10 @@ class TimeEntriesApi:
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         time_entry_ids: Annotated[Optional[List[StrictStr]], Field(description="Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. ")] = None,
-        start_date: Annotated[Optional[datetime], Field(description="Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
-        modified_start_date: Annotated[Optional[datetime], Field(description="Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. ")] = None,
-        modified_end_date: Annotated[Optional[datetime], Field(description="End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
+        modified_start_date: Annotated[Optional[StrictStr], Field(description="Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. ")] = None,
+        modified_end_date: Annotated[Optional[StrictStr], Field(description="End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. ")] = None,
         business_date: Annotated[Optional[date], Field(description="Optional date to match time entries. A time entry matches  the business date if its clock-in `inDate` is during the  business date. The cutoff from one `businessDate` to the  next is the `closeoutHour` for the restaurant. ")] = None,
         include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
         include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes archived time entries, when using the `startDate` and `endDate` parameters.  **Important**: this parameter _has no effect_ if you use the `modifiedStartDate` and `modifiedEndDate` parameters or the `businessDate` parameter to select time entries.  * Querying by modified date range _always_ returns archived time entries. * Querying by businessDate _never_ returns archived time entries.  This parameter is optional and the default value is `false`. ")] = None,
@@ -74,13 +74,13 @@ class TimeEntriesApi:
         :param time_entry_ids: Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. 
         :type time_entry_ids: List[str]
         :param start_date: Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. 
-        :type end_date: datetime
+        :type end_date: str
         :param modified_start_date: Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. 
-        :type modified_start_date: datetime
+        :type modified_start_date: str
         :param modified_end_date: End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. 
-        :type modified_end_date: datetime
+        :type modified_end_date: str
         :param business_date: Optional date to match time entries. A time entry matches  the business date if its clock-in `inDate` is during the  business date. The cutoff from one `businessDate` to the  next is the `closeoutHour` for the restaurant. 
         :type business_date: date
         :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
@@ -145,10 +145,10 @@ class TimeEntriesApi:
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         time_entry_ids: Annotated[Optional[List[StrictStr]], Field(description="Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. ")] = None,
-        start_date: Annotated[Optional[datetime], Field(description="Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
-        modified_start_date: Annotated[Optional[datetime], Field(description="Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. ")] = None,
-        modified_end_date: Annotated[Optional[datetime], Field(description="End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
+        modified_start_date: Annotated[Optional[StrictStr], Field(description="Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. ")] = None,
+        modified_end_date: Annotated[Optional[StrictStr], Field(description="End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. ")] = None,
         business_date: Annotated[Optional[date], Field(description="Optional date to match time entries. A time entry matches  the business date if its clock-in `inDate` is during the  business date. The cutoff from one `businessDate` to the  next is the `closeoutHour` for the restaurant. ")] = None,
         include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
         include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes archived time entries, when using the `startDate` and `endDate` parameters.  **Important**: this parameter _has no effect_ if you use the `modifiedStartDate` and `modifiedEndDate` parameters or the `businessDate` parameter to select time entries.  * Querying by modified date range _always_ returns archived time entries. * Querying by businessDate _never_ returns archived time entries.  This parameter is optional and the default value is `false`. ")] = None,
@@ -174,13 +174,13 @@ class TimeEntriesApi:
         :param time_entry_ids: Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. 
         :type time_entry_ids: List[str]
         :param start_date: Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. 
-        :type end_date: datetime
+        :type end_date: str
         :param modified_start_date: Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. 
-        :type modified_start_date: datetime
+        :type modified_start_date: str
         :param modified_end_date: End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. 
-        :type modified_end_date: datetime
+        :type modified_end_date: str
         :param business_date: Optional date to match time entries. A time entry matches  the business date if its clock-in `inDate` is during the  business date. The cutoff from one `businessDate` to the  next is the `closeoutHour` for the restaurant. 
         :type business_date: date
         :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
@@ -245,10 +245,10 @@ class TimeEntriesApi:
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         time_entry_ids: Annotated[Optional[List[StrictStr]], Field(description="Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. ")] = None,
-        start_date: Annotated[Optional[datetime], Field(description="Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
-        modified_start_date: Annotated[Optional[datetime], Field(description="Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. ")] = None,
-        modified_end_date: Annotated[Optional[datetime], Field(description="End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. ")] = None,
+        modified_start_date: Annotated[Optional[StrictStr], Field(description="Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. ")] = None,
+        modified_end_date: Annotated[Optional[StrictStr], Field(description="End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. ")] = None,
         business_date: Annotated[Optional[date], Field(description="Optional date to match time entries. A time entry matches  the business date if its clock-in `inDate` is during the  business date. The cutoff from one `businessDate` to the  next is the `closeoutHour` for the restaurant. ")] = None,
         include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
         include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes archived time entries, when using the `startDate` and `endDate` parameters.  **Important**: this parameter _has no effect_ if you use the `modifiedStartDate` and `modifiedEndDate` parameters or the `businessDate` parameter to select time entries.  * Querying by modified date range _always_ returns archived time entries. * Querying by businessDate _never_ returns archived time entries.  This parameter is optional and the default value is `false`. ")] = None,
@@ -274,13 +274,13 @@ class TimeEntriesApi:
         :param time_entry_ids: Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. 
         :type time_entry_ids: List[str]
         :param start_date: Optional start date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: Optional end date and time of time period to match time  entries. A time entry matches the time period if its  clock-in `inDate` is after (inclusive) the specified  `startDate` and before (exclusive) the `endDate`. The  specified period cannot be longer than one month. 
-        :type end_date: datetime
+        :type end_date: str
         :param modified_start_date: Start date and time of the time period to match modified  time entries. A time entry matches the time period if that  entry was modified after (inclusive) the  `modifiedStartDate`. If you include this parameter, you  must also include the `modifiedEndDate` parameter.  The  specified period cannot be longer than one month. 
-        :type modified_start_date: datetime
+        :type modified_start_date: str
         :param modified_end_date: End date and time of the time period to match modified time  entries. A time entry matches the time period if that entry  was modified before (exclusive) the `modifiedEndDate`. If  you include this parameter, you must also include the  `modifiedStartDate` parameter.  The specified period cannot  be longer than one month. 
-        :type modified_end_date: datetime
+        :type modified_end_date: str
         :param business_date: Optional date to match time entries. A time entry matches  the business date if its clock-in `inDate` is during the  business date. The cutoff from one `businessDate` to the  next is the `closeoutHour` for the restaurant. 
         :type business_date: date
         :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
@@ -375,56 +375,20 @@ class TimeEntriesApi:
             _query_params.append(('timeEntryIds', time_entry_ids))
             
         if start_date is not None:
-            if isinstance(start_date, datetime):
-                _query_params.append(
-                    (
-                        'startDate',
-                        start_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('startDate', start_date))
+            
+            _query_params.append(('startDate', start_date))
             
         if end_date is not None:
-            if isinstance(end_date, datetime):
-                _query_params.append(
-                    (
-                        'endDate',
-                        end_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('endDate', end_date))
+            
+            _query_params.append(('endDate', end_date))
             
         if modified_start_date is not None:
-            if isinstance(modified_start_date, datetime):
-                _query_params.append(
-                    (
-                        'modifiedStartDate',
-                        modified_start_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('modifiedStartDate', modified_start_date))
+            
+            _query_params.append(('modifiedStartDate', modified_start_date))
             
         if modified_end_date is not None:
-            if isinstance(modified_end_date, datetime):
-                _query_params.append(
-                    (
-                        'modifiedEndDate',
-                        modified_end_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('modifiedEndDate', modified_end_date))
+            
+            _query_params.append(('modifiedEndDate', modified_end_date))
             
         if business_date is not None:
             if isinstance(business_date, date):

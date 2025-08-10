@@ -16,7 +16,6 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from datetime import datetime
 from pydantic import Field, StrictStr
 from typing import List, Optional
 from typing_extensions import Annotated
@@ -45,8 +44,8 @@ class ShiftsApi:
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
-        start_date: Annotated[Optional[datetime], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -69,9 +68,9 @@ class ShiftsApi:
         :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
         :type shift_ids: str
         :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
-        :type end_date: datetime
+        :type end_date: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -125,8 +124,8 @@ class ShiftsApi:
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
-        start_date: Annotated[Optional[datetime], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -149,9 +148,9 @@ class ShiftsApi:
         :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
         :type shift_ids: str
         :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
-        :type end_date: datetime
+        :type end_date: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -205,8 +204,8 @@ class ShiftsApi:
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
-        start_date: Annotated[Optional[datetime], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
-        end_date: Annotated[Optional[datetime], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -229,9 +228,9 @@ class ShiftsApi:
         :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
         :type shift_ids: str
         :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
-        :type start_date: datetime
+        :type start_date: str
         :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
-        :type end_date: datetime
+        :type end_date: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -309,30 +308,12 @@ class ShiftsApi:
             _query_params.append(('shiftIds', shift_ids))
             
         if start_date is not None:
-            if isinstance(start_date, datetime):
-                _query_params.append(
-                    (
-                        'startDate',
-                        start_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('startDate', start_date))
+            
+            _query_params.append(('startDate', start_date))
             
         if end_date is not None:
-            if isinstance(end_date, datetime):
-                _query_params.append(
-                    (
-                        'endDate',
-                        end_date.strftime(
-                            self.api_client.configuration.datetime_format
-                        )
-                    )
-                )
-            else:
-                _query_params.append(('endDate', end_date))
+            
+            _query_params.append(('endDate', end_date))
             
         # process the header parameters
         if toast_restaurant_external_id is not None:
