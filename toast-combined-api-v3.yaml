@@ -5470,12 +5470,6 @@ components:
 
             If the `pricingStrategy` value is TIME_SPECIFIC_PRICE or SIZE_PRICE, you must use the rules provided in _this menu item's_ `pricingRules` value to calculate the price for it.
         pricingRules:
-          type: object
-          nullable: true
-          description: |
-            A `PricingRules` object with information about how to calculate the price for this menu item. You use a menu item's `pricingRules` value, in conjunction with its `pricingStrategy` value, to calculate a price for a menu item that uses a size-specific or time-specific price.
-
-            The `pricingRules` object takes different forms depending on the pricing strategy configured for the menu item. Use the `pricingStrategy` value to determine which pricing strategy has been used so that you can properly interpret the data in the `pricingRules` object. For the BASE_PRICE, and MENU_SPECIFIC_PRICE pricing strategies, the `pricingRules` object is null because you can retrieve the price from the `price` value without additional calculation. For the OPEN_PRICE pricing strategy, the `pricingRules` object is also null (the price of an open menu item is specified when it is ordered). For the TIME_SPECIFIC_PRICE and SIZE_PRICE pricing strategies, the `PricingRules` object contains additional values that you use to calculate the menu item's price.
           $ref: "#/components/schemas/PricingRules"
         isDeferred:
           type: boolean
@@ -5654,10 +5648,6 @@ components:
 
             If the `pricingStrategy` value is SIZE_PRICE, SEQUENCE_PRICE, or SIZE_SEQUENCE_PRICE, then you must use the rules provided in _this modifier group's_ `pricingRules` value to calculate the prices for the modifier options in the group.
         pricingRules:
-          type: object
-          nullable: true
-          description: |
-            A `PricingRules` object with information for calculating the prices for the modifier options contained in this modifier group. You use a modifier group's `pricingRules` object, in conjunction with its `pricingStrategy` value, to calculate prices for the group's modifier options when the group uses the Size Price, Sequence Price, or Size/Sequence Price pricing strategy.
           $ref: "#/components/schemas/PricingRules"
         defaultOptionsChargePrice:
           description: |
@@ -5779,10 +5769,6 @@ components:
               * GROUP_PRICE, then the modifier option inherits its price from a parent modifier group.
               * Any value other than GROUP_PRICE, then the modifier option is using either the price specified for its item reference or an override price.
         pricingRules:
-          type: object
-          nullable: true
-          description: |
-            A `PricingRules` object with information about how to calculate the price for this modifier option.
           $ref: "#/components/schemas/PricingRules"
         salesCategory:
           $ref: "#/components/schemas/SalesCategory"
@@ -7676,10 +7662,6 @@ components:
             The GUID maintained by the Toast platform.
           type: string
         breakType:
-          type: object
-          description: |
-            Optional, Toast platform reference to the break type 
-            associated with this time entry.
           $ref: "#/components/schemas/ToastReference"
         paid:
           type: boolean
@@ -8337,9 +8319,6 @@ components:
         - type: object
           properties:
             printer:
-              type: object
-              description: The Toast GUID or external identifier of a
-                printer device.
               $ref: "#/components/schemas/ToastReference"
 
     DiningOption:

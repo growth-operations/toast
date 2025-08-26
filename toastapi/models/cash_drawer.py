@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +29,7 @@ class CashDrawer(BaseModel):
     """ # noqa: E501
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
-    printer: Optional[Dict[str, Any]] = None
+    printer: Optional[ToastReference] = None
     __properties: ClassVar[List[str]] = ["guid", "entityType", "printer"]
 
     model_config = ConfigDict(
@@ -70,6 +71,9 @@ class CashDrawer(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of printer
+        if self.printer:
+            _dict['printer'] = self.printer.to_dict()
         return _dict
 
     @classmethod
@@ -84,7 +88,7 @@ class CashDrawer(BaseModel):
         _obj = cls.model_validate({
             "guid": obj.get("guid"),
             "entityType": obj.get("entityType"),
-            "printer": obj.get("printer")
+            "printer": ToastReference.from_dict(obj["printer"]) if obj.get("printer") is not None else None
         })
         return _obj
 

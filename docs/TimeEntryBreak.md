@@ -7,7 +7,7 @@ Information about a period of time that an employee is not working during a shif
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **guid** | **str** | The GUID maintained by the Toast platform.  | [optional] 
-**break_type** | [**ToastReference**](.md) |  | [optional] 
+**break_type** | [**ToastReference**](ToastReference.md) |  | [optional] 
 **paid** | **bool** | Indicates whether the employee was paid for the break.  | [optional] 
 **in_date** | **datetime** | The date and time that the employee started the break period, in UTC.  | [optional] 
 **out_date** | **datetime** | The date and time that the employee ended the break period and returned to work, in UTC.  | [optional] 

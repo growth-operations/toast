@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.toast_reference import ToastReference
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +29,7 @@ class TimeEntryBreak(BaseModel):
     Information about a period of time that an employee is not working during a shift. 
     """ # noqa: E501
     guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform. ")
-    break_type: Optional[Dict[str, Any]] = Field(default=None, alias="breakType")
+    break_type: Optional[ToastReference] = Field(default=None, alias="breakType")
     paid: Optional[StrictBool] = Field(default=None, description="Indicates whether the employee was paid for the break. ")
     in_date: Optional[datetime] = Field(default=None, description="The date and time that the employee started the break period, in UTC. ", alias="inDate")
     out_date: Optional[datetime] = Field(default=None, description="The date and time that the employee ended the break period and returned to work, in UTC. ", alias="outDate")

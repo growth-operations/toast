@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **guid** | **str** | The GUID maintained by the Toast platform. | 
 **entity_type** | **str** | The type of object this is. Response only. | 
-**printer** | **object** |  | [optional] 
+**printer** | [**ToastReference**](ToastReference.md) |  | [optional] 
 
 ## Example
 
