@@ -52,7 +52,6 @@ from toastapi.models.external_reference import ExternalReference
 from toastapi.models.general import General
 from toastapi.models.gift_card_info import GiftCardInfo
 from toastapi.models.hours import Hours
-from toastapi.models.image import Image
 from toastapi.models.item_tag import ItemTag
 from toastapi.models.job import Job
 from toastapi.models.job_wage_override import JobWageOverride

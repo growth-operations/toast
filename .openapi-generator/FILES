@@ -48,7 +48,6 @@ docs/ExternalReference.md
 docs/General.md
 docs/GiftCardInfo.md
 docs/Hours.md
-docs/Image.md
 docs/ItemTag.md
 docs/Job.md
 docs/JobWageOverride.md
@@ -219,7 +218,6 @@ toastapi/models/external_reference.py
 toastapi/models/general.py
 toastapi/models/gift_card_info.py
 toastapi/models/hours.py
-toastapi/models/image.py
 toastapi/models/item_tag.py
 toastapi/models/job.py
 toastapi/models/job_wage_override.py

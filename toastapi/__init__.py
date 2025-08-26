@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.28"
+__version__ = "1.0.29"
 
 # Define package exports
 __all__ = [
@@ -96,7 +96,6 @@ __all__ = [
     "General",
     "GiftCardInfo",
     "Hours",
-    "Image",
     "ItemTag",
     "Job",
     "JobWageOverride",
@@ -245,7 +244,6 @@ from toastapi.models.external_reference import ExternalReference as ExternalRefe
 from toastapi.models.general import General as General
 from toastapi.models.gift_card_info import GiftCardInfo as GiftCardInfo
 from toastapi.models.hours import Hours as Hours
-from toastapi.models.image import Image as Image
 from toastapi.models.item_tag import ItemTag as ItemTag
 from toastapi.models.job import Job as Job
 from toastapi.models.job_wage_override import JobWageOverride as JobWageOverride

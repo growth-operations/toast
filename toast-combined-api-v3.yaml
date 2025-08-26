@@ -7905,23 +7905,8 @@ components:
             and other information about gift cards.
 
     Image:
-      type: object
+      type: string
       description: Information about an image.
-      properties:
-        width:
-          type: integer
-          format: int32
-          description: The width of the image, in pixels.
-        height:
-          type: integer
-          format: int32
-          description: The height of the image, in pixels.
-        url:
-          type: string
-        heightWidthRatio:
-          type: number
-          format: float
-          description: The ratio of height to width
 
     Hours:
       type: object

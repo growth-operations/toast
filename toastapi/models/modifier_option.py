@@ -22,7 +22,6 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from toastapi.models.content_advisories import ContentAdvisories
 from toastapi.models.dimension_unit_of_measure import DimensionUnitOfMeasure
-from toastapi.models.image import Image
 from toastapi.models.item_tag import ItemTag
 from toastapi.models.modifier_option_tax_info import ModifierOptionTaxInfo
 from toastapi.models.portion import Portion
@@ -46,7 +45,7 @@ class ModifierOption(BaseModel):
     pos_button_color_light: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in light mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorLight` contains the HEX code for the light mode color. ", alias="posButtonColorLight")
     pos_button_color_dark: Optional[StrictStr] = Field(default=None, description="The color of the menu entity's button on the Toast POS app, when the app is running in dark mode.       When an employee configures a POS button's color, they select a color pairing that consists of two colors, one for light mode and one for dark mode. `posButtonColorDark` contains the HEX code for the dark mode color. ", alias="posButtonColorDark")
     prep_stations: Optional[List[StrictStr]] = Field(default=None, description="An array of GUIDs for the prep stations that have been assigned to this modifier option. ", alias="prepStations")
-    image: Optional[Image] = None
+    image: Optional[StrictStr] = Field(default=None, description="Information about an image.")
     visibility: Optional[List[StrictStr]] = Field(default=None, description="An array of strings that indicate where this menu entity is visible:  * POS: The menu entity is visible in the Toast POS app.   * KIOSK: The menu entity is visible on a Toast kiosk.   * TOAST_ONLINE_ORDERING: The menu entity is visible in the Toast online   ordering site for this restaurant.   * ORDERING_PARTNERS: The restaurants wants this menu entity to be visible   on online ordering sites that integrate with the Toast POS system using the orders API.   * GRUBHUB: Deprecated. The menu entity is included during a menu sync to   Grubhub and will be visible on the Grubhub online ordering service after a   menu sync has completed. _Note:_ Conceptually, the _Grubhub_ configuration   option that was associated with the `GRUBHUB` string in this array has   been replaced by the more general _Online orders: Ordering partners_   configuration option and restaurants that used the _Grubhub_ option have   been automatically migrated to the new _Online orders: Ordering partners_   option. This means that any menu entity that had the _Grubhub_ option set   to _Yes_ will now have the _Online orders: Ordering partners_ option   enabled and the `ORDERING_PARTNERS` enum will be present in the   `visibility` array for it. To support backwards compatibility, the   `visibility` array for these entities will also continue to contain the   `GRUBHUB` enum for a short period of time. See <a   href=\"https://doc.toasttab.com/doc/devguide/apiDeprecatedApiFunctions.html#apiMenuEntityVisibilityEnhancements\">Menu   Visibility Enhancements (Rolled Out)</a> for more information.  The `visibility` array is empty if the menu entity is not configured to be visible for any of the use cases listed above. ")
     price: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The price of this modifier option.  In Toast Web, a modifier option may:   * Inherit its price from a parent modifier group.   * Use the price specified for its modifier option item reference.   * Specify a price that overrides the price defined for its item reference.  The `price` value is populated differently depending on which of these pricing scenarios is used for the modifier option. ")
     pricing_strategy: Optional[StrictStr] = Field(default=None, description="A string that indicates how this modifier option has been priced. If `pricingStrategy` is:   * GROUP_PRICE, then the modifier option inherits its price from a parent modifier group.   * Any value other than GROUP_PRICE, then the modifier option is using either the price specified for its item reference or an override price. ", alias="pricingStrategy")
@@ -135,9 +134,6 @@ class ModifierOption(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of image
-        if self.image:
-            _dict['image'] = self.image.to_dict()
         # override the default output from pydantic by calling `to_dict()` of pricing_rules
         if self.pricing_rules:
             _dict['pricingRules'] = self.pricing_rules.to_dict()
@@ -227,7 +223,7 @@ class ModifierOption(BaseModel):
             "posButtonColorLight": obj.get("posButtonColorLight"),
             "posButtonColorDark": obj.get("posButtonColorDark"),
             "prepStations": obj.get("prepStations"),
-            "image": Image.from_dict(obj["image"]) if obj.get("image") is not None else None,
+            "image": obj.get("image"),
             "visibility": obj.get("visibility"),
             "price": obj.get("price"),
             "pricingStrategy": obj.get("pricingStrategy"),
