@@ -35,8 +35,8 @@ class Alcohol(BaseModel):
         if value is None:
             return value
 
-        if value not in set(['true', 'false']):
-            raise ValueError("must be one of enum values ('true', 'false')")
+        if value not in set(['YES', 'NO']):
+            raise ValueError("must be one of enum values ('YES', 'NO')")
         return value
 
     model_config = ConfigDict(

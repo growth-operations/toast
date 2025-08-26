@@ -9065,8 +9065,8 @@ components:
                  
             The `containsAlcohol` value may also be `null`. A `null` value indicates that the corresponding UI option in Toast Web has not been configured for this menu item or modifier.
           enum:
-            - YES
-            - NO
+            - "YES"
+            - "NO"
     Portion:
       type: object
       description: |
