@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **guid** | **str** | The GUID maintained by the Toast platform. | 
 **entity_type** | **str** | The type of object this is. Response only. | 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
-**item** | [**ConfigReference**](ConfigReference.md) |  | 
+**item** | [**ConfigReference**](ConfigReference.md) |  | [optional] 
 **item_group** | [**ConfigReference**](ConfigReference.md) |  | [optional] 
 **option_group** | [**ConfigReference**](ConfigReference.md) |  | [optional] 
 **pre_modifier** | [**ConfigReference**](ConfigReference.md) |  | [optional] 

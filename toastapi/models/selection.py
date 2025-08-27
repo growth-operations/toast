@@ -37,7 +37,7 @@ class Selection(BaseModel):
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
-    item: ConfigReference
+    item: Optional[ConfigReference] = None
     item_group: Optional[ConfigReference] = Field(default=None, alias="itemGroup")
     option_group: Optional[ConfigReference] = Field(default=None, alias="optionGroup")
     pre_modifier: Optional[ConfigReference] = Field(default=None, alias="preModifier")
