@@ -140,6 +140,11 @@ class Toast:
         self._config = Configuration(host=self.host)
         if environment.lower() == "sandbox":
             self._config.verify_ssl = False  # Ignore SSL verification for sandbox
+        
+        # Set token in configuration if provided
+        if token:
+            self._config.access_token = token
+            
         self._api_client = ApiClient(configuration=self._config)
 
         # Initialize API classes with retry wrappers
