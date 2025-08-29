@@ -5972,7 +5972,6 @@ components:
                 The checks for this order. Most orders have one check.
 
                 If the check is split, then there are multiple checks.
-              minItems: 1
               items:
                 $ref: "#/components/schemas/Check"
             table:
@@ -6967,9 +6966,6 @@ components:
     AppliedLoyaltyInfo:
       type: object
       description: Information about the customer loyalty program account associated with a check.
-      required:
-        - loyaltyIdentifier
-        - vendor
       allOf:
         - $ref: "#/components/schemas/ToastReference"
         - type: object

@@ -28,9 +28,9 @@ class AppliedLoyaltyInfo(BaseModel):
     """ # noqa: E501
     guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
     entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
-    loyalty_identifier: StrictStr = Field(description="An identifier for the loyalty program account. For `POST` orders, this identifier is transmitted to the loyalty program service provider to associate the check with the loyalty account.", alias="loyaltyIdentifier")
+    loyalty_identifier: Optional[StrictStr] = Field(default=None, description="An identifier for the loyalty program account. For `POST` orders, this identifier is transmitted to the loyalty program service provider to associate the check with the loyalty account.", alias="loyaltyIdentifier")
     masked_loyalty_identifier: Optional[StrictStr] = Field(default=None, description="A representation of the identifier of the loyalty program account that can be displayed securely. For example: `************1234`. The Toast POS displays this string to restaurant employees and guests.  You can optionally include this value when you `POST` an order. It is available in response data when you `GET` the order.  If you do not provide a `maskedLoyaltyIdentifier` when you `POST` an order, this value is `null` in response data.  The Toast POS app displays a masked representation of the `loyaltyIdentifier`. All characters except the last four are hidden. ", alias="maskedLoyaltyIdentifier")
-    vendor: StrictStr = Field(description="The specific loyalty program service provider that supports the loyalty account.")
+    vendor: Optional[StrictStr] = Field(default=None, description="The specific loyalty program service provider that supports the loyalty account.")
     accrual_family_guid: Optional[StrictStr] = Field(default=None, description="Response only. An internal Toast platform identifier for loyalty program transactions.  This is not returned from the initial `POST` order request and is available at a later time. ", alias="accrualFamilyGuid")
     accrual_text: Optional[StrictStr] = Field(default=None, description="Response only. A description of the loyalty program transaction to print on the customer's receipt. For example, \"Earned 27 points.\"  The maximum length of the description string is 255 characters.  This is not returned from the initial `POST` order request and is available at a later time. ", alias="accrualText")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "loyaltyIdentifier", "maskedLoyaltyIdentifier", "vendor", "accrualFamilyGuid", "accrualText"]
@@ -38,6 +38,9 @@ class AppliedLoyaltyInfo(BaseModel):
     @field_validator('vendor')
     def vendor_validate_enum(cls, value):
         """Validates the enum"""
+        if value is None:
+            return value
+
         if value not in set(['TOAST', 'PUNCHH', 'PUNCHH2', 'PAYTRONIX', 'APPFRONT', 'INTEGRATION']):
             raise ValueError("must be one of enum values ('TOAST', 'PUNCHH', 'PUNCHH2', 'PAYTRONIX', 'APPFRONT', 'INTEGRATION')")
         return value

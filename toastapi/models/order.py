@@ -20,7 +20,6 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
 from toastapi.models.applied_packaging_info import AppliedPackagingInfo
 from toastapi.models.check import Check
 from toastapi.models.curbside_pickup_info import CurbsidePickupInfo
@@ -44,7 +43,7 @@ class Order(BaseModel):
     promised_date: Optional[datetime] = Field(default=None, description="For scheduled orders, the date and time that the order is scheduled to be fulfilled.  For dine-in and as soon as possible (ASAP) orders, `promisedDate` is `null`. ", alias="promisedDate")
     channel_guid: Optional[StrictStr] = Field(default=None, description="Reserved for future use. ", alias="channelGuid")
     dining_option: Optional[ExternalReference] = Field(default=None, alias="diningOption")
-    checks: Annotated[List[Check], Field(min_length=1)] = Field(description="The checks for this order. Most orders have one check.  If the check is split, then there are multiple checks. ")
+    checks: List[Check] = Field(description="The checks for this order. Most orders have one check.  If the check is split, then there are multiple checks. ")
     table: Optional[ExternalReference] = None
     service_area: Optional[ExternalReference] = Field(default=None, alias="serviceArea")
     restaurant_service: Optional[ExternalReference] = Field(default=None, alias="restaurantService")
