@@ -6,7 +6,7 @@ A simplified wrapper around the generated OpenAPI client.
 
 import asyncio
 import time
-from typing import Optional, Callable
+from typing import Optional, Callable, Awaitable
 from toastapi.api_client import ApiClient
 from toastapi.configuration import Configuration
 from toastapi.api import (
@@ -93,6 +93,9 @@ class Toast:
         token: Optional[str] = None,
         token_expires_at: Optional[float] = None,
         retry_config: Optional[RetryConfig] = None,
+        token_refresh_callback: Optional[
+            Callable[[str, float], Awaitable[None]]
+        ] = None,
     ):
         """
         Initialize the Toast client.
@@ -108,11 +111,13 @@ class Toast:
             token: Optional pre-existing auth token
             token_expires_at: Optional token expiration timestamp
             retry_config: Optional retry configuration (defaults to 3 retries, 1s delay)
+            token_refresh_callback: Optional callback(token, expires_at) to execute after token refresh
         """
         self.client_id = client_id
         self.client_secret = client_secret
         self.environment = environment
         self.retry_config = retry_config or RetryConfig()
+        self._token_refresh_callback = token_refresh_callback
 
         # Determine the host URL
         if host:
@@ -140,11 +145,11 @@ class Toast:
         self._config = Configuration(host=self.host)
         if environment.lower() == "sandbox":
             self._config.verify_ssl = False  # Ignore SSL verification for sandbox
-        
+
         # Set token in configuration if provided
         if token:
             self._config.access_token = token
-            
+
         self._api_client = ApiClient(configuration=self._config)
 
         # Initialize API classes with retry wrappers
@@ -291,25 +296,16 @@ class Toast:
             response = await self.auth.authentication_login_post(auth_request)
 
             # Extract the token from the response
-            if (
-                response.token
-                and hasattr(response.token, "access_token")
-                and response.token.access_token
-            ):
+            if response.token and response.token.access_token:
                 self._token = response.token.access_token
             else:
                 raise Exception("No authentication token received from the API")
 
             # Set token expiration (default to 1 hour if not provided)
-            if (
-                response.token
-                and hasattr(response.token, "expires_in")
-                and response.token.expires_in
-            ):
+            if response.token and response.token.expires_in:
                 self._token_expires_at = time.time() + response.token.expires_in
             else:
-                # Default to 1 hour if expiration not provided
-                self._token_expires_at = time.time() + (60 * 60)  # 1 hour
+                raise Exception("No token expiration received from the API")
 
             # Update the API client configuration with the token
             self._config.access_token = self._token
@@ -318,17 +314,6 @@ class Toast:
 
         except Exception as e:
             raise Exception(f"Authentication failed: {e}")
-
-    async def ensure_authenticated(self) -> str:
-        """
-        Ensure we have a valid authentication token.
-
-        Returns:
-            The authentication token
-        """
-        if not self.is_token_valid():
-            return await self.authenticate()
-        return self._token
 
     async def _call_with_retry(self, api_method, *args, **kwargs):
         """
@@ -343,7 +328,10 @@ class Toast:
             The API response
         """
         # Ensure we're authenticated
-        await self.ensure_authenticated()
+        if not self.is_token_valid():
+            await self.authenticate()
+            if self._token_refresh_callback:
+                await self._token_refresh_callback(self._token, self._token_expires_at)
 
         # Apply retry logic
         last_exception = None
