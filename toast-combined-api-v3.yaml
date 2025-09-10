@@ -7246,11 +7246,6 @@ components:
     DeliveryInfo:
       type: object
       description: Information related to delivery orders. Required if the dining option behavior is `DELIVERY`.
-      required:
-        - address1
-        - city
-        - state
-        - zipCode
       properties:
         address1:
           type: string

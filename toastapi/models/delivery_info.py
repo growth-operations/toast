@@ -28,11 +28,11 @@ class DeliveryInfo(BaseModel):
     """
     Information related to delivery orders. Required if the dining option behavior is `DELIVERY`.
     """ # noqa: E501
-    address1: StrictStr = Field(description="The first line of the street address of the delivery destination. ")
+    address1: Optional[StrictStr] = Field(default=None, description="The first line of the street address of the delivery destination. ")
     address2: Optional[StrictStr] = Field(default=None, description="The second line of the street address of the delivery destination. ")
-    city: StrictStr = Field(description="The name of the city or town of the delivery destination. ")
-    state: StrictStr = Field(description="The postal abbreviation of the state or province of the delivery destination. ")
-    zip_code: StrictStr = Field(description="The postal or zip code of the delivery destination. ", alias="zipCode")
+    city: Optional[StrictStr] = Field(default=None, description="The name of the city or town of the delivery destination. ")
+    state: Optional[StrictStr] = Field(default=None, description="The postal abbreviation of the state or province of the delivery destination. ")
+    zip_code: Optional[StrictStr] = Field(default=None, description="The postal or zip code of the delivery destination. ", alias="zipCode")
     administrative_area: Optional[StrictStr] = Field(default=None, description="The state, province, or other geographic division that is larger than a city or town of the delivery destination. ", alias="administrativeArea")
     country: Optional[StrictStr] = Field(default=None, description="The two-character ISO-3166-2 country code of the delivery destination. ")
     latitude: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The north/south geographic coordinate of the delivery destination, in decimal format. ")

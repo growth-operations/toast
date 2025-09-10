@@ -3,7 +3,7 @@ name = "toastapi"
 version = "1.0.36"
 description = "Toast API"
 authors = [
-  {name = "Toast developer support",email = "team@openapitools.org"},
+  {name = "Growth Operations support",email = "info@growthoperationsco.com"}
 ]
 license = {text = "MIT"}
 readme = "README.md"
@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/GIT_USER_ID/GIT_REPO_ID"
+Repository = "https://github.com/growth-operations/toast"
 
 [tool.poetry]
 requires-poetry = ">=2.0"
