@@ -295,7 +295,7 @@ class Toast:
             )
 
             # Request authentication token
-            response = await self.auth.authentication_login_post(auth_request)
+            response = await self.auth.login(auth_request)
 
             # Extract the token from the response
             if response.token and response.token.access_token:

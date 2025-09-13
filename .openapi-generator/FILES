@@ -140,7 +140,6 @@ docs/VoidReasonsApi.md
 docs/WeekSchedule.md
 docs/WeightUnitOfMeasure.md
 git_push.sh
-pyproject.toml
 requirements.txt
 setup.cfg
 setup.py
