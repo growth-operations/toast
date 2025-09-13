@@ -51,6 +51,9 @@ from toastapi.models.error_message import ErrorMessage
 from toastapi.models.external_reference import ExternalReference
 from toastapi.models.general import General
 from toastapi.models.gift_card_info import GiftCardInfo
+from toastapi.models.guest_reporting_data_in_progress import GuestReportingDataInProgress
+from toastapi.models.guest_reporting_data_request import GuestReportingDataRequest
+from toastapi.models.guest_reporting_data_response import GuestReportingDataResponse
 from toastapi.models.hours import Hours
 from toastapi.models.item_tag import ItemTag
 from toastapi.models.job import Job
@@ -69,7 +72,6 @@ from toastapi.models.no_sale_reason import NoSaleReason
 from toastapi.models.online_ordering import OnlineOrdering
 from toastapi.models.order import Order
 from toastapi.models.order_response import OrderResponse
-from toastapi.models.orders_order_guid_delivery_info_patch_request import OrdersOrderGuidDeliveryInfoPatchRequest
 from toastapi.models.payment import Payment
 from toastapi.models.payment_options import PaymentOptions
 from toastapi.models.payout_reason import PayoutReason
@@ -108,6 +110,7 @@ from toastapi.models.time_specific_price import TimeSpecificPrice
 from toastapi.models.tip_withholding import TipWithholding
 from toastapi.models.toast_reference import ToastReference
 from toastapi.models.urls import URLs
+from toastapi.models.update_delivery_info_request import UpdateDeliveryInfoRequest
 from toastapi.models.update_payment_request import UpdatePaymentRequest
 from toastapi.models.void_information import VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest

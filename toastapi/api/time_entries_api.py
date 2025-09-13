@@ -41,7 +41,323 @@ class TimeEntriesApi:
 
 
     @validate_call
-    async def time_entries_get(
+    async def get_time_entry_by_id(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        time_entry_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  time entry. ")],
+        include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
+        include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes an archived time entry. Optional. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> TimeEntry:
+        """Get one time entry
+
+        Returns a `TimeEntry` object containing information about one  employee shift. The information includes the shift start time,  end time, and the start and end times of break periods. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param time_entry_id: The Toast platform GUID or an external identifier for the  time entry.  (required)
+        :type time_entry_id: str
+        :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
+        :type include_missed_breaks: bool
+        :param include_archived: Controls whether the response includes an archived time entry. Optional. 
+        :type include_archived: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_time_entry_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            time_entry_id=time_entry_id,
+            include_missed_breaks=include_missed_breaks,
+            include_archived=include_archived,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "TimeEntry",
+            '400': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def get_time_entry_by_id_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        time_entry_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  time entry. ")],
+        include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
+        include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes an archived time entry. Optional. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[TimeEntry]:
+        """Get one time entry
+
+        Returns a `TimeEntry` object containing information about one  employee shift. The information includes the shift start time,  end time, and the start and end times of break periods. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param time_entry_id: The Toast platform GUID or an external identifier for the  time entry.  (required)
+        :type time_entry_id: str
+        :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
+        :type include_missed_breaks: bool
+        :param include_archived: Controls whether the response includes an archived time entry. Optional. 
+        :type include_archived: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_time_entry_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            time_entry_id=time_entry_id,
+            include_missed_breaks=include_missed_breaks,
+            include_archived=include_archived,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "TimeEntry",
+            '400': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def get_time_entry_by_id_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        time_entry_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  time entry. ")],
+        include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
+        include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes an archived time entry. Optional. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get one time entry
+
+        Returns a `TimeEntry` object containing information about one  employee shift. The information includes the shift start time,  end time, and the start and end times of break periods. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param time_entry_id: The Toast platform GUID or an external identifier for the  time entry.  (required)
+        :type time_entry_id: str
+        :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
+        :type include_missed_breaks: bool
+        :param include_archived: Controls whether the response includes an archived time entry. Optional. 
+        :type include_archived: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_time_entry_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            time_entry_id=time_entry_id,
+            include_missed_breaks=include_missed_breaks,
+            include_archived=include_archived,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "TimeEntry",
+            '400': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_time_entry_by_id_serialize(
+        self,
+        toast_restaurant_external_id,
+        time_entry_id,
+        include_missed_breaks,
+        include_archived,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if time_entry_id is not None:
+            _path_params['timeEntryId'] = time_entry_id
+        # process the query parameters
+        if include_missed_breaks is not None:
+            
+            _query_params.append(('includeMissedBreaks', include_missed_breaks))
+            
+        if include_archived is not None:
+            
+            _query_params.append(('includeArchived', include_archived))
+            
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/labor/v1/timeEntries/{timeEntryId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def list_time_entries(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         time_entry_ids: Annotated[Optional[List[StrictStr]], Field(description="Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. ")] = None,
@@ -109,7 +425,7 @@ class TimeEntriesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._time_entries_get_serialize(
+        _param = self._list_time_entries_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             time_entry_ids=time_entry_ids,
             start_date=start_date,
@@ -141,7 +457,7 @@ class TimeEntriesApi:
 
 
     @validate_call
-    async def time_entries_get_with_http_info(
+    async def list_time_entries_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         time_entry_ids: Annotated[Optional[List[StrictStr]], Field(description="Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. ")] = None,
@@ -209,7 +525,7 @@ class TimeEntriesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._time_entries_get_serialize(
+        _param = self._list_time_entries_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             time_entry_ids=time_entry_ids,
             start_date=start_date,
@@ -241,7 +557,7 @@ class TimeEntriesApi:
 
 
     @validate_call
-    async def time_entries_get_without_preload_content(
+    async def list_time_entries_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         time_entry_ids: Annotated[Optional[List[StrictStr]], Field(description="Optional array of one or more time entry identifiers,  either the Toast platform GUID or an external identifier.  100 max. ")] = None,
@@ -309,7 +625,7 @@ class TimeEntriesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._time_entries_get_serialize(
+        _param = self._list_time_entries_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             time_entry_ids=time_entry_ids,
             start_date=start_date,
@@ -336,7 +652,7 @@ class TimeEntriesApi:
         return response_data.response
 
 
-    def _time_entries_get_serialize(
+    def _list_time_entries_serialize(
         self,
         toast_restaurant_external_id,
         time_entry_ids,
@@ -435,322 +751,6 @@ class TimeEntriesApi:
         return self.api_client.param_serialize(
             method='GET',
             resource_path='/labor/v1/timeEntries',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def time_entries_time_entry_id_get(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        time_entry_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  time entry. ")],
-        include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
-        include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes an archived time entry. Optional. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> TimeEntry:
-        """Get one time entry
-
-        Returns a `TimeEntry` object containing information about one  employee shift. The information includes the shift start time,  end time, and the start and end times of break periods. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param time_entry_id: The Toast platform GUID or an external identifier for the  time entry.  (required)
-        :type time_entry_id: str
-        :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
-        :type include_missed_breaks: bool
-        :param include_archived: Controls whether the response includes an archived time entry. Optional. 
-        :type include_archived: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._time_entries_time_entry_id_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            time_entry_id=time_entry_id,
-            include_missed_breaks=include_missed_breaks,
-            include_archived=include_archived,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "TimeEntry",
-            '400': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def time_entries_time_entry_id_get_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        time_entry_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  time entry. ")],
-        include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
-        include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes an archived time entry. Optional. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[TimeEntry]:
-        """Get one time entry
-
-        Returns a `TimeEntry` object containing information about one  employee shift. The information includes the shift start time,  end time, and the start and end times of break periods. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param time_entry_id: The Toast platform GUID or an external identifier for the  time entry.  (required)
-        :type time_entry_id: str
-        :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
-        :type include_missed_breaks: bool
-        :param include_archived: Controls whether the response includes an archived time entry. Optional. 
-        :type include_archived: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._time_entries_time_entry_id_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            time_entry_id=time_entry_id,
-            include_missed_breaks=include_missed_breaks,
-            include_archived=include_archived,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "TimeEntry",
-            '400': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def time_entries_time_entry_id_get_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        time_entry_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  time entry. ")],
-        include_missed_breaks: Annotated[Optional[StrictBool], Field(description="Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. ")] = None,
-        include_archived: Annotated[Optional[StrictBool], Field(description="Controls whether the response includes an archived time entry. Optional. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get one time entry
-
-        Returns a `TimeEntry` object containing information about one  employee shift. The information includes the shift start time,  end time, and the start and end times of break periods. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param time_entry_id: The Toast platform GUID or an external identifier for the  time entry.  (required)
-        :type time_entry_id: str
-        :param include_missed_breaks: Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries. 
-        :type include_missed_breaks: bool
-        :param include_archived: Controls whether the response includes an archived time entry. Optional. 
-        :type include_archived: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._time_entries_time_entry_id_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            time_entry_id=time_entry_id,
-            include_missed_breaks=include_missed_breaks,
-            include_archived=include_archived,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "TimeEntry",
-            '400': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _time_entries_time_entry_id_get_serialize(
-        self,
-        toast_restaurant_external_id,
-        time_entry_id,
-        include_missed_breaks,
-        include_archived,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if time_entry_id is not None:
-            _path_params['timeEntryId'] = time_entry_id
-        # process the query parameters
-        if include_missed_breaks is not None:
-            
-            _query_params.append(('includeMissedBreaks', include_missed_breaks))
-            
-        if include_archived is not None:
-            
-            _query_params.append(('includeArchived', include_archived))
-            
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/labor/v1/timeEntries/{timeEntryId}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

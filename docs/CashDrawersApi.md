@@ -4,12 +4,90 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**cash_drawers_get**](CashDrawersApi.md#cash_drawers_get) | **GET** /config/v2/cashDrawers | Get cash drawers 
-[**cash_drawers_guid_get**](CashDrawersApi.md#cash_drawers_guid_get) | **GET** /config/v2/cashDrawers/{guid} | Get a cash drawer 
+[**get_cash_drawer_by_id**](CashDrawersApi.md#get_cash_drawer_by_id) | **GET** /config/v2/cashDrawers/{guid} | Get a cash drawer 
+[**list_cash_drawers**](CashDrawersApi.md#list_cash_drawers) | **GET** /config/v2/cashDrawers | Get cash drawers 
 
 
-# **cash_drawers_get**
-> List[CashDrawer] cash_drawers_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+# **get_cash_drawer_by_id**
+> CashDrawer get_cash_drawer_by_id(toast_restaurant_external_id, guid)
+
+Get a cash drawer 
+
+Returns a `CashDrawer` object containing information about a cash drawer configured for a restaurant.
+
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.cash_drawer import CashDrawer
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.CashDrawersApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast POS GUID of the restaurant that the cash drawer is configured for. 
+    guid = 'guid_example' # str | The Toast POS GUID of the cash drawer.
+
+    try:
+        # Get a cash drawer 
+        api_response = await api_instance.get_cash_drawer_by_id(toast_restaurant_external_id, guid)
+        print("The response of CashDrawersApi->get_cash_drawer_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling CashDrawersApi->get_cash_drawer_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The Toast POS GUID of the restaurant that the cash drawer is configured for.  | 
+ **guid** | **str**| The Toast POS GUID of the cash drawer. | 
+
+### Return type
+
+[**CashDrawer**](CashDrawer.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a &#x60;CashDrawer&#x60; object. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_cash_drawers**
+> List[CashDrawer] list_cash_drawers(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
 
 Get cash drawers 
 
@@ -49,11 +127,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get cash drawers 
-        api_response = await api_instance.cash_drawers_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
-        print("The response of CashDrawersApi->cash_drawers_get:\n")
+        api_response = await api_instance.list_cash_drawers(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+        print("The response of CashDrawersApi->list_cash_drawers:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling CashDrawersApi->cash_drawers_get: %s\n" % e)
+        print("Exception when calling CashDrawersApi->list_cash_drawers: %s\n" % e)
 ```
 
 
@@ -85,84 +163,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns an array of &#x60;CashDrawer&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **cash_drawers_guid_get**
-> CashDrawer cash_drawers_guid_get(toast_restaurant_external_id, guid)
-
-Get a cash drawer 
-
-Returns a `CashDrawer` object containing information about a cash drawer configured for a restaurant.
-
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.cash_drawer import CashDrawer
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.CashDrawersApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast POS GUID of the restaurant that the cash drawer is configured for. 
-    guid = 'guid_example' # str | The Toast POS GUID of the cash drawer.
-
-    try:
-        # Get a cash drawer 
-        api_response = await api_instance.cash_drawers_guid_get(toast_restaurant_external_id, guid)
-        print("The response of CashDrawersApi->cash_drawers_guid_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling CashDrawersApi->cash_drawers_guid_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The Toast POS GUID of the restaurant that the cash drawer is configured for.  | 
- **guid** | **str**| The Toast POS GUID of the cash drawer. | 
-
-### Return type
-
-[**CashDrawer**](CashDrawer.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns a &#x60;CashDrawer&#x60; object. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -4,11 +4,11 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**authentication_login_post**](AuthenticationApi.md#authentication_login_post) | **POST** /authentication/v1/authentication/login | Get an authentication token
+[**login**](AuthenticationApi.md#login) | **POST** /authentication/v1/authentication/login | Get an authentication token
 
 
-# **authentication_login_post**
-> AuthenticationResponse authentication_login_post(authentication_request)
+# **login**
+> AuthenticationResponse login(authentication_request)
 
 Get an authentication token
 
@@ -41,11 +41,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get an authentication token
-        api_response = await api_instance.authentication_login_post(authentication_request)
-        print("The response of AuthenticationApi->authentication_login_post:\n")
+        api_response = await api_instance.login(authentication_request)
+        print("The response of AuthenticationApi->login:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling AuthenticationApi->authentication_login_post: %s\n" % e)
+        print("Exception when calling AuthenticationApi->login: %s\n" % e)
 ```
 
 

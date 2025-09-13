@@ -4,12 +4,90 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**void_reasons_get**](VoidReasonsApi.md#void_reasons_get) | **GET** /config/v2/voidReasons | Get void reasons
-[**void_reasons_guid_get**](VoidReasonsApi.md#void_reasons_guid_get) | **GET** /config/v2/voidReasons/{guid} | Get void reason by GUID
+[**get_void_reason_by_id**](VoidReasonsApi.md#get_void_reason_by_id) | **GET** /config/v2/voidReasons/{guid} | Get void reason by GUID
+[**list_void_reasons**](VoidReasonsApi.md#list_void_reasons) | **GET** /config/v2/voidReasons | Get void reasons
 
 
-# **void_reasons_get**
-> List[VoidReason] void_reasons_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+# **get_void_reason_by_id**
+> VoidReason get_void_reason_by_id(toast_restaurant_external_id, guid)
+
+Get void reason by GUID
+
+Returns a specific void reason by its GUID.
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.void_reason import VoidReason
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.VoidReasonsApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
+    guid = 'guid_example' # str | The GUID of the void reason.
+
+    try:
+        # Get void reason by GUID
+        api_response = await api_instance.get_void_reason_by_id(toast_restaurant_external_id, guid)
+        print("The response of VoidReasonsApi->get_void_reason_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling VoidReasonsApi->get_void_reason_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
+ **guid** | **str**| The GUID of the void reason. | 
+
+### Return type
+
+[**VoidReason**](VoidReason.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a &#x60;VoidReason&#x60; object. |  -  |
+**404** | Void reason not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_void_reasons**
+> List[VoidReason] list_void_reasons(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
 
 Get void reasons
 
@@ -49,11 +127,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get void reasons
-        api_response = await api_instance.void_reasons_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
-        print("The response of VoidReasonsApi->void_reasons_get:\n")
+        api_response = await api_instance.list_void_reasons(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+        print("The response of VoidReasonsApi->list_void_reasons:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling VoidReasonsApi->void_reasons_get: %s\n" % e)
+        print("Exception when calling VoidReasonsApi->list_void_reasons: %s\n" % e)
 ```
 
 
@@ -86,84 +164,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns an array of &#x60;VoidReason&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **void_reasons_guid_get**
-> VoidReason void_reasons_guid_get(toast_restaurant_external_id, guid)
-
-Get void reason by GUID
-
-Returns a specific void reason by its GUID.
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.void_reason import VoidReason
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.VoidReasonsApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
-    guid = 'guid_example' # str | The GUID of the void reason.
-
-    try:
-        # Get void reason by GUID
-        api_response = await api_instance.void_reasons_guid_get(toast_restaurant_external_id, guid)
-        print("The response of VoidReasonsApi->void_reasons_guid_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling VoidReasonsApi->void_reasons_guid_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
- **guid** | **str**| The GUID of the void reason. | 
-
-### Return type
-
-[**VoidReason**](VoidReason.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns a &#x60;VoidReason&#x60; object. |  -  |
-**404** | Void reason not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

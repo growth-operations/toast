@@ -4,12 +4,90 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**restaurant_services_get**](RestaurantServicesApi.md#restaurant_services_get) | **GET** /config/v2/restaurantServices | Get restaurant services
-[**restaurant_services_guid_get**](RestaurantServicesApi.md#restaurant_services_guid_get) | **GET** /config/v2/restaurantServices/{guid} | Get restaurant service by GUID
+[**get_restaurant_service_by_id**](RestaurantServicesApi.md#get_restaurant_service_by_id) | **GET** /config/v2/restaurantServices/{guid} | Get restaurant service by GUID
+[**list_restaurant_services**](RestaurantServicesApi.md#list_restaurant_services) | **GET** /config/v2/restaurantServices | Get restaurant services
 
 
-# **restaurant_services_get**
-> List[RestaurantService] restaurant_services_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+# **get_restaurant_service_by_id**
+> RestaurantService get_restaurant_service_by_id(toast_restaurant_external_id, guid)
+
+Get restaurant service by GUID
+
+Returns a specific restaurant service by its GUID.
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.restaurant_service import RestaurantService
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.RestaurantServicesApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
+    guid = 'guid_example' # str | The GUID of the restaurant service.
+
+    try:
+        # Get restaurant service by GUID
+        api_response = await api_instance.get_restaurant_service_by_id(toast_restaurant_external_id, guid)
+        print("The response of RestaurantServicesApi->get_restaurant_service_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling RestaurantServicesApi->get_restaurant_service_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
+ **guid** | **str**| The GUID of the restaurant service. | 
+
+### Return type
+
+[**RestaurantService**](RestaurantService.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a &#x60;RestaurantService&#x60; object. |  -  |
+**404** | Restaurant service not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_restaurant_services**
+> List[RestaurantService] list_restaurant_services(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
 
 Get restaurant services
 
@@ -49,11 +127,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get restaurant services
-        api_response = await api_instance.restaurant_services_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
-        print("The response of RestaurantServicesApi->restaurant_services_get:\n")
+        api_response = await api_instance.list_restaurant_services(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+        print("The response of RestaurantServicesApi->list_restaurant_services:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling RestaurantServicesApi->restaurant_services_get: %s\n" % e)
+        print("Exception when calling RestaurantServicesApi->list_restaurant_services: %s\n" % e)
 ```
 
 
@@ -86,84 +164,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns an array of &#x60;RestaurantService&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **restaurant_services_guid_get**
-> RestaurantService restaurant_services_guid_get(toast_restaurant_external_id, guid)
-
-Get restaurant service by GUID
-
-Returns a specific restaurant service by its GUID.
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.restaurant_service import RestaurantService
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.RestaurantServicesApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
-    guid = 'guid_example' # str | The GUID of the restaurant service.
-
-    try:
-        # Get restaurant service by GUID
-        api_response = await api_instance.restaurant_services_guid_get(toast_restaurant_external_id, guid)
-        print("The response of RestaurantServicesApi->restaurant_services_guid_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling RestaurantServicesApi->restaurant_services_guid_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
- **guid** | **str**| The GUID of the restaurant service. | 
-
-### Return type
-
-[**RestaurantService**](RestaurantService.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns a &#x60;RestaurantService&#x60; object. |  -  |
-**404** | Restaurant service not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

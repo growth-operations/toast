@@ -21,8 +21,8 @@ from typing import List, Optional
 from typing_extensions import Annotated
 from toastapi.models.order import Order
 from toastapi.models.order_response import OrderResponse
-from toastapi.models.orders_order_guid_delivery_info_patch_request import OrdersOrderGuidDeliveryInfoPatchRequest
 from toastapi.models.selection import Selection
+from toastapi.models.update_delivery_info_request import UpdateDeliveryInfoRequest
 from toastapi.models.void_order_request import VoidOrderRequest
 
 from toastapi.api_client import ApiClient, RequestSerialized
@@ -44,7 +44,947 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_bulk_get(
+    async def add_items_to_check(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding items to. ")],
+        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding items to. ")],
+        selection: Annotated[List[Selection], Field(description="An array of JSON `Selection` objects that identify the menu items you are adding. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Order:
+        """Add items to a check
+
+        Adds one or more items to an existing check in an order.  Include information about the items in an array of `Selection` objects in the message body.  Specify the Toast platform GUID of the order and check in REST path parameters.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html\">the  _Toast Developer Guide_</a>. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param order_guid: The Toast platform identifier of the order that you are adding items to.  (required)
+        :type order_guid: str
+        :param check_guid: The Toast platform identifier of the check that you are adding items to.  (required)
+        :type check_guid: str
+        :param selection: An array of JSON `Selection` objects that identify the menu items you are adding.  (required)
+        :type selection: List[Selection]
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._add_items_to_check_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order_guid=order_guid,
+            check_guid=check_guid,
+            selection=selection,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def add_items_to_check_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding items to. ")],
+        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding items to. ")],
+        selection: Annotated[List[Selection], Field(description="An array of JSON `Selection` objects that identify the menu items you are adding. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Order]:
+        """Add items to a check
+
+        Adds one or more items to an existing check in an order.  Include information about the items in an array of `Selection` objects in the message body.  Specify the Toast platform GUID of the order and check in REST path parameters.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html\">the  _Toast Developer Guide_</a>. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param order_guid: The Toast platform identifier of the order that you are adding items to.  (required)
+        :type order_guid: str
+        :param check_guid: The Toast platform identifier of the check that you are adding items to.  (required)
+        :type check_guid: str
+        :param selection: An array of JSON `Selection` objects that identify the menu items you are adding.  (required)
+        :type selection: List[Selection]
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._add_items_to_check_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order_guid=order_guid,
+            check_guid=check_guid,
+            selection=selection,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def add_items_to_check_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding items to. ")],
+        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding items to. ")],
+        selection: Annotated[List[Selection], Field(description="An array of JSON `Selection` objects that identify the menu items you are adding. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Add items to a check
+
+        Adds one or more items to an existing check in an order.  Include information about the items in an array of `Selection` objects in the message body.  Specify the Toast platform GUID of the order and check in REST path parameters.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html\">the  _Toast Developer Guide_</a>. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param order_guid: The Toast platform identifier of the order that you are adding items to.  (required)
+        :type order_guid: str
+        :param check_guid: The Toast platform identifier of the check that you are adding items to.  (required)
+        :type check_guid: str
+        :param selection: An array of JSON `Selection` objects that identify the menu items you are adding.  (required)
+        :type selection: List[Selection]
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._add_items_to_check_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order_guid=order_guid,
+            check_guid=check_guid,
+            selection=selection,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _add_items_to_check_serialize(
+        self,
+        toast_restaurant_external_id,
+        order_guid,
+        check_guid,
+        selection,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            'Selection': '',
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if order_guid is not None:
+            _path_params['orderGuid'] = order_guid
+        if check_guid is not None:
+            _path_params['checkGuid'] = check_guid
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+        if selection is not None:
+            _body_params = selection
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/orders/v2/orders/{orderGuid}/checks/{checkGuid}/selections',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def calculate_order_prices(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant to be used for this price calculation. ")],
+        order: Annotated[Order, Field(description="A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Order:
+        """Get order prices
+
+        Calculates the check price amounts, tax amounts, and service charges for an `Order` object you supply as a _required message body parameter_.  The `prices` endpoint validates the order you submit to ensure all referenced data exists and that you include item selections in the expected structure with all required modifier options.  Some values that would be present in the response data when creating an order are not present in the response data for the `prices` endpoint. For example, the order GUID is not set because the Toast platform does not create persistent data for the order.  The calculated price can change between requests to the `prices` endpoint with the same `Order` object if enough time passes between the requests. The difference in price is possible because the restaurant configuration can change and because some pricing configuration is based on time and date schedules. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant to be used for this price calculation.  (required)
+        :type toast_restaurant_external_id: str
+        :param order: A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order.  (required)
+        :type order: Order
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._calculate_order_prices_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order=order,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '403': None,
+            '404': None,
+            '413': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def calculate_order_prices_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant to be used for this price calculation. ")],
+        order: Annotated[Order, Field(description="A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Order]:
+        """Get order prices
+
+        Calculates the check price amounts, tax amounts, and service charges for an `Order` object you supply as a _required message body parameter_.  The `prices` endpoint validates the order you submit to ensure all referenced data exists and that you include item selections in the expected structure with all required modifier options.  Some values that would be present in the response data when creating an order are not present in the response data for the `prices` endpoint. For example, the order GUID is not set because the Toast platform does not create persistent data for the order.  The calculated price can change between requests to the `prices` endpoint with the same `Order` object if enough time passes between the requests. The difference in price is possible because the restaurant configuration can change and because some pricing configuration is based on time and date schedules. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant to be used for this price calculation.  (required)
+        :type toast_restaurant_external_id: str
+        :param order: A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order.  (required)
+        :type order: Order
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._calculate_order_prices_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order=order,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '403': None,
+            '404': None,
+            '413': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def calculate_order_prices_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant to be used for this price calculation. ")],
+        order: Annotated[Order, Field(description="A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get order prices
+
+        Calculates the check price amounts, tax amounts, and service charges for an `Order` object you supply as a _required message body parameter_.  The `prices` endpoint validates the order you submit to ensure all referenced data exists and that you include item selections in the expected structure with all required modifier options.  Some values that would be present in the response data when creating an order are not present in the response data for the `prices` endpoint. For example, the order GUID is not set because the Toast platform does not create persistent data for the order.  The calculated price can change between requests to the `prices` endpoint with the same `Order` object if enough time passes between the requests. The difference in price is possible because the restaurant configuration can change and because some pricing configuration is based on time and date schedules. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant to be used for this price calculation.  (required)
+        :type toast_restaurant_external_id: str
+        :param order: A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order.  (required)
+        :type order: Order
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._calculate_order_prices_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order=order,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '403': None,
+            '404': None,
+            '413': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _calculate_order_prices_serialize(
+        self,
+        toast_restaurant_external_id,
+        order,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+        if order is not None:
+            _body_params = order
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/orders/v2/prices',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def create_order(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant where this order was placed.")],
+        order: Annotated[Order, Field(description="A JSON object containing information about an order.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> OrderResponse:
+        """Post an order
+
+        Submits an order to the server. Returns a JSON `Order` object if successful.
+
+        :param toast_restaurant_external_id: The identifier for the restaurant where this order was placed. (required)
+        :type toast_restaurant_external_id: str
+        :param order: A JSON object containing information about an order. (required)
+        :type order: Order
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_order_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order=order,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "OrderResponse",
+            '400': None,
+            '404': None,
+            '413': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def create_order_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant where this order was placed.")],
+        order: Annotated[Order, Field(description="A JSON object containing information about an order.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[OrderResponse]:
+        """Post an order
+
+        Submits an order to the server. Returns a JSON `Order` object if successful.
+
+        :param toast_restaurant_external_id: The identifier for the restaurant where this order was placed. (required)
+        :type toast_restaurant_external_id: str
+        :param order: A JSON object containing information about an order. (required)
+        :type order: Order
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_order_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order=order,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "OrderResponse",
+            '400': None,
+            '404': None,
+            '413': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def create_order_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant where this order was placed.")],
+        order: Annotated[Order, Field(description="A JSON object containing information about an order.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Post an order
+
+        Submits an order to the server. Returns a JSON `Order` object if successful.
+
+        :param toast_restaurant_external_id: The identifier for the restaurant where this order was placed. (required)
+        :type toast_restaurant_external_id: str
+        :param order: A JSON object containing information about an order. (required)
+        :type order: Order
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_order_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            order=order,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "OrderResponse",
+            '400': None,
+            '404': None,
+            '413': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _create_order_serialize(
+        self,
+        toast_restaurant_external_id,
+        order,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+        if order is not None:
+            _body_params = order
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/orders/v2/orders',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def get_multiple_orders(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant that processed the orders. ")],
         start_date: Annotated[Optional[StrictStr], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
@@ -103,7 +1043,7 @@ class OrdersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_bulk_get_serialize(
+        _param = self._get_multiple_orders_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             start_date=start_date,
             end_date=end_date,
@@ -133,7 +1073,7 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_bulk_get_with_http_info(
+    async def get_multiple_orders_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant that processed the orders. ")],
         start_date: Annotated[Optional[StrictStr], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
@@ -192,7 +1132,7 @@ class OrdersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_bulk_get_serialize(
+        _param = self._get_multiple_orders_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             start_date=start_date,
             end_date=end_date,
@@ -222,7 +1162,7 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_bulk_get_without_preload_content(
+    async def get_multiple_orders_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant that processed the orders. ")],
         start_date: Annotated[Optional[StrictStr], Field(description="The inclusive start date and time. The results include orders with a modified date and time that occur at or after the `startDate`, but before the `endDate`.  Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value.  The date must be after 2015-12-01T00:00:00.000+0000. ")] = None,
@@ -281,7 +1221,7 @@ class OrdersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_bulk_get_serialize(
+        _param = self._get_multiple_orders_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             start_date=start_date,
             end_date=end_date,
@@ -306,7 +1246,7 @@ class OrdersApi:
         return response_data.response
 
 
-    def _orders_bulk_get_serialize(
+    def _get_multiple_orders_serialize(
         self,
         toast_restaurant_external_id,
         start_date,
@@ -396,7 +1336,292 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_get(
+    async def get_order_by_guid(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant where this order was placed.")],
+        guid: Annotated[StrictStr, Field(description="The GUID for the order to be returned.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Order:
+        """Get an order
+
+        Retrieves detailed information about a single order, specified by its GUID.
+
+        :param toast_restaurant_external_id: The identifier of the restaurant where this order was placed. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID for the order to be returned. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_order_by_guid_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def get_order_by_guid_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant where this order was placed.")],
+        guid: Annotated[StrictStr, Field(description="The GUID for the order to be returned.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Order]:
+        """Get an order
+
+        Retrieves detailed information about a single order, specified by its GUID.
+
+        :param toast_restaurant_external_id: The identifier of the restaurant where this order was placed. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID for the order to be returned. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_order_by_guid_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def get_order_by_guid_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant where this order was placed.")],
+        guid: Annotated[StrictStr, Field(description="The GUID for the order to be returned.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get an order
+
+        Retrieves detailed information about a single order, specified by its GUID.
+
+        :param toast_restaurant_external_id: The identifier of the restaurant where this order was placed. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID for the order to be returned. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_order_by_guid_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Order",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_order_by_guid_serialize(
+        self,
+        toast_restaurant_external_id,
+        guid,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if guid is not None:
+            _path_params['guid'] = guid
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/orders/v2/orders/{guid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def list_order_identifiers(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant to retrieve orders from.")],
         start_date: Annotated[Optional[StrictStr], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
@@ -450,7 +1675,7 @@ class OrdersApi:
         """ # noqa: E501
         warnings.warn("GET /orders/v2/orders is deprecated.", DeprecationWarning)
 
-        _param = self._orders_get_serialize(
+        _param = self._list_order_identifiers_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             start_date=start_date,
             end_date=end_date,
@@ -478,7 +1703,7 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_get_with_http_info(
+    async def list_order_identifiers_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant to retrieve orders from.")],
         start_date: Annotated[Optional[StrictStr], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
@@ -532,7 +1757,7 @@ class OrdersApi:
         """ # noqa: E501
         warnings.warn("GET /orders/v2/orders is deprecated.", DeprecationWarning)
 
-        _param = self._orders_get_serialize(
+        _param = self._list_order_identifiers_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             start_date=start_date,
             end_date=end_date,
@@ -560,7 +1785,7 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_get_without_preload_content(
+    async def list_order_identifiers_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant to retrieve orders from.")],
         start_date: Annotated[Optional[StrictStr], Field(description="\\ The inclusive start date and time. The results exclude orders with an earlier modified date and time. Use ISO-8601 format for the date and time, including a decimal fraction of a second. For example, `2016-01-01T14:13:12.000+0400`. URL encode the date and time value. The date must be after 2015-12-01T00:00:00.000+0000.")] = None,
@@ -614,7 +1839,7 @@ class OrdersApi:
         """ # noqa: E501
         warnings.warn("GET /orders/v2/orders is deprecated.", DeprecationWarning)
 
-        _param = self._orders_get_serialize(
+        _param = self._list_order_identifiers_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             start_date=start_date,
             end_date=end_date,
@@ -637,7 +1862,7 @@ class OrdersApi:
         return response_data.response
 
 
-    def _orders_get_serialize(
+    def _list_order_identifiers_serialize(
         self,
         toast_restaurant_external_id,
         start_date,
@@ -717,10 +1942,11 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_guid_get(
+    async def update_delivery_info(
         self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant where this order was placed.")],
-        guid: Annotated[StrictStr, Field(description="The GUID for the order to be returned.")],
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating the delivery information for. ")],
+        update_delivery_info_request: Annotated[UpdateDeliveryInfoRequest, Field(description="A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -734,14 +1960,16 @@ class OrdersApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> Order:
-        """Get an order
+        """Update delivery information
 
-        Retrieves detailed information about a single order, specified by its GUID.
+        Updates the delivery information of an order that uses the `DELIVERY` dining option. You can use this endpoint to update the delivery time, dispatch time, the employee who is delivering the order, the delivery state, or a combination of the four.  Specify the Toast platform GUID of the order in the `PATCH` path parameters. Returns a JSON `Order` object if successful.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html\"> the _Toast Developer Guide_</a>. 
 
-        :param toast_restaurant_external_id: The identifier of the restaurant where this order was placed. (required)
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
         :type toast_restaurant_external_id: str
-        :param guid: The GUID for the order to be returned. (required)
-        :type guid: str
+        :param order_guid: The Toast platform identifier of the order that you are updating the delivery information for.  (required)
+        :type order_guid: str
+        :param update_delivery_info_request: A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint.  (required)
+        :type update_delivery_info_request: UpdateDeliveryInfoRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -764,9 +1992,10 @@ class OrdersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_guid_get_serialize(
+        _param = self._update_delivery_info_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
+            order_guid=order_guid,
+            update_delivery_info_request=update_delivery_info_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -776,8 +2005,6 @@ class OrdersApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Order",
             '400': None,
-            '404': None,
-            '500': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -791,10 +2018,11 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_guid_get_with_http_info(
+    async def update_delivery_info_with_http_info(
         self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant where this order was placed.")],
-        guid: Annotated[StrictStr, Field(description="The GUID for the order to be returned.")],
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating the delivery information for. ")],
+        update_delivery_info_request: Annotated[UpdateDeliveryInfoRequest, Field(description="A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -808,14 +2036,16 @@ class OrdersApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[Order]:
-        """Get an order
+        """Update delivery information
 
-        Retrieves detailed information about a single order, specified by its GUID.
+        Updates the delivery information of an order that uses the `DELIVERY` dining option. You can use this endpoint to update the delivery time, dispatch time, the employee who is delivering the order, the delivery state, or a combination of the four.  Specify the Toast platform GUID of the order in the `PATCH` path parameters. Returns a JSON `Order` object if successful.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html\"> the _Toast Developer Guide_</a>. 
 
-        :param toast_restaurant_external_id: The identifier of the restaurant where this order was placed. (required)
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
         :type toast_restaurant_external_id: str
-        :param guid: The GUID for the order to be returned. (required)
-        :type guid: str
+        :param order_guid: The Toast platform identifier of the order that you are updating the delivery information for.  (required)
+        :type order_guid: str
+        :param update_delivery_info_request: A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint.  (required)
+        :type update_delivery_info_request: UpdateDeliveryInfoRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -838,9 +2068,10 @@ class OrdersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_guid_get_serialize(
+        _param = self._update_delivery_info_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
+            order_guid=order_guid,
+            update_delivery_info_request=update_delivery_info_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -850,8 +2081,6 @@ class OrdersApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Order",
             '400': None,
-            '404': None,
-            '500': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -865,10 +2094,11 @@ class OrdersApi:
 
 
     @validate_call
-    async def orders_guid_get_without_preload_content(
+    async def update_delivery_info_without_preload_content(
         self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant where this order was placed.")],
-        guid: Annotated[StrictStr, Field(description="The GUID for the order to be returned.")],
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating the delivery information for. ")],
+        update_delivery_info_request: Annotated[UpdateDeliveryInfoRequest, Field(description="A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -882,14 +2112,16 @@ class OrdersApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get an order
+        """Update delivery information
 
-        Retrieves detailed information about a single order, specified by its GUID.
+        Updates the delivery information of an order that uses the `DELIVERY` dining option. You can use this endpoint to update the delivery time, dispatch time, the employee who is delivering the order, the delivery state, or a combination of the four.  Specify the Toast platform GUID of the order in the `PATCH` path parameters. Returns a JSON `Order` object if successful.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html\"> the _Toast Developer Guide_</a>. 
 
-        :param toast_restaurant_external_id: The identifier of the restaurant where this order was placed. (required)
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
         :type toast_restaurant_external_id: str
-        :param guid: The GUID for the order to be returned. (required)
-        :type guid: str
+        :param order_guid: The Toast platform identifier of the order that you are updating the delivery information for.  (required)
+        :type order_guid: str
+        :param update_delivery_info_request: A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint.  (required)
+        :type update_delivery_info_request: UpdateDeliveryInfoRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -912,9 +2144,10 @@ class OrdersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_guid_get_serialize(
+        _param = self._update_delivery_info_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
+            order_guid=order_guid,
+            update_delivery_info_request=update_delivery_info_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -924,8 +2157,6 @@ class OrdersApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Order",
             '400': None,
-            '404': None,
-            '500': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -934,631 +2165,11 @@ class OrdersApi:
         return response_data.response
 
 
-    def _orders_guid_get_serialize(
-        self,
-        toast_restaurant_external_id,
-        guid,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if guid is not None:
-            _path_params['guid'] = guid
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/orders/v2/orders/{guid}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def orders_order_guid_checks_check_guid_selections_post(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding items to. ")],
-        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding items to. ")],
-        selection: Annotated[List[Selection], Field(description="An array of JSON `Selection` objects that identify the menu items you are adding. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Order:
-        """Add items to a check
-
-        Adds one or more items to an existing check in an order.  Include information about the items in an array of `Selection` objects in the message body.  Specify the Toast platform GUID of the order and check in REST path parameters.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html\">the  _Toast Developer Guide_</a>. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param order_guid: The Toast platform identifier of the order that you are adding items to.  (required)
-        :type order_guid: str
-        :param check_guid: The Toast platform identifier of the check that you are adding items to.  (required)
-        :type check_guid: str
-        :param selection: An array of JSON `Selection` objects that identify the menu items you are adding.  (required)
-        :type selection: List[Selection]
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_order_guid_checks_check_guid_selections_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order_guid=order_guid,
-            check_guid=check_guid,
-            selection=selection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def orders_order_guid_checks_check_guid_selections_post_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding items to. ")],
-        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding items to. ")],
-        selection: Annotated[List[Selection], Field(description="An array of JSON `Selection` objects that identify the menu items you are adding. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Order]:
-        """Add items to a check
-
-        Adds one or more items to an existing check in an order.  Include information about the items in an array of `Selection` objects in the message body.  Specify the Toast platform GUID of the order and check in REST path parameters.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html\">the  _Toast Developer Guide_</a>. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param order_guid: The Toast platform identifier of the order that you are adding items to.  (required)
-        :type order_guid: str
-        :param check_guid: The Toast platform identifier of the check that you are adding items to.  (required)
-        :type check_guid: str
-        :param selection: An array of JSON `Selection` objects that identify the menu items you are adding.  (required)
-        :type selection: List[Selection]
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_order_guid_checks_check_guid_selections_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order_guid=order_guid,
-            check_guid=check_guid,
-            selection=selection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def orders_order_guid_checks_check_guid_selections_post_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding items to. ")],
-        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding items to. ")],
-        selection: Annotated[List[Selection], Field(description="An array of JSON `Selection` objects that identify the menu items you are adding. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Add items to a check
-
-        Adds one or more items to an existing check in an order.  Include information about the items in an array of `Selection` objects in the message body.  Specify the Toast platform GUID of the order and check in REST path parameters.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiAddingItemsToACheck.html\">the  _Toast Developer Guide_</a>. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param order_guid: The Toast platform identifier of the order that you are adding items to.  (required)
-        :type order_guid: str
-        :param check_guid: The Toast platform identifier of the check that you are adding items to.  (required)
-        :type check_guid: str
-        :param selection: An array of JSON `Selection` objects that identify the menu items you are adding.  (required)
-        :type selection: List[Selection]
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_order_guid_checks_check_guid_selections_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order_guid=order_guid,
-            check_guid=check_guid,
-            selection=selection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _orders_order_guid_checks_check_guid_selections_post_serialize(
+    def _update_delivery_info_serialize(
         self,
         toast_restaurant_external_id,
         order_guid,
-        check_guid,
-        selection,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-            'Selection': '',
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if order_guid is not None:
-            _path_params['orderGuid'] = order_guid
-        if check_guid is not None:
-            _path_params['checkGuid'] = check_guid
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-        if selection is not None:
-            _body_params = selection
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/orders/v2/orders/{orderGuid}/checks/{checkGuid}/selections',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def orders_order_guid_delivery_info_patch(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating the delivery information for. ")],
-        orders_order_guid_delivery_info_patch_request: Annotated[OrdersOrderGuidDeliveryInfoPatchRequest, Field(description="A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Order:
-        """Update delivery information
-
-        Updates the delivery information of an order that uses the `DELIVERY` dining option. You can use this endpoint to update the delivery time, dispatch time, the employee who is delivering the order, the delivery state, or a combination of the four.  Specify the Toast platform GUID of the order in the `PATCH` path parameters. Returns a JSON `Order` object if successful.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html\"> the _Toast Developer Guide_</a>. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param order_guid: The Toast platform identifier of the order that you are updating the delivery information for.  (required)
-        :type order_guid: str
-        :param orders_order_guid_delivery_info_patch_request: A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint.  (required)
-        :type orders_order_guid_delivery_info_patch_request: OrdersOrderGuidDeliveryInfoPatchRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_order_guid_delivery_info_patch_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order_guid=order_guid,
-            orders_order_guid_delivery_info_patch_request=orders_order_guid_delivery_info_patch_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def orders_order_guid_delivery_info_patch_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating the delivery information for. ")],
-        orders_order_guid_delivery_info_patch_request: Annotated[OrdersOrderGuidDeliveryInfoPatchRequest, Field(description="A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Order]:
-        """Update delivery information
-
-        Updates the delivery information of an order that uses the `DELIVERY` dining option. You can use this endpoint to update the delivery time, dispatch time, the employee who is delivering the order, the delivery state, or a combination of the four.  Specify the Toast platform GUID of the order in the `PATCH` path parameters. Returns a JSON `Order` object if successful.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html\"> the _Toast Developer Guide_</a>. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param order_guid: The Toast platform identifier of the order that you are updating the delivery information for.  (required)
-        :type order_guid: str
-        :param orders_order_guid_delivery_info_patch_request: A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint.  (required)
-        :type orders_order_guid_delivery_info_patch_request: OrdersOrderGuidDeliveryInfoPatchRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_order_guid_delivery_info_patch_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order_guid=order_guid,
-            orders_order_guid_delivery_info_patch_request=orders_order_guid_delivery_info_patch_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def orders_order_guid_delivery_info_patch_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating the delivery information for. ")],
-        orders_order_guid_delivery_info_patch_request: Annotated[OrdersOrderGuidDeliveryInfoPatchRequest, Field(description="A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Update delivery information
-
-        Updates the delivery information of an order that uses the `DELIVERY` dining option. You can use this endpoint to update the delivery time, dispatch time, the employee who is delivering the order, the delivery state, or a combination of the four.  Specify the Toast platform GUID of the order in the `PATCH` path parameters. Returns a JSON `Order` object if successful.  For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingDeliveryInfoForAnOrder.html\"> the _Toast Developer Guide_</a>. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param order_guid: The Toast platform identifier of the order that you are updating the delivery information for.  (required)
-        :type order_guid: str
-        :param orders_order_guid_delivery_info_patch_request: A JSON `deliveryInfo` object containing the delivery information you want to update for an order.  You can update the `deliveredDate`, `dispatchedDate`, `deliveryState`, or `DeliveryEmployee`.  These are the only values you can update with this endpoint.  (required)
-        :type orders_order_guid_delivery_info_patch_request: OrdersOrderGuidDeliveryInfoPatchRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_order_guid_delivery_info_patch_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order_guid=order_guid,
-            orders_order_guid_delivery_info_patch_request=orders_order_guid_delivery_info_patch_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _orders_order_guid_delivery_info_patch_serialize(
-        self,
-        toast_restaurant_external_id,
-        order_guid,
-        orders_order_guid_delivery_info_patch_request,
+        update_delivery_info_request,
         _request_auth,
         _content_type,
         _headers,
@@ -1588,8 +2199,8 @@ class OrdersApi:
             _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
         # process the form parameters
         # process the body parameter
-        if orders_order_guid_delivery_info_patch_request is not None:
-            _body_params = orders_order_guid_delivery_info_patch_request
+        if update_delivery_info_request is not None:
+            _body_params = update_delivery_info_request
 
 
         # set the HTTP header `Accept`
@@ -1622,617 +2233,6 @@ class OrdersApi:
         return self.api_client.param_serialize(
             method='PATCH',
             resource_path='/orders/v2/orders/{orderGuid}/deliveryInfo',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def orders_post(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant where this order was placed.")],
-        order: Annotated[Order, Field(description="A JSON object containing information about an order.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> OrderResponse:
-        """Post an order
-
-        Submits an order to the server. Returns a JSON `Order` object if successful.
-
-        :param toast_restaurant_external_id: The identifier for the restaurant where this order was placed. (required)
-        :type toast_restaurant_external_id: str
-        :param order: A JSON object containing information about an order. (required)
-        :type order: Order
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order=order,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "OrderResponse",
-            '400': None,
-            '404': None,
-            '413': None,
-            '415': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def orders_post_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant where this order was placed.")],
-        order: Annotated[Order, Field(description="A JSON object containing information about an order.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[OrderResponse]:
-        """Post an order
-
-        Submits an order to the server. Returns a JSON `Order` object if successful.
-
-        :param toast_restaurant_external_id: The identifier for the restaurant where this order was placed. (required)
-        :type toast_restaurant_external_id: str
-        :param order: A JSON object containing information about an order. (required)
-        :type order: Order
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order=order,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "OrderResponse",
-            '400': None,
-            '404': None,
-            '413': None,
-            '415': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def orders_post_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant where this order was placed.")],
-        order: Annotated[Order, Field(description="A JSON object containing information about an order.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Post an order
-
-        Submits an order to the server. Returns a JSON `Order` object if successful.
-
-        :param toast_restaurant_external_id: The identifier for the restaurant where this order was placed. (required)
-        :type toast_restaurant_external_id: str
-        :param order: A JSON object containing information about an order. (required)
-        :type order: Order
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._orders_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order=order,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "OrderResponse",
-            '400': None,
-            '404': None,
-            '413': None,
-            '415': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _orders_post_serialize(
-        self,
-        toast_restaurant_external_id,
-        order,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-        if order is not None:
-            _body_params = order
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/orders/v2/orders',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def prices_post(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant to be used for this price calculation. ")],
-        order: Annotated[Order, Field(description="A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Order:
-        """Get order prices
-
-        Calculates the check price amounts, tax amounts, and service charges for an `Order` object you supply as a _required message body parameter_.  The `prices` endpoint validates the order you submit to ensure all referenced data exists and that you include item selections in the expected structure with all required modifier options.  Some values that would be present in the response data when creating an order are not present in the response data for the `prices` endpoint. For example, the order GUID is not set because the Toast platform does not create persistent data for the order.  The calculated price can change between requests to the `prices` endpoint with the same `Order` object if enough time passes between the requests. The difference in price is possible because the restaurant configuration can change and because some pricing configuration is based on time and date schedules. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant to be used for this price calculation.  (required)
-        :type toast_restaurant_external_id: str
-        :param order: A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order.  (required)
-        :type order: Order
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._prices_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order=order,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-            '403': None,
-            '404': None,
-            '413': None,
-            '415': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def prices_post_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant to be used for this price calculation. ")],
-        order: Annotated[Order, Field(description="A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Order]:
-        """Get order prices
-
-        Calculates the check price amounts, tax amounts, and service charges for an `Order` object you supply as a _required message body parameter_.  The `prices` endpoint validates the order you submit to ensure all referenced data exists and that you include item selections in the expected structure with all required modifier options.  Some values that would be present in the response data when creating an order are not present in the response data for the `prices` endpoint. For example, the order GUID is not set because the Toast platform does not create persistent data for the order.  The calculated price can change between requests to the `prices` endpoint with the same `Order` object if enough time passes between the requests. The difference in price is possible because the restaurant configuration can change and because some pricing configuration is based on time and date schedules. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant to be used for this price calculation.  (required)
-        :type toast_restaurant_external_id: str
-        :param order: A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order.  (required)
-        :type order: Order
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._prices_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order=order,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-            '403': None,
-            '404': None,
-            '413': None,
-            '415': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def prices_post_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant to be used for this price calculation. ")],
-        order: Annotated[Order, Field(description="A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get order prices
-
-        Calculates the check price amounts, tax amounts, and service charges for an `Order` object you supply as a _required message body parameter_.  The `prices` endpoint validates the order you submit to ensure all referenced data exists and that you include item selections in the expected structure with all required modifier options.  Some values that would be present in the response data when creating an order are not present in the response data for the `prices` endpoint. For example, the order GUID is not set because the Toast platform does not create persistent data for the order.  The calculated price can change between requests to the `prices` endpoint with the same `Order` object if enough time passes between the requests. The difference in price is possible because the restaurant configuration can change and because some pricing configuration is based on time and date schedules. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant to be used for this price calculation.  (required)
-        :type toast_restaurant_external_id: str
-        :param order: A _required_ JSON `Order` object containing information about the checks, item selections, modifier options, and other parts of the order.  (required)
-        :type order: Order
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._prices_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            order=order,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
-            '400': None,
-            '403': None,
-            '404': None,
-            '413': None,
-            '415': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _prices_post_serialize(
-        self,
-        toast_restaurant_external_id,
-        order,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-        if order is not None:
-            _body_params = order
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/orders/v2/prices',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

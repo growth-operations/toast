@@ -2,6 +2,7 @@
 
 # import apis into api package
 from toastapi.api.alternate_payment_types_api import AlternatePaymentTypesApi
+from toastapi.api.analytics_api import AnalyticsApi
 from toastapi.api.authentication_api import AuthenticationApi
 from toastapi.api.break_types_api import BreakTypesApi
 from toastapi.api.cash_drawers_api import CashDrawersApi

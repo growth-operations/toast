@@ -17,31 +17,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-class OrdersOrderGuidDeliveryInfoPatchRequest(BaseModel):
+class GuestReportingDataRequest(BaseModel):
     """
-    OrdersOrderGuidDeliveryInfoPatchRequest
+    A JSON object containing the starting and ending dates for the reporting data request and included or excluded restaurants. 
     """ # noqa: E501
-    delivered_date: Optional[datetime] = Field(default=None, description="The date on which the order was delivered. ", alias="deliveredDate")
-    dispatched_date: Optional[datetime] = Field(default=None, description="The date on which the order was dispatched. If `dispatchedDate` is not specified, it is set to the current system time. ", alias="dispatchedDate")
-    delivery_state: Optional[StrictStr] = Field(default=None, description="The delivery state of the order. ", alias="deliveryState")
-    delivery_employee: Optional[StrictStr] = Field(default=None, description="The Toast platform identifier of the employee who is delivering the order. ", alias="deliveryEmployee")
-    __properties: ClassVar[List[str]] = ["deliveredDate", "dispatchedDate", "deliveryState", "deliveryEmployee"]
-
-    @field_validator('delivery_state')
-    def delivery_state_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['PENDING', 'IN_PROGRESS', 'PICKED_UP', 'DELIVERED']):
-            raise ValueError("must be one of enum values ('PENDING', 'IN_PROGRESS', 'PICKED_UP', 'DELIVERED')")
-        return value
+    start_date: StrictInt = Field(description="The starting date of the time range for the reporting data.  Specify the date in the format YYYYMMDD. For example, 20220824. ", alias="startDate")
+    end_date: StrictInt = Field(description="The ending date of the time range for the reporting data.  Specify the date in the format YYYYMMDD. For example, 20220824. ", alias="endDate")
+    restaurant_ids: List[StrictStr] = Field(description="The restaurantGuid values of specific restaurants in the management group to include in the reporting data. If used, only the data for listed restaurants in the management group that are identified by restaurantGuid is included. If left blank, all restaurants are included by default. ", alias="restaurantIds")
+    excluded_restaurant_ids: List[StrictStr] = Field(description="The restaurantGuid values of specific restaurants in the management group to exclude from the reporting data. If used, the data for listed restaurants in the management group that are identified by restaurantGuid is excluded. If left blank, all restaurants are included by default. ", alias="excludedRestaurantIds")
+    __properties: ClassVar[List[str]] = ["startDate", "endDate", "restaurantIds", "excludedRestaurantIds"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -61,7 +50,7 @@ class OrdersOrderGuidDeliveryInfoPatchRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of OrdersOrderGuidDeliveryInfoPatchRequest from a JSON string"""
+        """Create an instance of GuestReportingDataRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -86,7 +75,7 @@ class OrdersOrderGuidDeliveryInfoPatchRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of OrdersOrderGuidDeliveryInfoPatchRequest from a dict"""
+        """Create an instance of GuestReportingDataRequest from a dict"""
         if obj is None:
             return None
 
@@ -94,10 +83,10 @@ class OrdersOrderGuidDeliveryInfoPatchRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "deliveredDate": obj.get("deliveredDate"),
-            "dispatchedDate": obj.get("dispatchedDate"),
-            "deliveryState": obj.get("deliveryState"),
-            "deliveryEmployee": obj.get("deliveryEmployee")
+            "startDate": obj.get("startDate"),
+            "endDate": obj.get("endDate"),
+            "restaurantIds": obj.get("restaurantIds"),
+            "excludedRestaurantIds": obj.get("excludedRestaurantIds")
         })
         return _obj
 

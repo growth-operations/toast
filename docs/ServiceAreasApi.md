@@ -4,12 +4,90 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**service_areas_get**](ServiceAreasApi.md#service_areas_get) | **GET** /config/v2/serviceAreas | Get service areas
-[**service_areas_guid_get**](ServiceAreasApi.md#service_areas_guid_get) | **GET** /config/v2/serviceAreas/{guid} | Get service area by GUID
+[**get_service_area_by_id**](ServiceAreasApi.md#get_service_area_by_id) | **GET** /config/v2/serviceAreas/{guid} | Get service area by GUID
+[**list_service_areas**](ServiceAreasApi.md#list_service_areas) | **GET** /config/v2/serviceAreas | Get service areas
 
 
-# **service_areas_get**
-> List[ServiceArea] service_areas_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+# **get_service_area_by_id**
+> ServiceArea get_service_area_by_id(toast_restaurant_external_id, guid)
+
+Get service area by GUID
+
+Returns a specific service area by its GUID.
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.service_area import ServiceArea
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.ServiceAreasApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
+    guid = 'guid_example' # str | The GUID of the service area.
+
+    try:
+        # Get service area by GUID
+        api_response = await api_instance.get_service_area_by_id(toast_restaurant_external_id, guid)
+        print("The response of ServiceAreasApi->get_service_area_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ServiceAreasApi->get_service_area_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
+ **guid** | **str**| The GUID of the service area. | 
+
+### Return type
+
+[**ServiceArea**](ServiceArea.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a &#x60;ServiceArea&#x60; object. |  -  |
+**404** | Service area not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_service_areas**
+> List[ServiceArea] list_service_areas(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
 
 Get service areas
 
@@ -49,11 +127,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get service areas
-        api_response = await api_instance.service_areas_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
-        print("The response of ServiceAreasApi->service_areas_get:\n")
+        api_response = await api_instance.list_service_areas(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+        print("The response of ServiceAreasApi->list_service_areas:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling ServiceAreasApi->service_areas_get: %s\n" % e)
+        print("Exception when calling ServiceAreasApi->list_service_areas: %s\n" % e)
 ```
 
 
@@ -86,84 +164,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns an array of &#x60;ServiceArea&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **service_areas_guid_get**
-> ServiceArea service_areas_guid_get(toast_restaurant_external_id, guid)
-
-Get service area by GUID
-
-Returns a specific service area by its GUID.
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.service_area import ServiceArea
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.ServiceAreasApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
-    guid = 'guid_example' # str | The GUID of the service area.
-
-    try:
-        # Get service area by GUID
-        api_response = await api_instance.service_areas_guid_get(toast_restaurant_external_id, guid)
-        print("The response of ServiceAreasApi->service_areas_guid_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling ServiceAreasApi->service_areas_guid_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
- **guid** | **str**| The GUID of the service area. | 
-
-### Return type
-
-[**ServiceArea**](ServiceArea.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns a &#x60;ServiceArea&#x60; object. |  -  |
-**404** | Service area not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

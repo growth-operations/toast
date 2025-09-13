@@ -40,322 +40,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_get(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
-        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
-        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[Shift]:
-        """Get shifts
-
-        Returns an array of `Shift` objects that contain information  about schedule shifts for restaurant employees. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
-        :type shift_ids: str
-        :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
-        :type start_date: str
-        :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
-        :type end_date: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._shifts_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            shift_ids=shift_ids,
-            start_date=start_date,
-            end_date=end_date,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Shift]",
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def shifts_get_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
-        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
-        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[Shift]]:
-        """Get shifts
-
-        Returns an array of `Shift` objects that contain information  about schedule shifts for restaurant employees. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
-        :type shift_ids: str
-        :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
-        :type start_date: str
-        :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
-        :type end_date: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._shifts_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            shift_ids=shift_ids,
-            start_date=start_date,
-            end_date=end_date,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Shift]",
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def shifts_get_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
-        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
-        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get shifts
-
-        Returns an array of `Shift` objects that contain information  about schedule shifts for restaurant employees. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
-        :type shift_ids: str
-        :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
-        :type start_date: str
-        :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
-        :type end_date: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._shifts_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            shift_ids=shift_ids,
-            start_date=start_date,
-            end_date=end_date,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Shift]",
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _shifts_get_serialize(
-        self,
-        toast_restaurant_external_id,
-        shift_ids,
-        start_date,
-        end_date,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        if shift_ids is not None:
-            
-            _query_params.append(('shiftIds', shift_ids))
-            
-        if start_date is not None:
-            
-            _query_params.append(('startDate', start_date))
-            
-        if end_date is not None:
-            
-            _query_params.append(('endDate', end_date))
-            
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/labor/v1/shifts',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def shifts_post(
+    async def create_shift(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
@@ -405,7 +90,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_post_serialize(
+        _param = self._create_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
             body=body,
@@ -433,7 +118,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_post_with_http_info(
+    async def create_shift_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
@@ -483,7 +168,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_post_serialize(
+        _param = self._create_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
             body=body,
@@ -511,7 +196,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_post_without_preload_content(
+    async def create_shift_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
@@ -561,7 +246,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_post_serialize(
+        _param = self._create_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
             body=body,
@@ -584,7 +269,7 @@ class ShiftsApi:
         return response_data.response
 
 
-    def _shifts_post_serialize(
+    def _create_shift_serialize(
         self,
         toast_restaurant_external_id,
         content_type,
@@ -668,7 +353,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_delete(
+    async def delete_shift(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The shift identifier, either the Toast platform GUID or an  external identifier. ")],
@@ -715,7 +400,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_delete_serialize(
+        _param = self._delete_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             _request_auth=_request_auth,
@@ -742,7 +427,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_delete_with_http_info(
+    async def delete_shift_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The shift identifier, either the Toast platform GUID or an  external identifier. ")],
@@ -789,7 +474,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_delete_serialize(
+        _param = self._delete_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             _request_auth=_request_auth,
@@ -816,7 +501,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_delete_without_preload_content(
+    async def delete_shift_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The shift identifier, either the Toast platform GUID or an  external identifier. ")],
@@ -863,7 +548,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_delete_serialize(
+        _param = self._delete_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             _request_auth=_request_auth,
@@ -885,7 +570,7 @@ class ShiftsApi:
         return response_data.response
 
 
-    def _shifts_shift_id_delete_serialize(
+    def _delete_shift_serialize(
         self,
         toast_restaurant_external_id,
         shift_id,
@@ -953,7 +638,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_get(
+    async def get_shift_by_id(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  shift. ")],
@@ -1000,7 +685,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_get_serialize(
+        _param = self._get_shift_by_id_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             _request_auth=_request_auth,
@@ -1027,7 +712,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_get_with_http_info(
+    async def get_shift_by_id_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  shift. ")],
@@ -1074,7 +759,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_get_serialize(
+        _param = self._get_shift_by_id_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             _request_auth=_request_auth,
@@ -1101,7 +786,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_get_without_preload_content(
+    async def get_shift_by_id_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The Toast platform GUID or an external identifier for the  shift. ")],
@@ -1148,7 +833,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_get_serialize(
+        _param = self._get_shift_by_id_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             _request_auth=_request_auth,
@@ -1170,7 +855,7 @@ class ShiftsApi:
         return response_data.response
 
 
-    def _shifts_shift_id_get_serialize(
+    def _get_shift_by_id_serialize(
         self,
         toast_restaurant_external_id,
         shift_id,
@@ -1238,7 +923,322 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_put(
+    async def list_shifts(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[Shift]:
+        """Get shifts
+
+        Returns an array of `Shift` objects that contain information  about schedule shifts for restaurant employees. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
+        :type shift_ids: str
+        :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
+        :type start_date: str
+        :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
+        :type end_date: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_shifts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            shift_ids=shift_ids,
+            start_date=start_date,
+            end_date=end_date,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Shift]",
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def list_shifts_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[Shift]]:
+        """Get shifts
+
+        Returns an array of `Shift` objects that contain information  about schedule shifts for restaurant employees. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
+        :type shift_ids: str
+        :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
+        :type start_date: str
+        :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
+        :type end_date: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_shifts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            shift_ids=shift_ids,
+            start_date=start_date,
+            end_date=end_date,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Shift]",
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def list_shifts_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        shift_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). ")] = None,
+        start_date: Annotated[Optional[StrictStr], Field(description="Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. ")] = None,
+        end_date: Annotated[Optional[StrictStr], Field(description="Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get shifts
+
+        Returns an array of `Shift` objects that contain information  about schedule shifts for restaurant employees. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param shift_ids: An optional identifier that filters return values for a specific shift. The identifier can be a Toast platform GUID or an external identifier. If present, the shifts resource will only return the shifts you specify. You can include multiple `shiftIds` query parameters (maximum 100). 
+        :type shift_ids: str
+        :param start_date: Optional start date and time of time period to match  shifts. A shift matches the time period if the shift  `inDate` is after (inclusive) the specified `startDate` and  the shift `outDate` is before the `endDate` (exclusive).  These parameters are required if the `shiftIds` parameter  is not defined. The specified period cannot be longer than  one month. 
+        :type start_date: str
+        :param end_date: Optional end date and time of time period to match shifts.  A shift matches the time period if the shift `inDate` is  after (inclusive) the specified `startDate` and the shift  `outDate` is before the `endDate` (exclusive). These  parameters are required if the `shiftIds` parameter is not  defined. The specified period cannot be longer than one  month. 
+        :type end_date: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_shifts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            shift_ids=shift_ids,
+            start_date=start_date,
+            end_date=end_date,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Shift]",
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _list_shifts_serialize(
+        self,
+        toast_restaurant_external_id,
+        shift_ids,
+        start_date,
+        end_date,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if shift_ids is not None:
+            
+            _query_params.append(('shiftIds', shift_ids))
+            
+        if start_date is not None:
+            
+            _query_params.append(('startDate', start_date))
+            
+        if end_date is not None:
+            
+            _query_params.append(('endDate', end_date))
+            
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/labor/v1/shifts',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def update_shift(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The shift identifier, either the Toast platform GUID or an  external identifier. ")],
@@ -1288,7 +1288,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_put_serialize(
+        _param = self._update_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             body=body,
@@ -1317,7 +1317,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_put_with_http_info(
+    async def update_shift_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The shift identifier, either the Toast platform GUID or an  external identifier. ")],
@@ -1367,7 +1367,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_put_serialize(
+        _param = self._update_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             body=body,
@@ -1396,7 +1396,7 @@ class ShiftsApi:
 
 
     @validate_call
-    async def shifts_shift_id_put_without_preload_content(
+    async def update_shift_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         shift_id: Annotated[StrictStr, Field(description="The shift identifier, either the Toast platform GUID or an  external identifier. ")],
@@ -1446,7 +1446,7 @@ class ShiftsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._shifts_shift_id_put_serialize(
+        _param = self._update_shift_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             shift_id=shift_id,
             body=body,
@@ -1470,7 +1470,7 @@ class ShiftsApi:
         return response_data.response
 
 
-    def _shifts_shift_id_put_serialize(
+    def _update_shift_serialize(
         self,
         toast_restaurant_external_id,
         shift_id,

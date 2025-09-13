@@ -4,12 +4,98 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**time_entries_get**](TimeEntriesApi.md#time_entries_get) | **GET** /labor/v1/timeEntries | Get time entries
-[**time_entries_time_entry_id_get**](TimeEntriesApi.md#time_entries_time_entry_id_get) | **GET** /labor/v1/timeEntries/{timeEntryId} | Get one time entry
+[**get_time_entry_by_id**](TimeEntriesApi.md#get_time_entry_by_id) | **GET** /labor/v1/timeEntries/{timeEntryId} | Get one time entry
+[**list_time_entries**](TimeEntriesApi.md#list_time_entries) | **GET** /labor/v1/timeEntries | Get time entries
 
 
-# **time_entries_get**
-> List[TimeEntry] time_entries_get(toast_restaurant_external_id, time_entry_ids=time_entry_ids, start_date=start_date, end_date=end_date, modified_start_date=modified_start_date, modified_end_date=modified_end_date, business_date=business_date, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
+# **get_time_entry_by_id**
+> TimeEntry get_time_entry_by_id(toast_restaurant_external_id, time_entry_id, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
+
+Get one time entry
+
+Returns a `TimeEntry` object containing information about one 
+employee shift. The information includes the shift start time, 
+end time, and the start and end times of break periods.
+
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.time_entry import TimeEntry
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.TimeEntriesApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast platform GUID of the restaurant that is the  context for this operation. 
+    time_entry_id = 'time_entry_id_example' # str | The Toast platform GUID or an external identifier for the  time entry. 
+    include_missed_breaks = True # bool | Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries.  (optional)
+    include_archived = True # bool | Controls whether the response includes an archived time entry. Optional.  (optional)
+
+    try:
+        # Get one time entry
+        api_response = await api_instance.get_time_entry_by_id(toast_restaurant_external_id, time_entry_id, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
+        print("The response of TimeEntriesApi->get_time_entry_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling TimeEntriesApi->get_time_entry_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The Toast platform GUID of the restaurant that is the  context for this operation.  | 
+ **time_entry_id** | **str**| The Toast platform GUID or an external identifier for the  time entry.  | 
+ **include_missed_breaks** | **bool**| Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries.  | [optional] 
+ **include_archived** | **bool**| Controls whether the response includes an archived time entry. Optional.  | [optional] 
+
+### Return type
+
+[**TimeEntry**](TimeEntry.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns the specified time entry.  |  -  |
+**400** | The GUID or external identifier was malformed.  |  -  |
+**500** | An unexpected internal error occurred. There is a  &#x60;requestId&#x60; attached to this error that can be referenced  by Toast support.  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_time_entries**
+> List[TimeEntry] list_time_entries(toast_restaurant_external_id, time_entry_ids=time_entry_ids, start_date=start_date, end_date=end_date, modified_start_date=modified_start_date, modified_end_date=modified_end_date, business_date=business_date, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
 
 Get time entries
 
@@ -75,11 +161,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get time entries
-        api_response = await api_instance.time_entries_get(toast_restaurant_external_id, time_entry_ids=time_entry_ids, start_date=start_date, end_date=end_date, modified_start_date=modified_start_date, modified_end_date=modified_end_date, business_date=business_date, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
-        print("The response of TimeEntriesApi->time_entries_get:\n")
+        api_response = await api_instance.list_time_entries(toast_restaurant_external_id, time_entry_ids=time_entry_ids, start_date=start_date, end_date=end_date, modified_start_date=modified_start_date, modified_end_date=modified_end_date, business_date=business_date, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
+        print("The response of TimeEntriesApi->list_time_entries:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling TimeEntriesApi->time_entries_get: %s\n" % e)
+        print("Exception when calling TimeEntriesApi->list_time_entries: %s\n" % e)
 ```
 
 
@@ -117,92 +203,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns the specified time entries.  |  -  |
-**500** | An unexpected internal error occurred. There is a  &#x60;requestId&#x60; attached to this error that can be referenced  by Toast support.  |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **time_entries_time_entry_id_get**
-> TimeEntry time_entries_time_entry_id_get(toast_restaurant_external_id, time_entry_id, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
-
-Get one time entry
-
-Returns a `TimeEntry` object containing information about one 
-employee shift. The information includes the shift start time, 
-end time, and the start and end times of break periods.
-
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.time_entry import TimeEntry
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.TimeEntriesApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast platform GUID of the restaurant that is the  context for this operation. 
-    time_entry_id = 'time_entry_id_example' # str | The Toast platform GUID or an external identifier for the  time entry. 
-    include_missed_breaks = True # bool | Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries.  (optional)
-    include_archived = True # bool | Controls whether the response includes an archived time entry. Optional.  (optional)
-
-    try:
-        # Get one time entry
-        api_response = await api_instance.time_entries_time_entry_id_get(toast_restaurant_external_id, time_entry_id, include_missed_breaks=include_missed_breaks, include_archived=include_archived)
-        print("The response of TimeEntriesApi->time_entries_time_entry_id_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling TimeEntriesApi->time_entries_time_entry_id_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The Toast platform GUID of the restaurant that is the  context for this operation.  | 
- **time_entry_id** | **str**| The Toast platform GUID or an external identifier for the  time entry.  | 
- **include_missed_breaks** | **bool**| Optional flag to indicate whether missed breaks should be  returned in the breaks array for the time entries.  | [optional] 
- **include_archived** | **bool**| Controls whether the response includes an archived time entry. Optional.  | [optional] 
-
-### Return type
-
-[**TimeEntry**](TimeEntry.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns the specified time entry.  |  -  |
-**400** | The GUID or external identifier was malformed.  |  -  |
 **500** | An unexpected internal error occurred. There is a  &#x60;requestId&#x60; attached to this error that can be referenced  by Toast support.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

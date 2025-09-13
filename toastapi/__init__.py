@@ -14,11 +14,12 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.38"
+__version__ = "1.0.39"
 
 # Define package exports
 __all__ = [
     "AlternatePaymentTypesApi",
+    "AnalyticsApi",
     "AuthenticationApi",
     "BreakTypesApi",
     "CashDrawersApi",
@@ -95,6 +96,9 @@ __all__ = [
     "ExternalReference",
     "General",
     "GiftCardInfo",
+    "GuestReportingDataInProgress",
+    "GuestReportingDataRequest",
+    "GuestReportingDataResponse",
     "Hours",
     "ItemTag",
     "Job",
@@ -113,7 +117,6 @@ __all__ = [
     "OnlineOrdering",
     "Order",
     "OrderResponse",
-    "OrdersOrderGuidDeliveryInfoPatchRequest",
     "Payment",
     "PaymentOptions",
     "PayoutReason",
@@ -152,6 +155,7 @@ __all__ = [
     "TipWithholding",
     "ToastReference",
     "URLs",
+    "UpdateDeliveryInfoRequest",
     "UpdatePaymentRequest",
     "VoidInformation",
     "VoidOrderRequest",
@@ -163,6 +167,7 @@ __all__ = [
 
 # import apis into sdk package
 from toastapi.api.alternate_payment_types_api import AlternatePaymentTypesApi as AlternatePaymentTypesApi
+from toastapi.api.analytics_api import AnalyticsApi as AnalyticsApi
 from toastapi.api.authentication_api import AuthenticationApi as AuthenticationApi
 from toastapi.api.break_types_api import BreakTypesApi as BreakTypesApi
 from toastapi.api.cash_drawers_api import CashDrawersApi as CashDrawersApi
@@ -243,6 +248,9 @@ from toastapi.models.error_message import ErrorMessage as ErrorMessage
 from toastapi.models.external_reference import ExternalReference as ExternalReference
 from toastapi.models.general import General as General
 from toastapi.models.gift_card_info import GiftCardInfo as GiftCardInfo
+from toastapi.models.guest_reporting_data_in_progress import GuestReportingDataInProgress as GuestReportingDataInProgress
+from toastapi.models.guest_reporting_data_request import GuestReportingDataRequest as GuestReportingDataRequest
+from toastapi.models.guest_reporting_data_response import GuestReportingDataResponse as GuestReportingDataResponse
 from toastapi.models.hours import Hours as Hours
 from toastapi.models.item_tag import ItemTag as ItemTag
 from toastapi.models.job import Job as Job
@@ -261,7 +269,6 @@ from toastapi.models.no_sale_reason import NoSaleReason as NoSaleReason
 from toastapi.models.online_ordering import OnlineOrdering as OnlineOrdering
 from toastapi.models.order import Order as Order
 from toastapi.models.order_response import OrderResponse as OrderResponse
-from toastapi.models.orders_order_guid_delivery_info_patch_request import OrdersOrderGuidDeliveryInfoPatchRequest as OrdersOrderGuidDeliveryInfoPatchRequest
 from toastapi.models.payment import Payment as Payment
 from toastapi.models.payment_options import PaymentOptions as PaymentOptions
 from toastapi.models.payout_reason import PayoutReason as PayoutReason
@@ -300,6 +307,7 @@ from toastapi.models.time_specific_price import TimeSpecificPrice as TimeSpecifi
 from toastapi.models.tip_withholding import TipWithholding as TipWithholding
 from toastapi.models.toast_reference import ToastReference as ToastReference
 from toastapi.models.urls import URLs as URLs
+from toastapi.models.update_delivery_info_request import UpdateDeliveryInfoRequest as UpdateDeliveryInfoRequest
 from toastapi.models.update_payment_request import UpdatePaymentRequest as UpdatePaymentRequest
 from toastapi.models.void_information import VoidInformation as VoidInformation
 from toastapi.models.void_order_request import VoidOrderRequest as VoidOrderRequest

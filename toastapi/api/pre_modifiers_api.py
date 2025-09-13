@@ -40,7 +40,7 @@ class PreModifiersApi:
 
 
     @validate_call
-    async def pre_modifiers_get(
+    async def list_pre_modifiers(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to.")],
         page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.")] = None,
@@ -90,7 +90,7 @@ class PreModifiersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._pre_modifiers_get_serialize(
+        _param = self._list_pre_modifiers_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             page_token=page_token,
             last_modified=last_modified,
@@ -115,7 +115,7 @@ class PreModifiersApi:
 
 
     @validate_call
-    async def pre_modifiers_get_with_http_info(
+    async def list_pre_modifiers_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to.")],
         page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.")] = None,
@@ -165,7 +165,7 @@ class PreModifiersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._pre_modifiers_get_serialize(
+        _param = self._list_pre_modifiers_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             page_token=page_token,
             last_modified=last_modified,
@@ -190,7 +190,7 @@ class PreModifiersApi:
 
 
     @validate_call
-    async def pre_modifiers_get_without_preload_content(
+    async def list_pre_modifiers_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to.")],
         page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.")] = None,
@@ -240,7 +240,7 @@ class PreModifiersApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._pre_modifiers_get_serialize(
+        _param = self._list_pre_modifiers_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             page_token=page_token,
             last_modified=last_modified,
@@ -260,7 +260,7 @@ class PreModifiersApi:
         return response_data.response
 
 
-    def _pre_modifiers_get_serialize(
+    def _list_pre_modifiers_serialize(
         self,
         toast_restaurant_external_id,
         page_token,

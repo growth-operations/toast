@@ -40,7 +40,7 @@ class AuthenticationApi:
 
 
     @validate_call
-    async def authentication_login_post(
+    async def login(
         self,
         authentication_request: Annotated[AuthenticationRequest, Field(description="The authentication credentials for your Toast API client integration software. ")],
         _request_timeout: Union[
@@ -84,7 +84,7 @@ class AuthenticationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._authentication_login_post_serialize(
+        _param = self._login_serialize(
             authentication_request=authentication_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -108,7 +108,7 @@ class AuthenticationApi:
 
 
     @validate_call
-    async def authentication_login_post_with_http_info(
+    async def login_with_http_info(
         self,
         authentication_request: Annotated[AuthenticationRequest, Field(description="The authentication credentials for your Toast API client integration software. ")],
         _request_timeout: Union[
@@ -152,7 +152,7 @@ class AuthenticationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._authentication_login_post_serialize(
+        _param = self._login_serialize(
             authentication_request=authentication_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -176,7 +176,7 @@ class AuthenticationApi:
 
 
     @validate_call
-    async def authentication_login_post_without_preload_content(
+    async def login_without_preload_content(
         self,
         authentication_request: Annotated[AuthenticationRequest, Field(description="The authentication credentials for your Toast API client integration software. ")],
         _request_timeout: Union[
@@ -220,7 +220,7 @@ class AuthenticationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._authentication_login_post_serialize(
+        _param = self._login_serialize(
             authentication_request=authentication_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -239,7 +239,7 @@ class AuthenticationApi:
         return response_data.response
 
 
-    def _authentication_login_post_serialize(
+    def _login_serialize(
         self,
         authentication_request,
         _request_auth,

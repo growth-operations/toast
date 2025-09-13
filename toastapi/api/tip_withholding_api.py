@@ -39,7 +39,7 @@ class TipWithholdingApi:
 
 
     @validate_call
-    async def tip_withholding_get(
+    async def get_tip_withholding(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         _request_timeout: Union[
@@ -83,7 +83,7 @@ class TipWithholdingApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._tip_withholding_get_serialize(
+        _param = self._get_tip_withholding_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -107,7 +107,7 @@ class TipWithholdingApi:
 
 
     @validate_call
-    async def tip_withholding_get_with_http_info(
+    async def get_tip_withholding_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         _request_timeout: Union[
@@ -151,7 +151,7 @@ class TipWithholdingApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._tip_withholding_get_serialize(
+        _param = self._get_tip_withholding_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -175,7 +175,7 @@ class TipWithholdingApi:
 
 
     @validate_call
-    async def tip_withholding_get_without_preload_content(
+    async def get_tip_withholding_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         _request_timeout: Union[
@@ -219,7 +219,7 @@ class TipWithholdingApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._tip_withholding_get_serialize(
+        _param = self._get_tip_withholding_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -238,7 +238,7 @@ class TipWithholdingApi:
         return response_data.response
 
 
-    def _tip_withholding_get_serialize(
+    def _get_tip_withholding_serialize(
         self,
         toast_restaurant_external_id,
         _request_auth,

@@ -4,11 +4,11 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tip_withholding_get**](TipWithholdingApi.md#tip_withholding_get) | **GET** /config/v2/tipWithholding | Get tip withholding configuration
+[**get_tip_withholding**](TipWithholdingApi.md#get_tip_withholding) | **GET** /config/v2/tipWithholding | Get tip withholding configuration
 
 
-# **tip_withholding_get**
-> TipWithholding tip_withholding_get(toast_restaurant_external_id)
+# **get_tip_withholding**
+> TipWithholding get_tip_withholding(toast_restaurant_external_id)
 
 Get tip withholding configuration
 
@@ -45,11 +45,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get tip withholding configuration
-        api_response = await api_instance.tip_withholding_get(toast_restaurant_external_id)
-        print("The response of TipWithholdingApi->tip_withholding_get:\n")
+        api_response = await api_instance.get_tip_withholding(toast_restaurant_external_id)
+        print("The response of TipWithholdingApi->get_tip_withholding:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling TipWithholdingApi->tip_withholding_get: %s\n" % e)
+        print("Exception when calling TipWithholdingApi->get_tip_withholding: %s\n" % e)
 ```
 
 

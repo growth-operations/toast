@@ -4,12 +4,90 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**service_charges_get**](ServiceChargesApi.md#service_charges_get) | **GET** /config/v2/serviceCharges | Get service charges
-[**service_charges_guid_get**](ServiceChargesApi.md#service_charges_guid_get) | **GET** /config/v2/serviceCharges/{guid} | Get service charge by GUID
+[**get_service_charge_by_id**](ServiceChargesApi.md#get_service_charge_by_id) | **GET** /config/v2/serviceCharges/{guid} | Get service charge by GUID
+[**list_service_charges**](ServiceChargesApi.md#list_service_charges) | **GET** /config/v2/serviceCharges | Get service charges
 
 
-# **service_charges_get**
-> List[ServiceCharge] service_charges_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+# **get_service_charge_by_id**
+> ServiceCharge get_service_charge_by_id(toast_restaurant_external_id, guid)
+
+Get service charge by GUID
+
+Returns a specific service charge by its GUID.
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.service_charge import ServiceCharge
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.ServiceChargesApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
+    guid = 'guid_example' # str | The GUID of the service charge.
+
+    try:
+        # Get service charge by GUID
+        api_response = await api_instance.get_service_charge_by_id(toast_restaurant_external_id, guid)
+        print("The response of ServiceChargesApi->get_service_charge_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ServiceChargesApi->get_service_charge_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
+ **guid** | **str**| The GUID of the service charge. | 
+
+### Return type
+
+[**ServiceCharge**](ServiceCharge.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a &#x60;ServiceCharge&#x60; object. |  -  |
+**404** | Service charge not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_service_charges**
+> List[ServiceCharge] list_service_charges(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
 
 Get service charges
 
@@ -49,11 +127,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get service charges
-        api_response = await api_instance.service_charges_get(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
-        print("The response of ServiceChargesApi->service_charges_get:\n")
+        api_response = await api_instance.list_service_charges(toast_restaurant_external_id, limit=limit, page_token=page_token, last_modified=last_modified)
+        print("The response of ServiceChargesApi->list_service_charges:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling ServiceChargesApi->service_charges_get: %s\n" % e)
+        print("Exception when calling ServiceChargesApi->list_service_charges: %s\n" % e)
 ```
 
 
@@ -86,84 +164,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns an array of &#x60;ServiceCharge&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **service_charges_guid_get**
-> ServiceCharge service_charges_guid_get(toast_restaurant_external_id, guid)
-
-Get service charge by GUID
-
-Returns a specific service charge by its GUID.
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.service_charge import ServiceCharge
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.ServiceChargesApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The identifier for the restaurant.
-    guid = 'guid_example' # str | The GUID of the service charge.
-
-    try:
-        # Get service charge by GUID
-        api_response = await api_instance.service_charges_guid_get(toast_restaurant_external_id, guid)
-        print("The response of ServiceChargesApi->service_charges_guid_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling ServiceChargesApi->service_charges_guid_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The identifier for the restaurant. | 
- **guid** | **str**| The GUID of the service charge. | 
-
-### Return type
-
-[**ServiceCharge**](ServiceCharge.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns a &#x60;ServiceCharge&#x60; object. |  -  |
-**404** | Service charge not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

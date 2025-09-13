@@ -40,292 +40,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_delete(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be deleted. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Employee:
-        """Delete an employee
-
-        Deletes a restaurant employee record by marking the record as  deleted. A deleted employee cannot log in at the restaurant or  open new time entries.  If you `GET` an employee record that has been deleted, its  `deleted` value is `true` and its `deletedDate` value contains  the date and time the record was deleted.   If you delete an employee that has already been deleted then  the result is successful (200) and no change is made.  The deleted record appears in the list of deleted employees for  the restaurant in Toast Web. From the  list of deleted employees, you can enable a deleted record so  that the employee can use it again. Information about deleted  employees remains available in reports.  You cannot delete employees who have open time entries (time  entries that do not have an out date value). 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param employee_id: The Toast platform GUID or external identifier for the  employee to be deleted.  (required)
-        :type employee_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_delete_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            employee_id=employee_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def employees_employee_id_delete_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be deleted. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Employee]:
-        """Delete an employee
-
-        Deletes a restaurant employee record by marking the record as  deleted. A deleted employee cannot log in at the restaurant or  open new time entries.  If you `GET` an employee record that has been deleted, its  `deleted` value is `true` and its `deletedDate` value contains  the date and time the record was deleted.   If you delete an employee that has already been deleted then  the result is successful (200) and no change is made.  The deleted record appears in the list of deleted employees for  the restaurant in Toast Web. From the  list of deleted employees, you can enable a deleted record so  that the employee can use it again. Information about deleted  employees remains available in reports.  You cannot delete employees who have open time entries (time  entries that do not have an out date value). 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param employee_id: The Toast platform GUID or external identifier for the  employee to be deleted.  (required)
-        :type employee_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_delete_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            employee_id=employee_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def employees_employee_id_delete_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be deleted. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Delete an employee
-
-        Deletes a restaurant employee record by marking the record as  deleted. A deleted employee cannot log in at the restaurant or  open new time entries.  If you `GET` an employee record that has been deleted, its  `deleted` value is `true` and its `deletedDate` value contains  the date and time the record was deleted.   If you delete an employee that has already been deleted then  the result is successful (200) and no change is made.  The deleted record appears in the list of deleted employees for  the restaurant in Toast Web. From the  list of deleted employees, you can enable a deleted record so  that the employee can use it again. Information about deleted  employees remains available in reports.  You cannot delete employees who have open time entries (time  entries that do not have an out date value). 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param employee_id: The Toast platform GUID or external identifier for the  employee to be deleted.  (required)
-        :type employee_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_delete_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            employee_id=employee_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _employees_employee_id_delete_serialize(
-        self,
-        toast_restaurant_external_id,
-        employee_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if employee_id is not None:
-            _path_params['employeeId'] = employee_id
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='DELETE',
-            resource_path='/labor/v1/employees/{employeeId}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def employees_employee_id_external_id_post(
+    async def add_external_identifier_to_employee(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -378,7 +93,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_external_id_post_serialize(
+        _param = self._add_external_identifier_to_employee_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -404,7 +119,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_external_id_post_with_http_info(
+    async def add_external_identifier_to_employee_with_http_info(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -457,7 +172,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_external_id_post_serialize(
+        _param = self._add_external_identifier_to_employee_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -483,7 +198,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_external_id_post_without_preload_content(
+    async def add_external_identifier_to_employee_without_preload_content(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -536,7 +251,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_external_id_post_serialize(
+        _param = self._add_external_identifier_to_employee_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -557,7 +272,7 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_employee_id_external_id_post_serialize(
+    def _add_external_identifier_to_employee_serialize(
         self,
         employee_id,
         toast_restaurant_external_id,
@@ -644,7 +359,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_external_id_put(
+    async def add_or_replace_external_identifier_to_employee(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -697,7 +412,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_external_id_put_serialize(
+        _param = self._add_or_replace_external_identifier_to_employee_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -723,7 +438,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_external_id_put_with_http_info(
+    async def add_or_replace_external_identifier_to_employee_with_http_info(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -776,7 +491,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_external_id_put_serialize(
+        _param = self._add_or_replace_external_identifier_to_employee_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -802,7 +517,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_external_id_put_without_preload_content(
+    async def add_or_replace_external_identifier_to_employee_without_preload_content(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -855,7 +570,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_external_id_put_serialize(
+        _param = self._add_or_replace_external_identifier_to_employee_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -876,7 +591,7 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_employee_id_external_id_put_serialize(
+    def _add_or_replace_external_identifier_to_employee_serialize(
         self,
         employee_id,
         toast_restaurant_external_id,
@@ -963,7 +678,605 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_get(
+    async def create_employee(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
+        body: Annotated[StrictStr, Field(description="An `Employee` object containing information about the  employee, including the employee's name and email address. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Employee:
+        """Add an employee
+
+        Creates a restaurant employee record. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
+        :type content_type: str
+        :param body: An `Employee` object containing information about the  employee, including the employee's name and email address.  (required)
+        :type body: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_employee_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            content_type=content_type,
+            body=body,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Employee",
+            '400': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def create_employee_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
+        body: Annotated[StrictStr, Field(description="An `Employee` object containing information about the  employee, including the employee's name and email address. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Employee]:
+        """Add an employee
+
+        Creates a restaurant employee record. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
+        :type content_type: str
+        :param body: An `Employee` object containing information about the  employee, including the employee's name and email address.  (required)
+        :type body: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_employee_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            content_type=content_type,
+            body=body,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Employee",
+            '400': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def create_employee_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
+        body: Annotated[StrictStr, Field(description="An `Employee` object containing information about the  employee, including the employee's name and email address. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Add an employee
+
+        Creates a restaurant employee record. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
+        :type content_type: str
+        :param body: An `Employee` object containing information about the  employee, including the employee's name and email address.  (required)
+        :type body: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_employee_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            content_type=content_type,
+            body=body,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Employee",
+            '400': None,
+            '415': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _create_employee_serialize(
+        self,
+        toast_restaurant_external_id,
+        content_type,
+        body,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        if content_type is not None:
+            _header_params['Content-Type'] = content_type
+        # process the form parameters
+        # process the body parameter
+        if body is not None:
+            _body_params = body
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/labor/v1/employees',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def delete_employee(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be deleted. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Employee:
+        """Delete an employee
+
+        Deletes a restaurant employee record by marking the record as  deleted. A deleted employee cannot log in at the restaurant or  open new time entries.  If you `GET` an employee record that has been deleted, its  `deleted` value is `true` and its `deletedDate` value contains  the date and time the record was deleted.   If you delete an employee that has already been deleted then  the result is successful (200) and no change is made.  The deleted record appears in the list of deleted employees for  the restaurant in Toast Web. From the  list of deleted employees, you can enable a deleted record so  that the employee can use it again. Information about deleted  employees remains available in reports.  You cannot delete employees who have open time entries (time  entries that do not have an out date value). 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param employee_id: The Toast platform GUID or external identifier for the  employee to be deleted.  (required)
+        :type employee_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._delete_employee_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            employee_id=employee_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Employee",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def delete_employee_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be deleted. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Employee]:
+        """Delete an employee
+
+        Deletes a restaurant employee record by marking the record as  deleted. A deleted employee cannot log in at the restaurant or  open new time entries.  If you `GET` an employee record that has been deleted, its  `deleted` value is `true` and its `deletedDate` value contains  the date and time the record was deleted.   If you delete an employee that has already been deleted then  the result is successful (200) and no change is made.  The deleted record appears in the list of deleted employees for  the restaurant in Toast Web. From the  list of deleted employees, you can enable a deleted record so  that the employee can use it again. Information about deleted  employees remains available in reports.  You cannot delete employees who have open time entries (time  entries that do not have an out date value). 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param employee_id: The Toast platform GUID or external identifier for the  employee to be deleted.  (required)
+        :type employee_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._delete_employee_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            employee_id=employee_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Employee",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def delete_employee_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be deleted. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Delete an employee
+
+        Deletes a restaurant employee record by marking the record as  deleted. A deleted employee cannot log in at the restaurant or  open new time entries.  If you `GET` an employee record that has been deleted, its  `deleted` value is `true` and its `deletedDate` value contains  the date and time the record was deleted.   If you delete an employee that has already been deleted then  the result is successful (200) and no change is made.  The deleted record appears in the list of deleted employees for  the restaurant in Toast Web. From the  list of deleted employees, you can enable a deleted record so  that the employee can use it again. Information about deleted  employees remains available in reports.  You cannot delete employees who have open time entries (time  entries that do not have an out date value). 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param employee_id: The Toast platform GUID or external identifier for the  employee to be deleted.  (required)
+        :type employee_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._delete_employee_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            employee_id=employee_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Employee",
+            '400': None,
+            '404': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _delete_employee_serialize(
+        self,
+        toast_restaurant_external_id,
+        employee_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if employee_id is not None:
+            _path_params['employeeId'] = employee_id
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='DELETE',
+            resource_path='/labor/v1/employees/{employeeId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def get_employee_by_id(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
@@ -1010,7 +1323,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_get_serialize(
+        _param = self._get_employee_by_id_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             employee_id=employee_id,
             _request_auth=_request_auth,
@@ -1037,7 +1350,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_get_with_http_info(
+    async def get_employee_by_id_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
@@ -1084,7 +1397,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_get_serialize(
+        _param = self._get_employee_by_id_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             employee_id=employee_id,
             _request_auth=_request_auth,
@@ -1111,7 +1424,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_get_without_preload_content(
+    async def get_employee_by_id_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
@@ -1158,7 +1471,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_get_serialize(
+        _param = self._get_employee_by_id_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             employee_id=employee_id,
             _request_auth=_request_auth,
@@ -1180,7 +1493,7 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_employee_id_get_serialize(
+    def _get_employee_by_id_serialize(
         self,
         toast_restaurant_external_id,
         employee_id,
@@ -1248,7 +1561,288 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_jobs_put(
+    async def list_employees(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        employee_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[Employee]:
+        """Get employees
+
+        Returns an array of `Employee` objects containing information  about restaurant employees. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param employee_ids: An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. 
+        :type employee_ids: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_employees_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            employee_ids=employee_ids,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Employee]",
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def list_employees_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        employee_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[Employee]]:
+        """Get employees
+
+        Returns an array of `Employee` objects containing information  about restaurant employees. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param employee_ids: An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. 
+        :type employee_ids: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_employees_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            employee_ids=employee_ids,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Employee]",
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def list_employees_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
+        employee_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get employees
+
+        Returns an array of `Employee` objects containing information  about restaurant employees. 
+
+        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
+        :type toast_restaurant_external_id: str
+        :param employee_ids: An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. 
+        :type employee_ids: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_employees_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            employee_ids=employee_ids,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Employee]",
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _list_employees_serialize(
+        self,
+        toast_restaurant_external_id,
+        employee_ids,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if employee_ids is not None:
+            
+            _query_params.append(('employeeIds', employee_ids))
+            
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/labor/v1/employees',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def replace_jobs_list(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -1301,7 +1895,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_jobs_put_serialize(
+        _param = self._replace_jobs_list_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -1327,7 +1921,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_jobs_put_with_http_info(
+    async def replace_jobs_list_with_http_info(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -1380,7 +1974,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_jobs_put_serialize(
+        _param = self._replace_jobs_list_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -1406,7 +2000,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_jobs_put_without_preload_content(
+    async def replace_jobs_list_without_preload_content(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -1459,7 +2053,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_jobs_put_serialize(
+        _param = self._replace_jobs_list_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -1480,7 +2074,7 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_employee_id_jobs_put_serialize(
+    def _replace_jobs_list_serialize(
         self,
         employee_id,
         toast_restaurant_external_id,
@@ -1567,629 +2161,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_patch(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
-        body: Annotated[StrictStr, Field(description="A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Employee:
-        """Update employee information
-
-        Updates the first name, chosen name, last name, external employee ID, and/or  passcode of a restaurant employee. The `PATCH` operation cannot  update any other employee information. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
-        :type content_type: str
-        :param employee_id: The Toast platform GUID or external identifier for the  employee to be returned.  (required)
-        :type employee_id: str
-        :param body: A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value.  (required)
-        :type body: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_patch_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            content_type=content_type,
-            employee_id=employee_id,
-            body=body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def employees_employee_id_patch_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
-        body: Annotated[StrictStr, Field(description="A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Employee]:
-        """Update employee information
-
-        Updates the first name, chosen name, last name, external employee ID, and/or  passcode of a restaurant employee. The `PATCH` operation cannot  update any other employee information. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
-        :type content_type: str
-        :param employee_id: The Toast platform GUID or external identifier for the  employee to be returned.  (required)
-        :type employee_id: str
-        :param body: A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value.  (required)
-        :type body: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_patch_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            content_type=content_type,
-            employee_id=employee_id,
-            body=body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def employees_employee_id_patch_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
-        body: Annotated[StrictStr, Field(description="A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Update employee information
-
-        Updates the first name, chosen name, last name, external employee ID, and/or  passcode of a restaurant employee. The `PATCH` operation cannot  update any other employee information. 
-
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
-        :type content_type: str
-        :param employee_id: The Toast platform GUID or external identifier for the  employee to be returned.  (required)
-        :type employee_id: str
-        :param body: A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value.  (required)
-        :type body: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_patch_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            content_type=content_type,
-            employee_id=employee_id,
-            body=body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-            '404': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _employees_employee_id_patch_serialize(
-        self,
-        toast_restaurant_external_id,
-        content_type,
-        employee_id,
-        body,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if employee_id is not None:
-            _path_params['employeeId'] = employee_id
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        if content_type is not None:
-            _header_params['Content-Type'] = content_type
-        # process the form parameters
-        # process the body parameter
-        if body is not None:
-            _body_params = body
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='PATCH',
-            resource_path='/labor/v1/employees/{employeeId}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def employees_employee_id_unarchive_put(
-        self,
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Employee:
-        """Unarchive an employee
-
-        Unarchives an employee record that was previously archived.  * Unarchived employees can sign into the Toast POS. * Unarchived employees can sign in to Toast Web.  * When you unarchive an employee, the employee has all    jobs that were previously assigned to them. * If an employee had a swipe card for signing into the    Toast POS, the swipe card _is not_ re-associated with    the employee when you unarchive them.  If you unarchive an employee who will take a different  role than the one they had when they were archived, you  must update the employee's jobs list and verify that the  employee should continue to sign into Toast Web. 
-
-        :param employee_id: The Toast platform GUID of the employee record.  (required)
-        :type employee_id: str
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
-        :type content_type: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_unarchive_put_serialize(
-            employee_id=employee_id,
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            content_type=content_type,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def employees_employee_id_unarchive_put_with_http_info(
-        self,
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Employee]:
-        """Unarchive an employee
-
-        Unarchives an employee record that was previously archived.  * Unarchived employees can sign into the Toast POS. * Unarchived employees can sign in to Toast Web.  * When you unarchive an employee, the employee has all    jobs that were previously assigned to them. * If an employee had a swipe card for signing into the    Toast POS, the swipe card _is not_ re-associated with    the employee when you unarchive them.  If you unarchive an employee who will take a different  role than the one they had when they were archived, you  must update the employee's jobs list and verify that the  employee should continue to sign into Toast Web. 
-
-        :param employee_id: The Toast platform GUID of the employee record.  (required)
-        :type employee_id: str
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
-        :type content_type: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_unarchive_put_serialize(
-            employee_id=employee_id,
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            content_type=content_type,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def employees_employee_id_unarchive_put_without_preload_content(
-        self,
-        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Unarchive an employee
-
-        Unarchives an employee record that was previously archived.  * Unarchived employees can sign into the Toast POS. * Unarchived employees can sign in to Toast Web.  * When you unarchive an employee, the employee has all    jobs that were previously assigned to them. * If an employee had a swipe card for signing into the    Toast POS, the swipe card _is not_ re-associated with    the employee when you unarchive them.  If you unarchive an employee who will take a different  role than the one they had when they were archived, you  must update the employee's jobs list and verify that the  employee should continue to sign into Toast Web. 
-
-        :param employee_id: The Toast platform GUID of the employee record.  (required)
-        :type employee_id: str
-        :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
-        :type toast_restaurant_external_id: str
-        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
-        :type content_type: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._employees_employee_id_unarchive_put_serialize(
-            employee_id=employee_id,
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            content_type=content_type,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Employee",
-            '400': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _employees_employee_id_unarchive_put_serialize(
-        self,
-        employee_id,
-        toast_restaurant_external_id,
-        content_type,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if employee_id is not None:
-            _path_params['employeeId'] = employee_id
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        if content_type is not None:
-            _header_params['Content-Type'] = content_type
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='PUT',
-            resource_path='/labor/v1/employees/{employeeId}/unarchive',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def employees_employee_id_wage_overrides_put(
+    async def replace_wage_overrides(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -2242,7 +2214,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_wage_overrides_put_serialize(
+        _param = self._replace_wage_overrides_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -2268,7 +2240,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_wage_overrides_put_with_http_info(
+    async def replace_wage_overrides_with_http_info(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -2321,7 +2293,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_wage_overrides_put_serialize(
+        _param = self._replace_wage_overrides_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -2347,7 +2319,7 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_employee_id_wage_overrides_put_without_preload_content(
+    async def replace_wage_overrides_without_preload_content(
         self,
         employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
@@ -2400,7 +2372,7 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_employee_id_wage_overrides_put_serialize(
+        _param = self._replace_wage_overrides_serialize(
             employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
@@ -2421,7 +2393,7 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_employee_id_wage_overrides_put_serialize(
+    def _replace_wage_overrides_serialize(
         self,
         employee_id,
         toast_restaurant_external_id,
@@ -2508,10 +2480,11 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_get(
+    async def unarchive_employee(
         self,
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        employee_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. ")] = None,
+        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2524,15 +2497,17 @@ class EmployeesApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[Employee]:
-        """Get employees
+    ) -> Employee:
+        """Unarchive an employee
 
-        Returns an array of `Employee` objects containing information  about restaurant employees. 
+        Unarchives an employee record that was previously archived.  * Unarchived employees can sign into the Toast POS. * Unarchived employees can sign in to Toast Web.  * When you unarchive an employee, the employee has all    jobs that were previously assigned to them. * If an employee had a swipe card for signing into the    Toast POS, the swipe card _is not_ re-associated with    the employee when you unarchive them.  If you unarchive an employee who will take a different  role than the one they had when they were archived, you  must update the employee's jobs list and verify that the  employee should continue to sign into Toast Web. 
 
+        :param employee_id: The Toast platform GUID of the employee record.  (required)
+        :type employee_id: str
         :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
         :type toast_restaurant_external_id: str
-        :param employee_ids: An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. 
-        :type employee_ids: str
+        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
+        :type content_type: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2555,9 +2530,10 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_get_serialize(
+        _param = self._unarchive_employee_serialize(
+            employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
-            employee_ids=employee_ids,
+            content_type=content_type,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2565,8 +2541,8 @@ class EmployeesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Employee]",
-            '500': None,
+            '200': "Employee",
+            '400': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -2580,10 +2556,11 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_get_with_http_info(
+    async def unarchive_employee_with_http_info(
         self,
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        employee_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. ")] = None,
+        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2596,15 +2573,17 @@ class EmployeesApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[Employee]]:
-        """Get employees
+    ) -> ApiResponse[Employee]:
+        """Unarchive an employee
 
-        Returns an array of `Employee` objects containing information  about restaurant employees. 
+        Unarchives an employee record that was previously archived.  * Unarchived employees can sign into the Toast POS. * Unarchived employees can sign in to Toast Web.  * When you unarchive an employee, the employee has all    jobs that were previously assigned to them. * If an employee had a swipe card for signing into the    Toast POS, the swipe card _is not_ re-associated with    the employee when you unarchive them.  If you unarchive an employee who will take a different  role than the one they had when they were archived, you  must update the employee's jobs list and verify that the  employee should continue to sign into Toast Web. 
 
+        :param employee_id: The Toast platform GUID of the employee record.  (required)
+        :type employee_id: str
         :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
         :type toast_restaurant_external_id: str
-        :param employee_ids: An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. 
-        :type employee_ids: str
+        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
+        :type content_type: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2627,9 +2606,10 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_get_serialize(
+        _param = self._unarchive_employee_serialize(
+            employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
-            employee_ids=employee_ids,
+            content_type=content_type,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2637,8 +2617,8 @@ class EmployeesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Employee]",
-            '500': None,
+            '200': "Employee",
+            '400': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -2652,10 +2632,11 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_get_without_preload_content(
+    async def unarchive_employee_without_preload_content(
         self,
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the employee record. ")],
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
-        employee_ids: Annotated[Optional[StrictStr], Field(description="An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. ")] = None,
+        content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2669,14 +2650,16 @@ class EmployeesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get employees
+        """Unarchive an employee
 
-        Returns an array of `Employee` objects containing information  about restaurant employees. 
+        Unarchives an employee record that was previously archived.  * Unarchived employees can sign into the Toast POS. * Unarchived employees can sign in to Toast Web.  * When you unarchive an employee, the employee has all    jobs that were previously assigned to them. * If an employee had a swipe card for signing into the    Toast POS, the swipe card _is not_ re-associated with    the employee when you unarchive them.  If you unarchive an employee who will take a different  role than the one they had when they were archived, you  must update the employee's jobs list and verify that the  employee should continue to sign into Toast Web. 
 
+        :param employee_id: The Toast platform GUID of the employee record.  (required)
+        :type employee_id: str
         :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
         :type toast_restaurant_external_id: str
-        :param employee_ids: An optional identifier that filters return values for a  specific employee. The identifier can be a Toast platform  GUID or an external identifier. If present, the `employees`  resource will only return the employees you specify. You  can include multiple `employeeIds` query parameters  (maximum 100). If not present, the resource returns each  employee for the restaurant. 
-        :type employee_ids: str
+        :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
+        :type content_type: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2699,9 +2682,10 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_get_serialize(
+        _param = self._unarchive_employee_serialize(
+            employee_id=employee_id,
             toast_restaurant_external_id=toast_restaurant_external_id,
-            employee_ids=employee_ids,
+            content_type=content_type,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2709,8 +2693,8 @@ class EmployeesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Employee]",
-            '500': None,
+            '200': "Employee",
+            '400': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -2719,10 +2703,11 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_get_serialize(
+    def _unarchive_employee_serialize(
         self,
+        employee_id,
         toast_restaurant_external_id,
-        employee_ids,
+        content_type,
         _request_auth,
         _content_type,
         _headers,
@@ -2744,14 +2729,14 @@ class EmployeesApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
+        if employee_id is not None:
+            _path_params['employeeId'] = employee_id
         # process the query parameters
-        if employee_ids is not None:
-            
-            _query_params.append(('employeeIds', employee_ids))
-            
         # process the header parameters
         if toast_restaurant_external_id is not None:
             _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        if content_type is not None:
+            _header_params['Content-Type'] = content_type
         # process the form parameters
         # process the body parameter
 
@@ -2771,8 +2756,8 @@ class EmployeesApi:
         ]
 
         return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/labor/v1/employees',
+            method='PUT',
+            resource_path='/labor/v1/employees/{employeeId}/unarchive',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -2789,11 +2774,12 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_post(
+    async def update_employee(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        body: Annotated[StrictStr, Field(description="An `Employee` object containing information about the  employee, including the employee's name and email address. ")],
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
+        body: Annotated[StrictStr, Field(description="A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2807,15 +2793,17 @@ class EmployeesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> Employee:
-        """Add an employee
+        """Update employee information
 
-        Creates a restaurant employee record. 
+        Updates the first name, chosen name, last name, external employee ID, and/or  passcode of a restaurant employee. The `PATCH` operation cannot  update any other employee information. 
 
         :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
         :type toast_restaurant_external_id: str
         :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
         :type content_type: str
-        :param body: An `Employee` object containing information about the  employee, including the employee's name and email address.  (required)
+        :param employee_id: The Toast platform GUID or external identifier for the  employee to be returned.  (required)
+        :type employee_id: str
+        :param body: A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value.  (required)
         :type body: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -2839,9 +2827,10 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_post_serialize(
+        _param = self._update_employee_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
+            employee_id=employee_id,
             body=body,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2852,7 +2841,7 @@ class EmployeesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Employee",
             '400': None,
-            '415': None,
+            '404': None,
             '500': None,
         }
         response_data = await self.api_client.call_api(
@@ -2867,11 +2856,12 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_post_with_http_info(
+    async def update_employee_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        body: Annotated[StrictStr, Field(description="An `Employee` object containing information about the  employee, including the employee's name and email address. ")],
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
+        body: Annotated[StrictStr, Field(description="A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2885,15 +2875,17 @@ class EmployeesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[Employee]:
-        """Add an employee
+        """Update employee information
 
-        Creates a restaurant employee record. 
+        Updates the first name, chosen name, last name, external employee ID, and/or  passcode of a restaurant employee. The `PATCH` operation cannot  update any other employee information. 
 
         :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
         :type toast_restaurant_external_id: str
         :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
         :type content_type: str
-        :param body: An `Employee` object containing information about the  employee, including the employee's name and email address.  (required)
+        :param employee_id: The Toast platform GUID or external identifier for the  employee to be returned.  (required)
+        :type employee_id: str
+        :param body: A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value.  (required)
         :type body: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -2917,9 +2909,10 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_post_serialize(
+        _param = self._update_employee_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
+            employee_id=employee_id,
             body=body,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2930,7 +2923,7 @@ class EmployeesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Employee",
             '400': None,
-            '415': None,
+            '404': None,
             '500': None,
         }
         response_data = await self.api_client.call_api(
@@ -2945,11 +2938,12 @@ class EmployeesApi:
 
 
     @validate_call
-    async def employees_post_without_preload_content(
+    async def update_employee_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast platform GUID of the restaurant that is the  context for this operation. ")],
         content_type: Annotated[StrictStr, Field(description="The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`. ")],
-        body: Annotated[StrictStr, Field(description="An `Employee` object containing information about the  employee, including the employee's name and email address. ")],
+        employee_id: Annotated[StrictStr, Field(description="The Toast platform GUID or external identifier for the  employee to be returned. ")],
+        body: Annotated[StrictStr, Field(description="A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2963,15 +2957,17 @@ class EmployeesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Add an employee
+        """Update employee information
 
-        Creates a restaurant employee record. 
+        Updates the first name, chosen name, last name, external employee ID, and/or  passcode of a restaurant employee. The `PATCH` operation cannot  update any other employee information. 
 
         :param toast_restaurant_external_id: The Toast platform GUID of the restaurant that is the  context for this operation.  (required)
         :type toast_restaurant_external_id: str
         :param content_type: The Internet Assigned Numbers Authority (IANA) media type  of the message body data. The value must be  `application/json`.  (required)
         :type content_type: str
-        :param body: An `Employee` object containing information about the  employee, including the employee's name and email address.  (required)
+        :param employee_id: The Toast platform GUID or external identifier for the  employee to be returned.  (required)
+        :type employee_id: str
+        :param body: A JSON object containing the employee information that you  are updating. You can update an employee's:  * `firstName` - First name.  * `chosenName` - Chosen name.  * `lastName` - Last name.  * `externalEmployeeId` - External employee identifier.  * `passcode` - The passcode for access to Toast POS devices.  All values are optional. You must include at least one  value. Each value that you include must contain information  (not null). If you include the `passcode` value to update  an employee's passcode you must include the employee's  current passcode in the `currentPasscode` value.  (required)
         :type body: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -2995,9 +2991,10 @@ class EmployeesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._employees_post_serialize(
+        _param = self._update_employee_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             content_type=content_type,
+            employee_id=employee_id,
             body=body,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -3008,7 +3005,7 @@ class EmployeesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Employee",
             '400': None,
-            '415': None,
+            '404': None,
             '500': None,
         }
         response_data = await self.api_client.call_api(
@@ -3018,10 +3015,11 @@ class EmployeesApi:
         return response_data.response
 
 
-    def _employees_post_serialize(
+    def _update_employee_serialize(
         self,
         toast_restaurant_external_id,
         content_type,
+        employee_id,
         body,
         _request_auth,
         _content_type,
@@ -3044,6 +3042,8 @@ class EmployeesApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
+        if employee_id is not None:
+            _path_params['employeeId'] = employee_id
         # process the query parameters
         # process the header parameters
         if toast_restaurant_external_id is not None:
@@ -3084,8 +3084,8 @@ class EmployeesApi:
         ]
 
         return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/labor/v1/employees',
+            method='PATCH',
+            resource_path='/labor/v1/employees/{employeeId}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

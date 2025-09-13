@@ -11,6 +11,7 @@ from toastapi.api_client import ApiClient
 from toastapi.configuration import Configuration
 from toastapi.api import (
     AlternatePaymentTypesApi,
+    AnalyticsApi,
     AuthenticationApi,
     BreakTypesApi,
     CashDrawersApi,
@@ -153,6 +154,7 @@ class Toast:
         self._api_client = ApiClient(configuration=self._config)
 
         # Initialize API classes with retry wrappers
+        self.analytics: AnalyticsApi = self._create_retry_wrapper(AnalyticsApi)
         self.auth: AuthenticationApi = self._create_retry_wrapper(AuthenticationApi)
         self.orders: OrdersApi = self._create_retry_wrapper(OrdersApi)
         self.employees: EmployeesApi = self._create_retry_wrapper(EmployeesApi)

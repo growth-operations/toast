@@ -40,7 +40,286 @@ class PayoutReasonsApi:
 
 
     @validate_call
-    async def payout_reasons_get(
+    async def get_payout_reason_by_id(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
+        guid: Annotated[StrictStr, Field(description="The GUID of the payout reason.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> PayoutReason:
+        """Get payout reason by GUID
+
+        Returns a specific payout reason by its GUID. 
+
+        :param toast_restaurant_external_id: The identifier for the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID of the payout reason. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_payout_reason_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "PayoutReason",
+            '404': "ErrorMessage",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def get_payout_reason_by_id_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
+        guid: Annotated[StrictStr, Field(description="The GUID of the payout reason.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PayoutReason]:
+        """Get payout reason by GUID
+
+        Returns a specific payout reason by its GUID. 
+
+        :param toast_restaurant_external_id: The identifier for the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID of the payout reason. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_payout_reason_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "PayoutReason",
+            '404': "ErrorMessage",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def get_payout_reason_by_id_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
+        guid: Annotated[StrictStr, Field(description="The GUID of the payout reason.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get payout reason by GUID
+
+        Returns a specific payout reason by its GUID. 
+
+        :param toast_restaurant_external_id: The identifier for the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID of the payout reason. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_payout_reason_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "PayoutReason",
+            '404': "ErrorMessage",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_payout_reason_by_id_serialize(
+        self,
+        toast_restaurant_external_id,
+        guid,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if guid is not None:
+            _path_params['guid'] = guid
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/config/v2/payoutReasons/{guid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def list_payout_reasons(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         limit: Annotated[Optional[Annotated[int, Field(le=300, strict=True)]], Field(description="The maximum number of objects to return. The default value is 300. The maximum value is 300.")] = None,
@@ -93,7 +372,7 @@ class PayoutReasonsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payout_reasons_get_serialize(
+        _param = self._list_payout_reasons_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             limit=limit,
             page_token=page_token,
@@ -119,7 +398,7 @@ class PayoutReasonsApi:
 
 
     @validate_call
-    async def payout_reasons_get_with_http_info(
+    async def list_payout_reasons_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         limit: Annotated[Optional[Annotated[int, Field(le=300, strict=True)]], Field(description="The maximum number of objects to return. The default value is 300. The maximum value is 300.")] = None,
@@ -172,7 +451,7 @@ class PayoutReasonsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payout_reasons_get_serialize(
+        _param = self._list_payout_reasons_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             limit=limit,
             page_token=page_token,
@@ -198,7 +477,7 @@ class PayoutReasonsApi:
 
 
     @validate_call
-    async def payout_reasons_get_without_preload_content(
+    async def list_payout_reasons_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
         limit: Annotated[Optional[Annotated[int, Field(le=300, strict=True)]], Field(description="The maximum number of objects to return. The default value is 300. The maximum value is 300.")] = None,
@@ -251,7 +530,7 @@ class PayoutReasonsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payout_reasons_get_serialize(
+        _param = self._list_payout_reasons_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             limit=limit,
             page_token=page_token,
@@ -272,7 +551,7 @@ class PayoutReasonsApi:
         return response_data.response
 
 
-    def _payout_reasons_get_serialize(
+    def _list_payout_reasons_serialize(
         self,
         toast_restaurant_external_id,
         limit,
@@ -336,285 +615,6 @@ class PayoutReasonsApi:
         return self.api_client.param_serialize(
             method='GET',
             resource_path='/config/v2/payoutReasons',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def payout_reasons_guid_get(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
-        guid: Annotated[StrictStr, Field(description="The GUID of the payout reason.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> PayoutReason:
-        """Get payout reason by GUID
-
-        Returns a specific payout reason by its GUID. 
-
-        :param toast_restaurant_external_id: The identifier for the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The GUID of the payout reason. (required)
-        :type guid: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._payout_reasons_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "PayoutReason",
-            '404': "ErrorMessage",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def payout_reasons_guid_get_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
-        guid: Annotated[StrictStr, Field(description="The GUID of the payout reason.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[PayoutReason]:
-        """Get payout reason by GUID
-
-        Returns a specific payout reason by its GUID. 
-
-        :param toast_restaurant_external_id: The identifier for the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The GUID of the payout reason. (required)
-        :type guid: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._payout_reasons_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "PayoutReason",
-            '404': "ErrorMessage",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def payout_reasons_guid_get_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier for the restaurant.")],
-        guid: Annotated[StrictStr, Field(description="The GUID of the payout reason.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get payout reason by GUID
-
-        Returns a specific payout reason by its GUID. 
-
-        :param toast_restaurant_external_id: The identifier for the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The GUID of the payout reason. (required)
-        :type guid: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._payout_reasons_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "PayoutReason",
-            '404': "ErrorMessage",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _payout_reasons_guid_get_serialize(
-        self,
-        toast_restaurant_external_id,
-        guid,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if guid is not None:
-            _path_params['guid'] = guid
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/config/v2/payoutReasons/{guid}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

@@ -4,11 +4,11 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**pre_modifiers_get**](PreModifiersApi.md#pre_modifiers_get) | **GET** /config/v2/preModifiers | Get pre-modifiers
+[**list_pre_modifiers**](PreModifiersApi.md#list_pre_modifiers) | **GET** /config/v2/preModifiers | Get pre-modifiers
 
 
-# **pre_modifiers_get**
-> List[PreModifier] pre_modifiers_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+# **list_pre_modifiers**
+> List[PreModifier] list_pre_modifiers(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
 
 Get pre-modifiers
 
@@ -47,11 +47,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get pre-modifiers
-        api_response = await api_instance.pre_modifiers_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
-        print("The response of PreModifiersApi->pre_modifiers_get:\n")
+        api_response = await api_instance.list_pre_modifiers(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+        print("The response of PreModifiersApi->list_pre_modifiers:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling PreModifiersApi->pre_modifiers_get: %s\n" % e)
+        print("Exception when calling PreModifiersApi->list_pre_modifiers: %s\n" % e)
 ```
 
 

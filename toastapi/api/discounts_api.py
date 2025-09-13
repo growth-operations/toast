@@ -44,873 +44,7 @@ class DiscountsApi:
 
 
     @validate_call
-    async def applicable_discounts_post(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        applicable_discounts_request: Annotated[ApplicableDiscountsRequest, Field(description="A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[ApplicableDiscount]:
-        """Get applicable discounts
-
-        Returns an array of `ApplicableDiscount` objects that contain information about the discounts that apply to the checks and menu item selections in an order.  Each `ApplicableDiscount` object contains information that you can use to determine which items and checks are eligible for the discount.  If you include a `promoCode` value in the `ApplicableDiscount` object, the `applicableDiscounts` endpoint returns the only the discounts that are associated with that promotional code. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param applicable_discounts_request: A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`.  (required)
-        :type applicable_discounts_request: ApplicableDiscountsRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._applicable_discounts_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            applicable_discounts_request=applicable_discounts_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ApplicableDiscount]",
-            '400': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def applicable_discounts_post_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        applicable_discounts_request: Annotated[ApplicableDiscountsRequest, Field(description="A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[ApplicableDiscount]]:
-        """Get applicable discounts
-
-        Returns an array of `ApplicableDiscount` objects that contain information about the discounts that apply to the checks and menu item selections in an order.  Each `ApplicableDiscount` object contains information that you can use to determine which items and checks are eligible for the discount.  If you include a `promoCode` value in the `ApplicableDiscount` object, the `applicableDiscounts` endpoint returns the only the discounts that are associated with that promotional code. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param applicable_discounts_request: A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`.  (required)
-        :type applicable_discounts_request: ApplicableDiscountsRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._applicable_discounts_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            applicable_discounts_request=applicable_discounts_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ApplicableDiscount]",
-            '400': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def applicable_discounts_post_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
-        applicable_discounts_request: Annotated[ApplicableDiscountsRequest, Field(description="A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`. ")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get applicable discounts
-
-        Returns an array of `ApplicableDiscount` objects that contain information about the discounts that apply to the checks and menu item selections in an order.  Each `ApplicableDiscount` object contains information that you can use to determine which items and checks are eligible for the discount.  If you include a `promoCode` value in the `ApplicableDiscount` object, the `applicableDiscounts` endpoint returns the only the discounts that are associated with that promotional code. 
-
-        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
-        :type toast_restaurant_external_id: str
-        :param applicable_discounts_request: A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`.  (required)
-        :type applicable_discounts_request: ApplicableDiscountsRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._applicable_discounts_post_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            applicable_discounts_request=applicable_discounts_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ApplicableDiscount]",
-            '400': None,
-            '500': None,
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _applicable_discounts_post_serialize(
-        self,
-        toast_restaurant_external_id,
-        applicable_discounts_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-        if applicable_discounts_request is not None:
-            _body_params = applicable_discounts_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/orders/v2/applicableDiscounts',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def discounts_get(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
-        page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. ")] = None,
-        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[Discount]:
-        """Get discounts
-
-        Returns an array of `Discount` objects containing information about the price deductions configured for a restaurant. If a `lastModified` date is specified, returns all objects that were created or modified after that date. 
-
-        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
-        :type toast_restaurant_external_id: str
-        :param page_token: A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. 
-        :type page_token: str
-        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. 
-        :type last_modified: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._discounts_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            page_token=page_token,
-            last_modified=last_modified,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Discount]",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def discounts_get_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
-        page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. ")] = None,
-        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[Discount]]:
-        """Get discounts
-
-        Returns an array of `Discount` objects containing information about the price deductions configured for a restaurant. If a `lastModified` date is specified, returns all objects that were created or modified after that date. 
-
-        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
-        :type toast_restaurant_external_id: str
-        :param page_token: A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. 
-        :type page_token: str
-        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. 
-        :type last_modified: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._discounts_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            page_token=page_token,
-            last_modified=last_modified,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Discount]",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def discounts_get_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
-        page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. ")] = None,
-        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. ")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get discounts
-
-        Returns an array of `Discount` objects containing information about the price deductions configured for a restaurant. If a `lastModified` date is specified, returns all objects that were created or modified after that date. 
-
-        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
-        :type toast_restaurant_external_id: str
-        :param page_token: A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. 
-        :type page_token: str
-        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. 
-        :type last_modified: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._discounts_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            page_token=page_token,
-            last_modified=last_modified,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[Discount]",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _discounts_get_serialize(
-        self,
-        toast_restaurant_external_id,
-        page_token,
-        last_modified,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        if page_token is not None:
-            
-            _query_params.append(('pageToken', page_token))
-            
-        if last_modified is not None:
-            
-            _query_params.append(('lastModified', last_modified))
-            
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/config/v2/discounts',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def discounts_guid_get(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
-        guid: Annotated[StrictStr, Field(description="The Toast POS GUID of the discount.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Discount:
-        """Get a discount
-
-        Returns a `Discount` object containing information about a price deduction configured for a restaurant. 
-
-        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The Toast POS GUID of the discount. (required)
-        :type guid: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._discounts_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Discount",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def discounts_guid_get_with_http_info(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
-        guid: Annotated[StrictStr, Field(description="The Toast POS GUID of the discount.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Discount]:
-        """Get a discount
-
-        Returns a `Discount` object containing information about a price deduction configured for a restaurant. 
-
-        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The Toast POS GUID of the discount. (required)
-        :type guid: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._discounts_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Discount",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def discounts_guid_get_without_preload_content(
-        self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
-        guid: Annotated[StrictStr, Field(description="The Toast POS GUID of the discount.")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get a discount
-
-        Returns a `Discount` object containing information about a price deduction configured for a restaurant. 
-
-        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The Toast POS GUID of the discount. (required)
-        :type guid: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._discounts_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Discount",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _discounts_guid_get_serialize(
-        self,
-        toast_restaurant_external_id,
-        guid,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if guid is not None:
-            _path_params['guid'] = guid
-        # process the query parameters
-        # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'oauth2'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/config/v2/discounts/{guid}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def orders_checks_applied_discounts_post(
+    async def add_check_level_discounts(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding a discount to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding a discount to. ")],
@@ -960,7 +94,7 @@ class DiscountsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_applied_discounts_post_serialize(
+        _param = self._add_check_level_discounts_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             applied_discount=applied_discount,
@@ -986,7 +120,7 @@ class DiscountsApi:
 
 
     @validate_call
-    async def orders_checks_applied_discounts_post_with_http_info(
+    async def add_check_level_discounts_with_http_info(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding a discount to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding a discount to. ")],
@@ -1036,7 +170,7 @@ class DiscountsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_applied_discounts_post_serialize(
+        _param = self._add_check_level_discounts_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             applied_discount=applied_discount,
@@ -1062,7 +196,7 @@ class DiscountsApi:
 
 
     @validate_call
-    async def orders_checks_applied_discounts_post_without_preload_content(
+    async def add_check_level_discounts_without_preload_content(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding a discount to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding a discount to. ")],
@@ -1112,7 +246,7 @@ class DiscountsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_applied_discounts_post_serialize(
+        _param = self._add_check_level_discounts_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             applied_discount=applied_discount,
@@ -1133,7 +267,7 @@ class DiscountsApi:
         return response_data.response
 
 
-    def _orders_checks_applied_discounts_post_serialize(
+    def _add_check_level_discounts_serialize(
         self,
         order_guid,
         check_guid,
@@ -1218,7 +352,7 @@ class DiscountsApi:
 
 
     @validate_call
-    async def orders_checks_selections_applied_discounts_post(
+    async def add_item_level_discounts(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding a discount to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding a discount to. ")],
@@ -1271,7 +405,7 @@ class DiscountsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_selections_applied_discounts_post_serialize(
+        _param = self._add_item_level_discounts_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             selection_guid=selection_guid,
@@ -1298,7 +432,7 @@ class DiscountsApi:
 
 
     @validate_call
-    async def orders_checks_selections_applied_discounts_post_with_http_info(
+    async def add_item_level_discounts_with_http_info(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding a discount to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding a discount to. ")],
@@ -1351,7 +485,7 @@ class DiscountsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_selections_applied_discounts_post_serialize(
+        _param = self._add_item_level_discounts_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             selection_guid=selection_guid,
@@ -1378,7 +512,7 @@ class DiscountsApi:
 
 
     @validate_call
-    async def orders_checks_selections_applied_discounts_post_without_preload_content(
+    async def add_item_level_discounts_without_preload_content(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding a discount to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding a discount to. ")],
@@ -1431,7 +565,7 @@ class DiscountsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_selections_applied_discounts_post_serialize(
+        _param = self._add_item_level_discounts_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             selection_guid=selection_guid,
@@ -1453,7 +587,7 @@ class DiscountsApi:
         return response_data.response
 
 
-    def _orders_checks_selections_applied_discounts_post_serialize(
+    def _add_item_level_discounts_serialize(
         self,
         order_guid,
         check_guid,
@@ -1525,6 +659,872 @@ class DiscountsApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/orders/v2/orders/{orderGuid}/checks/{checkGuid}/selections/{selectionGuid}/appliedDiscounts',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def get_applicable_discounts(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        applicable_discounts_request: Annotated[ApplicableDiscountsRequest, Field(description="A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[ApplicableDiscount]:
+        """Get applicable discounts
+
+        Returns an array of `ApplicableDiscount` objects that contain information about the discounts that apply to the checks and menu item selections in an order.  Each `ApplicableDiscount` object contains information that you can use to determine which items and checks are eligible for the discount.  If you include a `promoCode` value in the `ApplicableDiscount` object, the `applicableDiscounts` endpoint returns the only the discounts that are associated with that promotional code. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param applicable_discounts_request: A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`.  (required)
+        :type applicable_discounts_request: ApplicableDiscountsRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_applicable_discounts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            applicable_discounts_request=applicable_discounts_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[ApplicableDiscount]",
+            '400': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def get_applicable_discounts_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        applicable_discounts_request: Annotated[ApplicableDiscountsRequest, Field(description="A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[ApplicableDiscount]]:
+        """Get applicable discounts
+
+        Returns an array of `ApplicableDiscount` objects that contain information about the discounts that apply to the checks and menu item selections in an order.  Each `ApplicableDiscount` object contains information that you can use to determine which items and checks are eligible for the discount.  If you include a `promoCode` value in the `ApplicableDiscount` object, the `applicableDiscounts` endpoint returns the only the discounts that are associated with that promotional code. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param applicable_discounts_request: A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`.  (required)
+        :type applicable_discounts_request: ApplicableDiscountsRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_applicable_discounts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            applicable_discounts_request=applicable_discounts_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[ApplicableDiscount]",
+            '400': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def get_applicable_discounts_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The identifier of the restaurant.")],
+        applicable_discounts_request: Annotated[ApplicableDiscountsRequest, Field(description="A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`. ")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get applicable discounts
+
+        Returns an array of `ApplicableDiscount` objects that contain information about the discounts that apply to the checks and menu item selections in an order.  Each `ApplicableDiscount` object contains information that you can use to determine which items and checks are eligible for the discount.  If you include a `promoCode` value in the `ApplicableDiscount` object, the `applicableDiscounts` endpoint returns the only the discounts that are associated with that promotional code. 
+
+        :param toast_restaurant_external_id: The identifier of the restaurant. (required)
+        :type toast_restaurant_external_id: str
+        :param applicable_discounts_request: A JSON `ApplicableDiscountsRequest` object containing information about an order, and an optional `promoCode`.  (required)
+        :type applicable_discounts_request: ApplicableDiscountsRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_applicable_discounts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            applicable_discounts_request=applicable_discounts_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[ApplicableDiscount]",
+            '400': None,
+            '500': None,
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_applicable_discounts_serialize(
+        self,
+        toast_restaurant_external_id,
+        applicable_discounts_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+        if applicable_discounts_request is not None:
+            _body_params = applicable_discounts_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/orders/v2/applicableDiscounts',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def get_discount_by_id(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
+        guid: Annotated[StrictStr, Field(description="The Toast POS GUID of the discount.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Discount:
+        """Get a discount
+
+        Returns a `Discount` object containing information about a price deduction configured for a restaurant. 
+
+        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The Toast POS GUID of the discount. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_discount_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Discount",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def get_discount_by_id_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
+        guid: Annotated[StrictStr, Field(description="The Toast POS GUID of the discount.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Discount]:
+        """Get a discount
+
+        Returns a `Discount` object containing information about a price deduction configured for a restaurant. 
+
+        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The Toast POS GUID of the discount. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_discount_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Discount",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def get_discount_by_id_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
+        guid: Annotated[StrictStr, Field(description="The Toast POS GUID of the discount.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get a discount
+
+        Returns a `Discount` object containing information about a price deduction configured for a restaurant. 
+
+        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The Toast POS GUID of the discount. (required)
+        :type guid: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_discount_by_id_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Discount",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_discount_by_id_serialize(
+        self,
+        toast_restaurant_external_id,
+        guid,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if guid is not None:
+            _path_params['guid'] = guid
+        # process the query parameters
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/config/v2/discounts/{guid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    async def list_discounts(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
+        page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. ")] = None,
+        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[Discount]:
+        """Get discounts
+
+        Returns an array of `Discount` objects containing information about the price deductions configured for a restaurant. If a `lastModified` date is specified, returns all objects that were created or modified after that date. 
+
+        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
+        :type toast_restaurant_external_id: str
+        :param page_token: A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. 
+        :type page_token: str
+        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. 
+        :type last_modified: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_discounts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            page_token=page_token,
+            last_modified=last_modified,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Discount]",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def list_discounts_with_http_info(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
+        page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. ")] = None,
+        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[Discount]]:
+        """Get discounts
+
+        Returns an array of `Discount` objects containing information about the price deductions configured for a restaurant. If a `lastModified` date is specified, returns all objects that were created or modified after that date. 
+
+        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
+        :type toast_restaurant_external_id: str
+        :param page_token: A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. 
+        :type page_token: str
+        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. 
+        :type last_modified: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_discounts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            page_token=page_token,
+            last_modified=last_modified,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Discount]",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def list_discounts_without_preload_content(
+        self,
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The Toast POS GUID of the restaurant that the configuration applies to. ")],
+        page_token: Annotated[Optional[StrictStr], Field(description="A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. ")] = None,
+        last_modified: Annotated[Optional[StrictStr], Field(description="Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get discounts
+
+        Returns an array of `Discount` objects containing information about the price deductions configured for a restaurant. If a `lastModified` date is specified, returns all objects that were created or modified after that date. 
+
+        :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
+        :type toast_restaurant_external_id: str
+        :param page_token: A string that identifies the set of data objects that the  endpoint will return in its response data. You can use this  parameter to retrieve one page of response data. You  get the value that you supply in the `pageToken` parameter  from the `Toast-Next-Page-Token` header field value of a  previous request to the endpoint. For more information, see  <a href=\"https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html\">Paginating response data</a>. 
+        :type page_token: str
+        :param last_modified: Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`. 
+        :type last_modified: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_discounts_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            page_token=page_token,
+            last_modified=last_modified,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[Discount]",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _list_discounts_serialize(
+        self,
+        toast_restaurant_external_id,
+        page_token,
+        last_modified,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if page_token is not None:
+            
+            _query_params.append(('pageToken', page_token))
+            
+        if last_modified is not None:
+            
+            _query_params.append(('lastModified', last_modified))
+            
+        # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/config/v2/discounts',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

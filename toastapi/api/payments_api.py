@@ -42,7 +42,7 @@ class PaymentsApi:
 
 
     @validate_call
-    async def orders_checks_payments_post(
+    async def add_payments_to_check(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding payments to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding payments to. ")],
@@ -92,7 +92,7 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_payments_post_serialize(
+        _param = self._add_payments_to_check_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             payment=payment,
@@ -118,7 +118,7 @@ class PaymentsApi:
 
 
     @validate_call
-    async def orders_checks_payments_post_with_http_info(
+    async def add_payments_to_check_with_http_info(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding payments to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding payments to. ")],
@@ -168,7 +168,7 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_payments_post_serialize(
+        _param = self._add_payments_to_check_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             payment=payment,
@@ -194,7 +194,7 @@ class PaymentsApi:
 
 
     @validate_call
-    async def orders_checks_payments_post_without_preload_content(
+    async def add_payments_to_check_without_preload_content(
         self,
         order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are adding payments to. ")],
         check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are adding payments to. ")],
@@ -244,7 +244,7 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_checks_payments_post_serialize(
+        _param = self._add_payments_to_check_serialize(
             order_guid=order_guid,
             check_guid=check_guid,
             payment=payment,
@@ -265,7 +265,7 @@ class PaymentsApi:
         return response_data.response
 
 
-    def _orders_checks_payments_post_serialize(
+    def _add_payments_to_check_serialize(
         self,
         order_guid,
         check_guid,
@@ -350,12 +350,10 @@ class PaymentsApi:
 
 
     @validate_call
-    async def orders_order_guid_checks_check_guid_payments_payment_guid_patch(
+    async def get_payment_by_guid(
         self,
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating a tip in. ")],
-        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are updating a tip in. ")],
-        payment_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the payment that you are updating a tip in. ")],
-        update_payment_request: Annotated[UpdatePaymentRequest, Field(description="A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`. ")],
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
+        guid: Annotated[StrictStr, Field(description="The GUID for the payment you want to return.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -368,19 +366,15 @@ class PaymentsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Order:
-        """Update a tip amount
+    ) -> Payment:
+        """Get a payment
 
-        Updates the tip amount in an existing payment for a check in an order. Include the new `tipAmount` value in a `Payment` object in the message body.  This endpoint does not allow any other `Payment` object value for a `PATCH` request.  Specify the Toast platform GUID of the order, check, and payment in REST path parameters.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html\"> the _Toast Developer Guide_</a>. 
+        Returns a JSON `Payment` object containing detailed information about a  single payment, specified by its GUID.
 
-        :param order_guid: The Toast platform identifier of the order that you are updating a tip in.  (required)
-        :type order_guid: str
-        :param check_guid: The Toast platform identifier of the check that you are updating a tip in.  (required)
-        :type check_guid: str
-        :param payment_guid: The Toast platform identifier of the payment that you are updating a tip in.  (required)
-        :type payment_guid: str
-        :param update_payment_request: A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`.  (required)
-        :type update_payment_request: UpdatePaymentRequest
+        :param toast_restaurant_external_id: The GUID of the restaurant used as the context of the request. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID for the payment you want to return. (required)
+        :type guid: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -403,11 +397,9 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_order_guid_checks_check_guid_payments_payment_guid_patch_serialize(
-            order_guid=order_guid,
-            check_guid=check_guid,
-            payment_guid=payment_guid,
-            update_payment_request=update_payment_request,
+        _param = self._get_payment_by_guid_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -415,8 +407,9 @@ class PaymentsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
+            '200': "Payment",
             '400': None,
+            '404': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -430,12 +423,10 @@ class PaymentsApi:
 
 
     @validate_call
-    async def orders_order_guid_checks_check_guid_payments_payment_guid_patch_with_http_info(
+    async def get_payment_by_guid_with_http_info(
         self,
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating a tip in. ")],
-        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are updating a tip in. ")],
-        payment_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the payment that you are updating a tip in. ")],
-        update_payment_request: Annotated[UpdatePaymentRequest, Field(description="A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`. ")],
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
+        guid: Annotated[StrictStr, Field(description="The GUID for the payment you want to return.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -448,19 +439,15 @@ class PaymentsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Order]:
-        """Update a tip amount
+    ) -> ApiResponse[Payment]:
+        """Get a payment
 
-        Updates the tip amount in an existing payment for a check in an order. Include the new `tipAmount` value in a `Payment` object in the message body.  This endpoint does not allow any other `Payment` object value for a `PATCH` request.  Specify the Toast platform GUID of the order, check, and payment in REST path parameters.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html\"> the _Toast Developer Guide_</a>. 
+        Returns a JSON `Payment` object containing detailed information about a  single payment, specified by its GUID.
 
-        :param order_guid: The Toast platform identifier of the order that you are updating a tip in.  (required)
-        :type order_guid: str
-        :param check_guid: The Toast platform identifier of the check that you are updating a tip in.  (required)
-        :type check_guid: str
-        :param payment_guid: The Toast platform identifier of the payment that you are updating a tip in.  (required)
-        :type payment_guid: str
-        :param update_payment_request: A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`.  (required)
-        :type update_payment_request: UpdatePaymentRequest
+        :param toast_restaurant_external_id: The GUID of the restaurant used as the context of the request. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID for the payment you want to return. (required)
+        :type guid: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -483,11 +470,9 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_order_guid_checks_check_guid_payments_payment_guid_patch_serialize(
-            order_guid=order_guid,
-            check_guid=check_guid,
-            payment_guid=payment_guid,
-            update_payment_request=update_payment_request,
+        _param = self._get_payment_by_guid_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -495,8 +480,9 @@ class PaymentsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
+            '200': "Payment",
             '400': None,
+            '404': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -510,12 +496,10 @@ class PaymentsApi:
 
 
     @validate_call
-    async def orders_order_guid_checks_check_guid_payments_payment_guid_patch_without_preload_content(
+    async def get_payment_by_guid_without_preload_content(
         self,
-        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating a tip in. ")],
-        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are updating a tip in. ")],
-        payment_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the payment that you are updating a tip in. ")],
-        update_payment_request: Annotated[UpdatePaymentRequest, Field(description="A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`. ")],
+        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
+        guid: Annotated[StrictStr, Field(description="The GUID for the payment you want to return.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -529,18 +513,14 @@ class PaymentsApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Update a tip amount
+        """Get a payment
 
-        Updates the tip amount in an existing payment for a check in an order. Include the new `tipAmount` value in a `Payment` object in the message body.  This endpoint does not allow any other `Payment` object value for a `PATCH` request.  Specify the Toast platform GUID of the order, check, and payment in REST path parameters.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html\"> the _Toast Developer Guide_</a>. 
+        Returns a JSON `Payment` object containing detailed information about a  single payment, specified by its GUID.
 
-        :param order_guid: The Toast platform identifier of the order that you are updating a tip in.  (required)
-        :type order_guid: str
-        :param check_guid: The Toast platform identifier of the check that you are updating a tip in.  (required)
-        :type check_guid: str
-        :param payment_guid: The Toast platform identifier of the payment that you are updating a tip in.  (required)
-        :type payment_guid: str
-        :param update_payment_request: A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`.  (required)
-        :type update_payment_request: UpdatePaymentRequest
+        :param toast_restaurant_external_id: The GUID of the restaurant used as the context of the request. (required)
+        :type toast_restaurant_external_id: str
+        :param guid: The GUID for the payment you want to return. (required)
+        :type guid: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -563,11 +543,9 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._orders_order_guid_checks_check_guid_payments_payment_guid_patch_serialize(
-            order_guid=order_guid,
-            check_guid=check_guid,
-            payment_guid=payment_guid,
-            update_payment_request=update_payment_request,
+        _param = self._get_payment_by_guid_serialize(
+            toast_restaurant_external_id=toast_restaurant_external_id,
+            guid=guid,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -575,8 +553,9 @@ class PaymentsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Order",
+            '200': "Payment",
             '400': None,
+            '404': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -585,12 +564,10 @@ class PaymentsApi:
         return response_data.response
 
 
-    def _orders_order_guid_checks_check_guid_payments_payment_guid_patch_serialize(
+    def _get_payment_by_guid_serialize(
         self,
-        order_guid,
-        check_guid,
-        payment_guid,
-        update_payment_request,
+        toast_restaurant_external_id,
+        guid,
         _request_auth,
         _content_type,
         _headers,
@@ -612,18 +589,14 @@ class PaymentsApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if order_guid is not None:
-            _path_params['orderGuid'] = order_guid
-        if check_guid is not None:
-            _path_params['checkGuid'] = check_guid
-        if payment_guid is not None:
-            _path_params['paymentGuid'] = payment_guid
+        if guid is not None:
+            _path_params['guid'] = guid
         # process the query parameters
         # process the header parameters
+        if toast_restaurant_external_id is not None:
+            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
         # process the form parameters
         # process the body parameter
-        if update_payment_request is not None:
-            _body_params = update_payment_request
 
 
         # set the HTTP header `Accept`
@@ -634,19 +607,6 @@ class PaymentsApi:
                 ]
             )
 
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [
@@ -654,8 +614,8 @@ class PaymentsApi:
         ]
 
         return self.api_client.param_serialize(
-            method='PATCH',
-            resource_path='/orders/v2/orders/{orderGuid}/checks/{checkGuid}/payments/{paymentGuid}',
+            method='GET',
+            resource_path='/orders/v2/payments/{guid}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -672,7 +632,7 @@ class PaymentsApi:
 
 
     @validate_call
-    async def payments_get(
+    async def list_payments(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
         paid_business_date: Annotated[Optional[StrictStr], Field(description="Returns a list of the payments that were made during one business day. Specify the business day in the format yyyyMMdd. For example, `20170101`. ")] = None,
@@ -725,7 +685,7 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payments_get_serialize(
+        _param = self._list_payments_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             paid_business_date=paid_business_date,
             refund_business_date=refund_business_date,
@@ -752,7 +712,7 @@ class PaymentsApi:
 
 
     @validate_call
-    async def payments_get_with_http_info(
+    async def list_payments_with_http_info(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
         paid_business_date: Annotated[Optional[StrictStr], Field(description="Returns a list of the payments that were made during one business day. Specify the business day in the format yyyyMMdd. For example, `20170101`. ")] = None,
@@ -805,7 +765,7 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payments_get_serialize(
+        _param = self._list_payments_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             paid_business_date=paid_business_date,
             refund_business_date=refund_business_date,
@@ -832,7 +792,7 @@ class PaymentsApi:
 
 
     @validate_call
-    async def payments_get_without_preload_content(
+    async def list_payments_without_preload_content(
         self,
         toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
         paid_business_date: Annotated[Optional[StrictStr], Field(description="Returns a list of the payments that were made during one business day. Specify the business day in the format yyyyMMdd. For example, `20170101`. ")] = None,
@@ -885,7 +845,7 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payments_get_serialize(
+        _param = self._list_payments_serialize(
             toast_restaurant_external_id=toast_restaurant_external_id,
             paid_business_date=paid_business_date,
             refund_business_date=refund_business_date,
@@ -907,7 +867,7 @@ class PaymentsApi:
         return response_data.response
 
 
-    def _payments_get_serialize(
+    def _list_payments_serialize(
         self,
         toast_restaurant_external_id,
         paid_business_date,
@@ -987,10 +947,12 @@ class PaymentsApi:
 
 
     @validate_call
-    async def payments_guid_get(
+    async def update_tip_amount(
         self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
-        guid: Annotated[StrictStr, Field(description="The GUID for the payment you want to return.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating a tip in. ")],
+        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are updating a tip in. ")],
+        payment_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the payment that you are updating a tip in. ")],
+        update_payment_request: Annotated[UpdatePaymentRequest, Field(description="A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1003,15 +965,19 @@ class PaymentsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Payment:
-        """Get a payment
+    ) -> Order:
+        """Update a tip amount
 
-        Returns a JSON `Payment` object containing detailed information about a  single payment, specified by its GUID.
+        Updates the tip amount in an existing payment for a check in an order. Include the new `tipAmount` value in a `Payment` object in the message body.  This endpoint does not allow any other `Payment` object value for a `PATCH` request.  Specify the Toast platform GUID of the order, check, and payment in REST path parameters.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html\"> the _Toast Developer Guide_</a>. 
 
-        :param toast_restaurant_external_id: The GUID of the restaurant used as the context of the request. (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The GUID for the payment you want to return. (required)
-        :type guid: str
+        :param order_guid: The Toast platform identifier of the order that you are updating a tip in.  (required)
+        :type order_guid: str
+        :param check_guid: The Toast platform identifier of the check that you are updating a tip in.  (required)
+        :type check_guid: str
+        :param payment_guid: The Toast platform identifier of the payment that you are updating a tip in.  (required)
+        :type payment_guid: str
+        :param update_payment_request: A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`.  (required)
+        :type update_payment_request: UpdatePaymentRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1034,9 +1000,11 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payments_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
+        _param = self._update_tip_amount_serialize(
+            order_guid=order_guid,
+            check_guid=check_guid,
+            payment_guid=payment_guid,
+            update_payment_request=update_payment_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1044,9 +1012,8 @@ class PaymentsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Payment",
+            '200': "Order",
             '400': None,
-            '404': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -1060,10 +1027,12 @@ class PaymentsApi:
 
 
     @validate_call
-    async def payments_guid_get_with_http_info(
+    async def update_tip_amount_with_http_info(
         self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
-        guid: Annotated[StrictStr, Field(description="The GUID for the payment you want to return.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating a tip in. ")],
+        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are updating a tip in. ")],
+        payment_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the payment that you are updating a tip in. ")],
+        update_payment_request: Annotated[UpdatePaymentRequest, Field(description="A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1076,15 +1045,19 @@ class PaymentsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Payment]:
-        """Get a payment
+    ) -> ApiResponse[Order]:
+        """Update a tip amount
 
-        Returns a JSON `Payment` object containing detailed information about a  single payment, specified by its GUID.
+        Updates the tip amount in an existing payment for a check in an order. Include the new `tipAmount` value in a `Payment` object in the message body.  This endpoint does not allow any other `Payment` object value for a `PATCH` request.  Specify the Toast platform GUID of the order, check, and payment in REST path parameters.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html\"> the _Toast Developer Guide_</a>. 
 
-        :param toast_restaurant_external_id: The GUID of the restaurant used as the context of the request. (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The GUID for the payment you want to return. (required)
-        :type guid: str
+        :param order_guid: The Toast platform identifier of the order that you are updating a tip in.  (required)
+        :type order_guid: str
+        :param check_guid: The Toast platform identifier of the check that you are updating a tip in.  (required)
+        :type check_guid: str
+        :param payment_guid: The Toast platform identifier of the payment that you are updating a tip in.  (required)
+        :type payment_guid: str
+        :param update_payment_request: A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`.  (required)
+        :type update_payment_request: UpdatePaymentRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1107,9 +1080,11 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payments_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
+        _param = self._update_tip_amount_serialize(
+            order_guid=order_guid,
+            check_guid=check_guid,
+            payment_guid=payment_guid,
+            update_payment_request=update_payment_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1117,9 +1092,8 @@ class PaymentsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Payment",
+            '200': "Order",
             '400': None,
-            '404': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -1133,10 +1107,12 @@ class PaymentsApi:
 
 
     @validate_call
-    async def payments_guid_get_without_preload_content(
+    async def update_tip_amount_without_preload_content(
         self,
-        toast_restaurant_external_id: Annotated[StrictStr, Field(description="The GUID of the restaurant used as the context of the request.")],
-        guid: Annotated[StrictStr, Field(description="The GUID for the payment you want to return.")],
+        order_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the order that you are updating a tip in. ")],
+        check_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the check that you are updating a tip in. ")],
+        payment_guid: Annotated[StrictStr, Field(description="The Toast platform identifier of the payment that you are updating a tip in. ")],
+        update_payment_request: Annotated[UpdatePaymentRequest, Field(description="A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`. ")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1150,14 +1126,18 @@ class PaymentsApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get a payment
+        """Update a tip amount
 
-        Returns a JSON `Payment` object containing detailed information about a  single payment, specified by its GUID.
+        Updates the tip amount in an existing payment for a check in an order. Include the new `tipAmount` value in a `Payment` object in the message body.  This endpoint does not allow any other `Payment` object value for a `PATCH` request.  Specify the Toast platform GUID of the order, check, and payment in REST path parameters.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiUpdatingTipsInAPayment.html\"> the _Toast Developer Guide_</a>. 
 
-        :param toast_restaurant_external_id: The GUID of the restaurant used as the context of the request. (required)
-        :type toast_restaurant_external_id: str
-        :param guid: The GUID for the payment you want to return. (required)
-        :type guid: str
+        :param order_guid: The Toast platform identifier of the order that you are updating a tip in.  (required)
+        :type order_guid: str
+        :param check_guid: The Toast platform identifier of the check that you are updating a tip in.  (required)
+        :type check_guid: str
+        :param payment_guid: The Toast platform identifier of the payment that you are updating a tip in.  (required)
+        :type payment_guid: str
+        :param update_payment_request: A JSON `Payment` object containing the `tipAmount` value that will replace any existing tip amount for the payment.  Do not include any value other than `tipAmount`.  (required)
+        :type update_payment_request: UpdatePaymentRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1180,9 +1160,11 @@ class PaymentsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._payments_guid_get_serialize(
-            toast_restaurant_external_id=toast_restaurant_external_id,
-            guid=guid,
+        _param = self._update_tip_amount_serialize(
+            order_guid=order_guid,
+            check_guid=check_guid,
+            payment_guid=payment_guid,
+            update_payment_request=update_payment_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1190,9 +1172,8 @@ class PaymentsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Payment",
+            '200': "Order",
             '400': None,
-            '404': None,
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -1201,10 +1182,12 @@ class PaymentsApi:
         return response_data.response
 
 
-    def _payments_guid_get_serialize(
+    def _update_tip_amount_serialize(
         self,
-        toast_restaurant_external_id,
-        guid,
+        order_guid,
+        check_guid,
+        payment_guid,
+        update_payment_request,
         _request_auth,
         _content_type,
         _headers,
@@ -1226,14 +1209,18 @@ class PaymentsApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if guid is not None:
-            _path_params['guid'] = guid
+        if order_guid is not None:
+            _path_params['orderGuid'] = order_guid
+        if check_guid is not None:
+            _path_params['checkGuid'] = check_guid
+        if payment_guid is not None:
+            _path_params['paymentGuid'] = payment_guid
         # process the query parameters
         # process the header parameters
-        if toast_restaurant_external_id is not None:
-            _header_params['Toast-Restaurant-External-ID'] = toast_restaurant_external_id
         # process the form parameters
         # process the body parameter
+        if update_payment_request is not None:
+            _body_params = update_payment_request
 
 
         # set the HTTP header `Accept`
@@ -1244,6 +1231,19 @@ class PaymentsApi:
                 ]
             )
 
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [
@@ -1251,8 +1251,8 @@ class PaymentsApi:
         ]
 
         return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/orders/v2/payments/{guid}',
+            method='PATCH',
+            resource_path='/orders/v2/orders/{orderGuid}/checks/{checkGuid}/payments/{paymentGuid}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

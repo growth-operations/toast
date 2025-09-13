@@ -17,20 +17,31 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class Image(BaseModel):
+class UpdateDeliveryInfoRequest(BaseModel):
     """
-    Information about an image.
+    UpdateDeliveryInfoRequest
     """ # noqa: E501
-    width: Optional[StrictInt] = Field(default=None, description="The width of the image, in pixels.")
-    height: Optional[StrictInt] = Field(default=None, description="The height of the image, in pixels.")
-    url: Optional[StrictStr] = None
-    height_width_ratio: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The ratio of height to width", alias="heightWidthRatio")
-    __properties: ClassVar[List[str]] = ["width", "height", "url", "heightWidthRatio"]
+    delivered_date: Optional[datetime] = Field(default=None, description="The date on which the order was delivered. ", alias="deliveredDate")
+    dispatched_date: Optional[datetime] = Field(default=None, description="The date on which the order was dispatched. If `dispatchedDate` is not specified, it is set to the current system time. ", alias="dispatchedDate")
+    delivery_state: Optional[StrictStr] = Field(default=None, description="The delivery state of the order. ", alias="deliveryState")
+    delivery_employee: Optional[StrictStr] = Field(default=None, description="The Toast platform identifier of the employee who is delivering the order. ", alias="deliveryEmployee")
+    __properties: ClassVar[List[str]] = ["deliveredDate", "dispatchedDate", "deliveryState", "deliveryEmployee"]
+
+    @field_validator('delivery_state')
+    def delivery_state_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['PENDING', 'IN_PROGRESS', 'PICKED_UP', 'DELIVERED']):
+            raise ValueError("must be one of enum values ('PENDING', 'IN_PROGRESS', 'PICKED_UP', 'DELIVERED')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +61,7 @@ class Image(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Image from a JSON string"""
+        """Create an instance of UpdateDeliveryInfoRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,7 +86,7 @@ class Image(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Image from a dict"""
+        """Create an instance of UpdateDeliveryInfoRequest from a dict"""
         if obj is None:
             return None
 
@@ -83,10 +94,10 @@ class Image(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "width": obj.get("width"),
-            "height": obj.get("height"),
-            "url": obj.get("url"),
-            "heightWidthRatio": obj.get("heightWidthRatio")
+            "deliveredDate": obj.get("deliveredDate"),
+            "dispatchedDate": obj.get("dispatchedDate"),
+            "deliveryState": obj.get("deliveryState"),
+            "deliveryEmployee": obj.get("deliveryEmployee")
         })
         return _obj
 

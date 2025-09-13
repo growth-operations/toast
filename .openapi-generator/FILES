@@ -6,6 +6,7 @@ README.md
 docs/Alcohol.md
 docs/AlternatePaymentType.md
 docs/AlternatePaymentTypesApi.md
+docs/AnalyticsApi.md
 docs/ApplicableDiscount.md
 docs/ApplicableDiscountsRequest.md
 docs/AppliedDiscount.md
@@ -47,6 +48,9 @@ docs/ErrorMessage.md
 docs/ExternalReference.md
 docs/General.md
 docs/GiftCardInfo.md
+docs/GuestReportingDataInProgress.md
+docs/GuestReportingDataRequest.md
+docs/GuestReportingDataResponse.md
 docs/Hours.md
 docs/ItemTag.md
 docs/Job.md
@@ -72,7 +76,6 @@ docs/OnlineOrdering.md
 docs/Order.md
 docs/OrderResponse.md
 docs/OrdersApi.md
-docs/OrdersOrderGuidDeliveryInfoPatchRequest.md
 docs/Payment.md
 docs/PaymentOptions.md
 docs/PaymentsApi.md
@@ -127,6 +130,7 @@ docs/TipWithholding.md
 docs/TipWithholdingApi.md
 docs/ToastReference.md
 docs/URLs.md
+docs/UpdateDeliveryInfoRequest.md
 docs/UpdatePaymentRequest.md
 docs/VoidInformation.md
 docs/VoidOrderRequest.md
@@ -136,6 +140,7 @@ docs/VoidReasonsApi.md
 docs/WeekSchedule.md
 docs/WeightUnitOfMeasure.md
 git_push.sh
+pyproject.toml
 requirements.txt
 setup.cfg
 setup.py
@@ -144,6 +149,7 @@ test/__init__.py
 toastapi/__init__.py
 toastapi/api/__init__.py
 toastapi/api/alternate_payment_types_api.py
+toastapi/api/analytics_api.py
 toastapi/api/authentication_api.py
 toastapi/api/break_types_api.py
 toastapi/api/cash_drawers_api.py
@@ -216,6 +222,9 @@ toastapi/models/error_message.py
 toastapi/models/external_reference.py
 toastapi/models/general.py
 toastapi/models/gift_card_info.py
+toastapi/models/guest_reporting_data_in_progress.py
+toastapi/models/guest_reporting_data_request.py
+toastapi/models/guest_reporting_data_response.py
 toastapi/models/hours.py
 toastapi/models/item_tag.py
 toastapi/models/job.py
@@ -234,7 +243,6 @@ toastapi/models/no_sale_reason.py
 toastapi/models/online_ordering.py
 toastapi/models/order.py
 toastapi/models/order_response.py
-toastapi/models/orders_order_guid_delivery_info_patch_request.py
 toastapi/models/payment.py
 toastapi/models/payment_options.py
 toastapi/models/payout_reason.py
@@ -272,6 +280,7 @@ toastapi/models/time_range.py
 toastapi/models/time_specific_price.py
 toastapi/models/tip_withholding.py
 toastapi/models/toast_reference.py
+toastapi/models/update_delivery_info_request.py
 toastapi/models/update_payment_request.py
 toastapi/models/urls.py
 toastapi/models/void_information.py

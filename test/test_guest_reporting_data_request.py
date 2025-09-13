@@ -12,26 +12,55 @@
 """  # noqa: E501
 
 
-from __future__ import annotations
-import json
-from enum import Enum
-from typing_extensions import Self
+import unittest
 
+from toastapi.models.guest_reporting_data_request import GuestReportingDataRequest
 
-class Visibility(str, Enum):
-    """
-    A string that indicates whether a menu entity is visible in the Toast POS app.  The `visibility` value is HIDDEN if the menu entity is not displayed in the Toast POS app. The `visibility` value is POS if the menu entity is displayed in the Toast POS app. 
-    """
+class TestGuestReportingDataRequest(unittest.TestCase):
+    """GuestReportingDataRequest unit test stubs"""
 
-    """
-    allowed enum values
-    """
-    HIDDEN = 'HIDDEN'
-    POS = 'POS'
+    def setUp(self):
+        pass
 
-    @classmethod
-    def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Visibility from a JSON string"""
-        return cls(json.loads(json_str))
+    def tearDown(self):
+        pass
 
+    def make_instance(self, include_optional) -> GuestReportingDataRequest:
+        """Test GuestReportingDataRequest
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
+        # uncomment below to create an instance of `GuestReportingDataRequest`
+        """
+        model = GuestReportingDataRequest()
+        if include_optional:
+            return GuestReportingDataRequest(
+                start_date = 56,
+                end_date = 56,
+                restaurant_ids = [
+                    ''
+                    ],
+                excluded_restaurant_ids = [
+                    ''
+                    ]
+            )
+        else:
+            return GuestReportingDataRequest(
+                start_date = 56,
+                end_date = 56,
+                restaurant_ids = [
+                    ''
+                    ],
+                excluded_restaurant_ids = [
+                    ''
+                    ],
+        )
+        """
 
+    def testGuestReportingDataRequest(self):
+        """Test GuestReportingDataRequest"""
+        # inst_req_only = self.make_instance(include_optional=False)
+        # inst_req_and_optional = self.make_instance(include_optional=True)
+
+if __name__ == '__main__':
+    unittest.main()

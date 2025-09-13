@@ -4,12 +4,90 @@ All URIs are relative to *https://ws-sandbox-api.eng.toasttab.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**dining_options_get**](DiningOptionsApi.md#dining_options_get) | **GET** /config/v2/diningOptions | Get dining options 
-[**dining_options_guid_get**](DiningOptionsApi.md#dining_options_guid_get) | **GET** /config/v2/diningOptions/{guid} | Get a dining option 
+[**get_dining_option_by_id**](DiningOptionsApi.md#get_dining_option_by_id) | **GET** /config/v2/diningOptions/{guid} | Get a dining option 
+[**list_dining_options**](DiningOptionsApi.md#list_dining_options) | **GET** /config/v2/diningOptions | Get dining options 
 
 
-# **dining_options_get**
-> List[DiningOption] dining_options_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+# **get_dining_option_by_id**
+> DiningOption get_dining_option_by_id(toast_restaurant_external_id, guid)
+
+Get a dining option 
+
+Returns a `DiningOption` object containing information about a dining option configured for a restaurant.
+
+
+### Example
+
+* OAuth Authentication (oauth2):
+
+```python
+import toastapi
+from toastapi.models.dining_option import DiningOption
+from toastapi.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = toastapi.Configuration(
+    host = "https://ws-sandbox-api.eng.toasttab.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Enter a context with an instance of the API client
+async with toastapi.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = toastapi.DiningOptionsApi(api_client)
+    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast POS GUID of the restaurant that the dining option is configured for. 
+    guid = 'guid_example' # str | The Toast POS GUID of the dining option.
+
+    try:
+        # Get a dining option 
+        api_response = await api_instance.get_dining_option_by_id(toast_restaurant_external_id, guid)
+        print("The response of DiningOptionsApi->get_dining_option_by_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling DiningOptionsApi->get_dining_option_by_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **toast_restaurant_external_id** | **str**| The Toast POS GUID of the restaurant that the dining option is configured for.  | 
+ **guid** | **str**| The Toast POS GUID of the dining option. | 
+
+### Return type
+
+[**DiningOption**](DiningOption.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a &#x60;DiningOption&#x60; object. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_dining_options**
+> List[DiningOption] list_dining_options(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
 
 Get dining options 
 
@@ -49,11 +127,11 @@ async with toastapi.ApiClient(configuration) as api_client:
 
     try:
         # Get dining options 
-        api_response = await api_instance.dining_options_get(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
-        print("The response of DiningOptionsApi->dining_options_get:\n")
+        api_response = await api_instance.list_dining_options(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+        print("The response of DiningOptionsApi->list_dining_options:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling DiningOptionsApi->dining_options_get: %s\n" % e)
+        print("Exception when calling DiningOptionsApi->list_dining_options: %s\n" % e)
 ```
 
 
@@ -85,84 +163,6 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Returns an array of &#x60;DiningOption&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **dining_options_guid_get**
-> DiningOption dining_options_guid_get(toast_restaurant_external_id, guid)
-
-Get a dining option 
-
-Returns a `DiningOption` object containing information about a dining option configured for a restaurant.
-
-
-### Example
-
-* OAuth Authentication (oauth2):
-
-```python
-import toastapi
-from toastapi.models.dining_option import DiningOption
-from toastapi.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://ws-sandbox-api.eng.toasttab.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = toastapi.Configuration(
-    host = "https://ws-sandbox-api.eng.toasttab.com"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-configuration.access_token = os.environ["ACCESS_TOKEN"]
-
-# Enter a context with an instance of the API client
-async with toastapi.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = toastapi.DiningOptionsApi(api_client)
-    toast_restaurant_external_id = 'toast_restaurant_external_id_example' # str | The Toast POS GUID of the restaurant that the dining option is configured for. 
-    guid = 'guid_example' # str | The Toast POS GUID of the dining option.
-
-    try:
-        # Get a dining option 
-        api_response = await api_instance.dining_options_guid_get(toast_restaurant_external_id, guid)
-        print("The response of DiningOptionsApi->dining_options_guid_get:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling DiningOptionsApi->dining_options_guid_get: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **toast_restaurant_external_id** | **str**| The Toast POS GUID of the restaurant that the dining option is configured for.  | 
- **guid** | **str**| The Toast POS GUID of the dining option. | 
-
-### Return type
-
-[**DiningOption**](DiningOption.md)
-
-### Authorization
-
-[oauth2](../README.md#oauth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Returns a &#x60;DiningOption&#x60; object. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
