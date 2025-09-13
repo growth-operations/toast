@@ -142,7 +142,6 @@ docs/WeightUnitOfMeasure.md
 git_push.sh
 requirements.txt
 setup.cfg
-setup.py
 test-requirements.txt
 test/__init__.py
 toastapi/__init__.py

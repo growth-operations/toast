@@ -44,6 +44,7 @@ from toastapi.api import (
     VoidReasonsApi,
 )
 from toastapi.models.authentication_request import AuthenticationRequest
+from toastapi.exceptions import UnauthorizedException
 
 
 class RetryConfig:
@@ -294,8 +295,9 @@ class Toast:
                 user_access_type="TOAST_MACHINE_CLIENT",
             )
 
-            # Request authentication token
-            response = await self.auth.login(auth_request)
+            # Request authentication token directly from API client to avoid recursion
+            auth_api = AuthenticationApi(self._api_client)
+            response = await auth_api.login(auth_request)
 
             # Extract the token from the response
             if response.token and response.token.access_token:
@@ -332,7 +334,7 @@ class Toast:
         # Ensure we're authenticated
         if not self.is_token_valid():
             await self.authenticate()
-            if self._token_refresh_callback:
+            if self._token_refresh_callback and self._token and self._token_expires_at:
                 await self._token_refresh_callback(self._token, self._token_expires_at)
 
         # Apply retry logic
@@ -356,6 +358,22 @@ class Toast:
                 if attempt == self.retry_config.max_retries:
                     break
 
+                # Handle 401 Unauthorized errors by forcing re-authentication
+                if isinstance(e, UnauthorizedException):
+                    try:
+                        await self.authenticate()
+                        if (
+                            self._token_refresh_callback
+                            and self._token
+                            and self._token_expires_at
+                        ):
+                            await self._token_refresh_callback(
+                                self._token, self._token_expires_at
+                            )
+                    except Exception as auth_error:
+                        # If re-authentication fails, raise the original error
+                        raise e from auth_error
+
                 # Wait before retrying
                 await asyncio.sleep(delay)
                 delay = min(
@@ -364,4 +382,6 @@ class Toast:
                 )
 
         # If we get here, all retries failed
-        raise last_exception
+        if last_exception:
+            raise last_exception
+        raise Exception("All retry attempts failed")
