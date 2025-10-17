@@ -3658,7 +3658,7 @@ paths:
       summary: |
         Get a menu item
       description: |
-        Returns a `MenuItem` object containing information about a menu item configured for a restaurant.
+        Returns a `MenuItemSimple` object containing simplified information about a menu item configured for a restaurant.
       parameters:
         - name: Toast-Restaurant-External-ID
           description: |
@@ -3675,11 +3675,11 @@ paths:
             type: string
       responses:
         "200":
-          description: Returns a `MenuItem` object.
+          description: Returns a `MenuItemSimple` object.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MenuItem"
+                $ref: "#/components/schemas/MenuItemSimple"
       security:
         - oauth2:
             - config:read
@@ -3691,7 +3691,7 @@ paths:
       summary: |
         Get menu items
       description: |
-        Returns an array of `MenuItem` objects containing information about menu items configured for a restaurant.
+        Returns an array of `MenuItemSimple` objects containing simplified information about menu items configured for a restaurant.
       parameters:
         - name: Toast-Restaurant-External-ID
           description: |
@@ -3717,7 +3717,7 @@ paths:
             example: "2024-06-20T00:00:00.000+0000"
       responses:
         "200":
-          description: Returns an array of `MenuItem` objects.
+          description: Returns an array of `MenuItemSimple` objects.
           content:
             application/json:
               schema:
@@ -3726,7 +3726,7 @@ paths:
                 minItems: 0
                 maxItems: 300
                 items:
-                  $ref: "#/components/schemas/MenuItem"
+                  $ref: "#/components/schemas/MenuItemSimple"
           headers:
             Toast-Next-Page-Token:
               description: |
@@ -5744,6 +5744,85 @@ components:
           $ref: "#/components/schemas/Images"
         guestCount:
           $ref: "#/components/schemas/GuestCount"
+    MenuItemSimple:
+      type: object
+      description: |
+        Simplified menu item information returned by config/v2/menuItems endpoints. This schema contains a subset of the full MenuItem properties with simpler structure.
+      properties:
+        guid:
+          description: |
+            A unique identifier for this menu item, assigned by the Toast POS system.
+          type: string
+        entityType:
+          description: |
+            The type of entity. Always "MenuItem" for menu items.
+          type: string
+        externalId:
+          description: |
+            An external identifier for this menu item, if configured.
+          type: string
+          nullable: true
+        inheritUnitOfMeasure:
+          description: |
+            Indicates whether this menu item inherits its unit of measure from a parent entity.
+          type: boolean
+        images:
+          description: |
+            An array of image URLs or references for this menu item.
+          type: array
+          items:
+            type: string
+        inheritOptionGroups:
+          description: |
+            Indicates whether this menu item inherits its option groups from a parent entity.
+          type: boolean
+        visibility:
+          description: |
+            A string that represents where this menu item is visible. Possible values include ALL, POS, KIOSK, TOAST_ONLINE_ORDERING, ORDERING_PARTNERS, GRUBHUB.
+          type: string
+        unitOfMeasure:
+          type: string
+          enum:
+            - NONE
+            - LB
+            - OZ
+            - KG
+            - G
+          description: |
+            The unit of measure used to determine the price of the item. For example, $10.00 per gram.
+        orderableOnline:
+          description: |
+            Indicates whether this menu item can be ordered online. Possible values include "Yes", "No".
+          type: string
+        name:
+          description: |
+            A descriptive name for this menu item, for example, "Caesar Salad" or "Turkey Sandwich".
+          type: string
+        plu:
+          type: string
+          description: |
+            The price lookup (PLU) code for this menu item. The PLU code can include both numbers and letters. This value contains an empty string if a PLU code has not been defined.
+        optionGroups:
+          description: |
+            An array of option group references for this menu item.
+          type: array
+          items:
+            type: object
+        calories:
+          type: integer
+          nullable: true
+          description: |
+            The number of calories in this menu item. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the menu item.
+        sku:
+          type: string
+          nullable: true
+          description: |
+            The stock keeping unit (SKU) identifier for this menu item. The SKU identifier can include both numbers and letters. This value is null if a SKU has not been defined.
+        type:
+          description: |
+            The type classification of this menu item, if configured.
+          type: string
+          nullable: true
     ModifierGroup:
       type: object
       description: |

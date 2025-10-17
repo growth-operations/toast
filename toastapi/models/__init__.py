@@ -64,6 +64,7 @@ from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilita
 from toastapi.models.menu import Menu
 from toastapi.models.menu_group import MenuGroup
 from toastapi.models.menu_item import MenuItem
+from toastapi.models.menu_item_simple import MenuItemSimple
 from toastapi.models.metadata import Metadata
 from toastapi.models.modifier_group import ModifierGroup
 from toastapi.models.modifier_option import ModifierOption

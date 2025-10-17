@@ -63,6 +63,7 @@ docs/Menu.md
 docs/MenuGroup.md
 docs/MenuGroupsApi.md
 docs/MenuItem.md
+docs/MenuItemSimple.md
 docs/MenuItemsApi.md
 docs/MenusV2Api.md
 docs/MenusV3Api.md
@@ -144,6 +145,7 @@ requirements.txt
 setup.cfg
 test-requirements.txt
 test/__init__.py
+test/test_menu_item_simple.py
 toastapi/__init__.py
 toastapi/api/__init__.py
 toastapi/api/alternate_payment_types_api.py
@@ -233,6 +235,7 @@ toastapi/models/marketplace_facilitator_tax_info.py
 toastapi/models/menu.py
 toastapi/models/menu_group.py
 toastapi/models/menu_item.py
+toastapi/models/menu_item_simple.py
 toastapi/models/metadata.py
 toastapi/models/modifier_group.py
 toastapi/models/modifier_option.py

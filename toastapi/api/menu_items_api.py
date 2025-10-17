@@ -19,7 +19,7 @@ from typing_extensions import Annotated
 from pydantic import Field, StrictStr
 from typing import List, Optional
 from typing_extensions import Annotated
-from toastapi.models.menu_item import MenuItem
+from toastapi.models.menu_item_simple import MenuItemSimple
 
 from toastapi.api_client import ApiClient, RequestSerialized
 from toastapi.api_response import ApiResponse
@@ -56,10 +56,10 @@ class MenuItemsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> MenuItem:
+    ) -> MenuItemSimple:
         """Get a menu item 
 
-        Returns a `MenuItem` object containing information about a menu item configured for a restaurant. 
+        Returns a `MenuItemSimple` object containing simplified information about a menu item configured for a restaurant. 
 
         :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the menu item is configured for.  (required)
         :type toast_restaurant_external_id: str
@@ -97,7 +97,7 @@ class MenuItemsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "MenuItem",
+            '200': "MenuItemSimple",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -127,10 +127,10 @@ class MenuItemsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[MenuItem]:
+    ) -> ApiResponse[MenuItemSimple]:
         """Get a menu item 
 
-        Returns a `MenuItem` object containing information about a menu item configured for a restaurant. 
+        Returns a `MenuItemSimple` object containing simplified information about a menu item configured for a restaurant. 
 
         :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the menu item is configured for.  (required)
         :type toast_restaurant_external_id: str
@@ -168,7 +168,7 @@ class MenuItemsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "MenuItem",
+            '200': "MenuItemSimple",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -201,7 +201,7 @@ class MenuItemsApi:
     ) -> RESTResponseType:
         """Get a menu item 
 
-        Returns a `MenuItem` object containing information about a menu item configured for a restaurant. 
+        Returns a `MenuItemSimple` object containing simplified information about a menu item configured for a restaurant. 
 
         :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the menu item is configured for.  (required)
         :type toast_restaurant_external_id: str
@@ -239,7 +239,7 @@ class MenuItemsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "MenuItem",
+            '200': "MenuItemSimple",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -333,10 +333,10 @@ class MenuItemsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[MenuItem]:
+    ) -> List[MenuItemSimple]:
         """Get menu items 
 
-        Returns an array of `MenuItem` objects containing information about menu items configured for a restaurant. 
+        Returns an array of `MenuItemSimple` objects containing simplified information about menu items configured for a restaurant. 
 
         :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
         :type toast_restaurant_external_id: str
@@ -377,7 +377,7 @@ class MenuItemsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[MenuItem]",
+            '200': "List[MenuItemSimple]",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -408,10 +408,10 @@ class MenuItemsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[MenuItem]]:
+    ) -> ApiResponse[List[MenuItemSimple]]:
         """Get menu items 
 
-        Returns an array of `MenuItem` objects containing information about menu items configured for a restaurant. 
+        Returns an array of `MenuItemSimple` objects containing simplified information about menu items configured for a restaurant. 
 
         :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
         :type toast_restaurant_external_id: str
@@ -452,7 +452,7 @@ class MenuItemsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[MenuItem]",
+            '200': "List[MenuItemSimple]",
         }
         response_data = await self.api_client.call_api(
             *_param,
@@ -486,7 +486,7 @@ class MenuItemsApi:
     ) -> RESTResponseType:
         """Get menu items 
 
-        Returns an array of `MenuItem` objects containing information about menu items configured for a restaurant. 
+        Returns an array of `MenuItemSimple` objects containing simplified information about menu items configured for a restaurant. 
 
         :param toast_restaurant_external_id: The Toast POS GUID of the restaurant that the configuration applies to.  (required)
         :type toast_restaurant_external_id: str
@@ -527,7 +527,7 @@ class MenuItemsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[MenuItem]",
+            '200': "List[MenuItemSimple]",
         }
         response_data = await self.api_client.call_api(
             *_param,

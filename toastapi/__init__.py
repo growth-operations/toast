@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.43"
+__version__ = "1.0.44"
 
 # Define package exports
 __all__ = [
@@ -109,6 +109,7 @@ __all__ = [
     "Menu",
     "MenuGroup",
     "MenuItem",
+    "MenuItemSimple",
     "Metadata",
     "ModifierGroup",
     "ModifierOption",
@@ -261,6 +262,7 @@ from toastapi.models.marketplace_facilitator_tax_info import MarketplaceFacilita
 from toastapi.models.menu import Menu as Menu
 from toastapi.models.menu_group import MenuGroup as MenuGroup
 from toastapi.models.menu_item import MenuItem as MenuItem
+from toastapi.models.menu_item_simple import MenuItemSimple as MenuItemSimple
 from toastapi.models.metadata import Metadata as Metadata
 from toastapi.models.modifier_group import ModifierGroup as ModifierGroup
 from toastapi.models.modifier_option import ModifierOption as ModifierOption

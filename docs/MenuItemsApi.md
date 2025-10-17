@@ -9,11 +9,11 @@ Method | HTTP request | Description
 
 
 # **get_menu_item_by_id**
-> MenuItem get_menu_item_by_id(toast_restaurant_external_id, guid)
+> MenuItemSimple get_menu_item_by_id(toast_restaurant_external_id, guid)
 
 Get a menu item 
 
-Returns a `MenuItem` object containing information about a menu item configured for a restaurant.
+Returns a `MenuItemSimple` object containing simplified information about a menu item configured for a restaurant.
 
 
 ### Example
@@ -22,7 +22,7 @@ Returns a `MenuItem` object containing information about a menu item configured 
 
 ```python
 import toastapi
-from toastapi.models.menu_item import MenuItem
+from toastapi.models.menu_item_simple import MenuItemSimple
 from toastapi.rest import ApiException
 from pprint import pprint
 
@@ -67,7 +67,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**MenuItem**](MenuItem.md)
+[**MenuItemSimple**](MenuItemSimple.md)
 
 ### Authorization
 
@@ -82,16 +82,16 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Returns a &#x60;MenuItem&#x60; object. |  -  |
+**200** | Returns a &#x60;MenuItemSimple&#x60; object. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_menu_items**
-> List[MenuItem] list_menu_items(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
+> List[MenuItemSimple] list_menu_items(toast_restaurant_external_id, page_token=page_token, last_modified=last_modified)
 
 Get menu items 
 
-Returns an array of `MenuItem` objects containing information about menu items configured for a restaurant.
+Returns an array of `MenuItemSimple` objects containing simplified information about menu items configured for a restaurant.
 
 
 ### Example
@@ -100,7 +100,7 @@ Returns an array of `MenuItem` objects containing information about menu items c
 
 ```python
 import toastapi
-from toastapi.models.menu_item import MenuItem
+from toastapi.models.menu_item_simple import MenuItemSimple
 from toastapi.rest import ApiException
 from pprint import pprint
 
@@ -147,7 +147,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List[MenuItem]**](MenuItem.md)
+[**List[MenuItemSimple]**](MenuItemSimple.md)
 
 ### Authorization
 
@@ -162,7 +162,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Returns an array of &#x60;MenuItem&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
+**200** | Returns an array of &#x60;MenuItemSimple&#x60; objects. |  * Toast-Next-Page-Token - A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the \&quot;pageToken\&quot; parameter of the next request to the endpoint. For more information, see https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
