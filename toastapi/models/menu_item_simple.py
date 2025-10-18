@@ -19,6 +19,8 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from toastapi.models.menu_item_simple_images_inner import MenuItemSimpleImagesInner
+from toastapi.models.menu_item_simple_option_groups_inner import MenuItemSimpleOptionGroupsInner
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,14 +32,14 @@ class MenuItemSimple(BaseModel):
     entity_type: Optional[StrictStr] = Field(default=None, description="The type of entity. Always \"MenuItem\" for menu items. ", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="An external identifier for this menu item, if configured. ", alias="externalId")
     inherit_unit_of_measure: Optional[StrictBool] = Field(default=None, description="Indicates whether this menu item inherits its unit of measure from a parent entity. ", alias="inheritUnitOfMeasure")
-    images: Optional[List[StrictStr]] = Field(default=None, description="An array of image URLs or references for this menu item. ")
+    images: Optional[List[MenuItemSimpleImagesInner]] = Field(default=None, description="An array of image objects for this menu item. ")
     inherit_option_groups: Optional[StrictBool] = Field(default=None, description="Indicates whether this menu item inherits its option groups from a parent entity. ", alias="inheritOptionGroups")
     visibility: Optional[StrictStr] = Field(default=None, description="A string that represents where this menu item is visible. Possible values include ALL, POS, KIOSK, TOAST_ONLINE_ORDERING, ORDERING_PARTNERS, GRUBHUB. ")
     unit_of_measure: Optional[StrictStr] = Field(default=None, description="The unit of measure used to determine the price of the item. For example, $10.00 per gram. ", alias="unitOfMeasure")
     orderable_online: Optional[StrictStr] = Field(default=None, description="Indicates whether this menu item can be ordered online. Possible values include \"Yes\", \"No\". ", alias="orderableOnline")
     name: Optional[StrictStr] = Field(default=None, description="A descriptive name for this menu item, for example, \"Caesar Salad\" or \"Turkey Sandwich\". ")
     plu: Optional[StrictStr] = Field(default=None, description="The price lookup (PLU) code for this menu item. The PLU code can include both numbers and letters. This value contains an empty string if a PLU code has not been defined. ")
-    option_groups: Optional[List[Dict[str, Any]]] = Field(default=None, description="An array of option group references for this menu item. ", alias="optionGroups")
+    option_groups: Optional[List[MenuItemSimpleOptionGroupsInner]] = Field(default=None, description="An array of option group references for this menu item. ", alias="optionGroups")
     calories: Optional[StrictInt] = Field(default=None, description="The number of calories in this menu item. The calories value can be any positive or negative integer, or zero. This value is null if a calories amount has not been configured for the menu item. ")
     sku: Optional[StrictStr] = Field(default=None, description="The stock keeping unit (SKU) identifier for this menu item. The SKU identifier can include both numbers and letters. This value is null if a SKU has not been defined. ")
     type: Optional[StrictStr] = Field(default=None, description="The type classification of this menu item, if configured. ")
@@ -92,6 +94,20 @@ class MenuItemSimple(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in images (list)
+        _items = []
+        if self.images:
+            for _item_images in self.images:
+                if _item_images:
+                    _items.append(_item_images.to_dict())
+            _dict['images'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in option_groups (list)
+        _items = []
+        if self.option_groups:
+            for _item_option_groups in self.option_groups:
+                if _item_option_groups:
+                    _items.append(_item_option_groups.to_dict())
+            _dict['optionGroups'] = _items
         # set to None if external_id (nullable) is None
         # and model_fields_set contains the field
         if self.external_id is None and "external_id" in self.model_fields_set:
@@ -128,14 +144,14 @@ class MenuItemSimple(BaseModel):
             "entityType": obj.get("entityType"),
             "externalId": obj.get("externalId"),
             "inheritUnitOfMeasure": obj.get("inheritUnitOfMeasure"),
-            "images": obj.get("images"),
+            "images": [MenuItemSimpleImagesInner.from_dict(_item) for _item in obj["images"]] if obj.get("images") is not None else None,
             "inheritOptionGroups": obj.get("inheritOptionGroups"),
             "visibility": obj.get("visibility"),
             "unitOfMeasure": obj.get("unitOfMeasure"),
             "orderableOnline": obj.get("orderableOnline"),
             "name": obj.get("name"),
             "plu": obj.get("plu"),
-            "optionGroups": obj.get("optionGroups"),
+            "optionGroups": [MenuItemSimpleOptionGroupsInner.from_dict(_item) for _item in obj["optionGroups"]] if obj.get("optionGroups") is not None else None,
             "calories": obj.get("calories"),
             "sku": obj.get("sku"),
             "type": obj.get("type")
