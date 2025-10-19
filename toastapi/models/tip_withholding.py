@@ -26,8 +26,8 @@ class TipWithholding(BaseModel):
     """
     Information about the way tip withholding is configured for a restaurant. Tip withholding is a percentage of employees' credit card tips and service charges that are paid to employees as a gratuity that is kept by a restaurant to cover credit card processing fees. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     enabled: Optional[StrictBool] = Field(default=None, description="Indicates whether a restaurant location withholds a percent of employees' credit card tips.  * `true` - the location keeps a percent of employees' credit card tips.  * `false` - the location does not keep a percent of employees' credit card tips. ")
     percentage: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The decimal percentage of credit card tips withheld. If tip withholding is not `enabled`, tips will not be withheld in the Toast platform regardless of this value. ")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "enabled", "percentage"]

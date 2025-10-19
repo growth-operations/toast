@@ -6,8 +6,8 @@ A tax rate that is applied to an item or service charge.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. | [optional] 
 **tax_rate** | [**ToastReference**](ToastReference.md) |  | 
 **name** | **str** | The name of the tax rate. | [optional] 
 **rate** | **float** | The tax rate, which can be a fixed amount, a percentage, or null. | [optional] 

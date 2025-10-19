@@ -35,8 +35,8 @@ class Order(BaseModel):
     """
     A Toast platform order is composed of one or more checks. Each check has  one or more menu item selections. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     opened_date: Optional[datetime] = Field(default=None, description="The business date of the order.  For dine-in and as soon as possible (ASAP) orders, `openedDate` should match `createdDate`.  For scheduled orders, `openedDate` should match `promisedDate`.  If you do not provide a value for  `openedDate` value when you `POST` a new order, the business date of the order is set to the restaurant business day that corresponds to the current date and time.  The business date of an order is affected by the business date cutoff time for a restaurant, which is available from the restaurants API in the `closeoutHour` property. ", alias="openedDate")
     modified_date: Optional[datetime] = Field(default=None, description="The most recent date that the order, or a check or menu item selection in the order, was modified.", alias="modifiedDate")

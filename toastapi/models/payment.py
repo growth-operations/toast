@@ -31,8 +31,8 @@ class Payment(BaseModel):
     """
     Defines a payment.
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     paid_date: Optional[datetime] = Field(default=None, description="The date on which the payment was made.", alias="paidDate")
     paid_business_date: Optional[StrictInt] = Field(default=None, description="The business date (yyyyMMdd) on which this payment was first applied. Response only.", alias="paidBusinessDate")

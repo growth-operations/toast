@@ -26,8 +26,8 @@ class GiftCardInfo(BaseModel):
     """
     Reserved for future use.
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     last4_card_digits: StrictStr = Field(description="The last 4 digits of the gift card that was used.", alias="last4CardDigits")
     first5_card_digits: Optional[StrictStr] = Field(default=None, description="The first 5 digits of the gift card that was used. Response only.", alias="first5CardDigits")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "last4CardDigits", "first5CardDigits"]

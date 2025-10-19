@@ -29,8 +29,8 @@ class AppliedServiceCharge(BaseModel):
     """
     A service charge that is added to a check. A service charge can represent an upcharge such as a gratuity or a delivery fee.  Whether the upcharge is taxable is defined in the restaurant-configured `serviceCharge`.  The fields on the `AppliedServiceCharge` are calculated based on the referenced `ServiceCharge` configuration. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     charge_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The final applied amount excluding tax. Required if `chargeType` is `OPEN`.", alias="chargeAmount")
     service_charge: ExternalReference = Field(alias="serviceCharge")

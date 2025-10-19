@@ -27,8 +27,8 @@ class ServiceArea(BaseModel):
     """
     ServiceArea
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     name: Optional[StrictStr] = Field(default=None, description="The name of this service area.")
     revenue_center: Optional[ExternalReference] = Field(default=None, alias="revenueCenter")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "name", "revenueCenter"]

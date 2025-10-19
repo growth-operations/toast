@@ -6,8 +6,8 @@ Reserved for future use.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **last4_card_digits** | **str** | The last 4 digits of the gift card that was used. | 
 **first5_card_digits** | **str** | The first 5 digits of the gift card that was used. Response only. | [optional] 
 

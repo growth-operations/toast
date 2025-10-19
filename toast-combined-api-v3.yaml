@@ -8040,9 +8040,6 @@ components:
     ToastReference:
       type: object
       description: A wrapper object with fields that allow reference to a Toast entity by Toast GUID.
-      required:
-        - guid
-        - entityType
       properties:
         guid:
           description: The GUID maintained by the Toast platform.

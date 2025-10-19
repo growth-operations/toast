@@ -27,8 +27,8 @@ class CurbsidePickupInfo(BaseModel):
     """
     Information that the restaurant can use to identify a guest when they arrive outside the restaurant to pick up their order. `transportDescription` is a required field. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     transport_color: Optional[Annotated[str, Field(strict=True, max_length=20)]] = Field(default=None, description="The color of the guest's vehicle if they will arrive at the restaurant in a vehicle to pick up their order. ", alias="transportColor")
     transport_description: Optional[Annotated[str, Field(strict=True, max_length=100)]] = Field(default=None, description="Information about how the guest will arrive at the restaurant to pick up their order.  For example, the make and model of the vehicle the guest will arrive in. ", alias="transportDescription")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "transportColor", "transportDescription"]

@@ -6,8 +6,8 @@ A Toast platform order is composed of one or more checks. Each check has  one or
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
 **opened_date** | **datetime** | The business date of the order.  For dine-in and as soon as possible (ASAP) orders, &#x60;openedDate&#x60; should match &#x60;createdDate&#x60;.  For scheduled orders, &#x60;openedDate&#x60; should match &#x60;promisedDate&#x60;.  If you do not provide a value for  &#x60;openedDate&#x60; value when you &#x60;POST&#x60; a new order, the business date of the order is set to the restaurant business day that corresponds to the current date and time.  The business date of an order is affected by the business date cutoff time for a restaurant, which is available from the restaurants API in the &#x60;closeoutHour&#x60; property.  | [optional] 
 **modified_date** | **datetime** | The most recent date that the order, or a check or menu item selection in the order, was modified. | [optional] 

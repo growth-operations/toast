@@ -26,8 +26,8 @@ class ConfigReference(BaseModel):
     """
     A wrapper object containing identifier values for Toast platform entities. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     multi_location_id: Optional[StrictStr] = Field(default=None, description="A consistent identifier for Toast platform entities. ", alias="multiLocationId")
     external_id: Optional[StrictStr] = Field(default=None, description="An external identifier that is prefixed by a naming authority. ", alias="externalId")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "multiLocationId", "externalId"]

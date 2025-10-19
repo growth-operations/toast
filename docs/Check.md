@@ -6,8 +6,8 @@ Represents a single check within an order.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
 **created_date** | **datetime** | The date and time that the Toast platform received the check. | [optional] 
 **opened_date** | **datetime** | The date on which this check was opened. If not specified, it is set to the current system time. | [optional] 

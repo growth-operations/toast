@@ -6,8 +6,8 @@ A service charge that is added to a check. A service charge can represent an upc
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
 **charge_amount** | **float** | The final applied amount excluding tax. Required if &#x60;chargeType&#x60; is &#x60;OPEN&#x60;. | [optional] 
 **service_charge** | [**ExternalReference**](ExternalReference.md) |  | 

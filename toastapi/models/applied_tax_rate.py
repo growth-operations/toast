@@ -27,8 +27,8 @@ class AppliedTaxRate(BaseModel):
     """
     A tax rate that is applied to an item or service charge.
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is.", alias="entityType")
     tax_rate: ToastReference = Field(alias="taxRate")
     name: Optional[StrictStr] = Field(default=None, description="The name of the tax rate.")
     rate: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The tax rate, which can be a fixed amount, a percentage, or null.")

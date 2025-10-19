@@ -34,8 +34,8 @@ class Selection(BaseModel):
     """
     A `Selection` object can represent either a primary item (for example, `Check.selections`) or a modifier (`Selection.modifiers`) selection. Quantity defaults to `1`.  For a `POST` operation, all selections must have valid `item` and `itemGroup` fields. The `item` and `itemGroup` values can be `null` for `GET` requests. For example, they are `null` for gift cards and on special requests.  To specify a modifier selection, add it to the `modifiers` list of another selection. Each modifier selection must have its `optionGroup` field set correctly, because a `MenuItem` can be included in multiple `MenuOptionGroups`, potentially with different prices or sizing. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     item: Optional[ConfigReference] = None
     item_group: Optional[ConfigReference] = Field(default=None, alias="itemGroup")

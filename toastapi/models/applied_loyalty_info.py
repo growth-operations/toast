@@ -26,8 +26,8 @@ class AppliedLoyaltyInfo(BaseModel):
     """
     Information about the customer loyalty program account associated with a check.
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     loyalty_identifier: Optional[StrictStr] = Field(default=None, description="An identifier for the loyalty program account. For `POST` orders, this identifier is transmitted to the loyalty program service provider to associate the check with the loyalty account.", alias="loyaltyIdentifier")
     masked_loyalty_identifier: Optional[StrictStr] = Field(default=None, description="A representation of the identifier of the loyalty program account that can be displayed securely. For example: `************1234`. The Toast POS displays this string to restaurant employees and guests.  You can optionally include this value when you `POST` an order. It is available in response data when you `GET` the order.  If you do not provide a `maskedLoyaltyIdentifier` when you `POST` an order, this value is `null` in response data.  The Toast POS app displays a masked representation of the `loyaltyIdentifier`. All characters except the last four are hidden. ", alias="maskedLoyaltyIdentifier")
     vendor: Optional[StrictStr] = Field(default=None, description="The specific loyalty program service provider that supports the loyalty account.")

@@ -6,8 +6,8 @@ A wrapper object containing identifier values for Toast platform entities.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **multi_location_id** | **str** | A consistent identifier for Toast platform entities.  | [optional] 
 **external_id** | **str** | An external identifier that is prefixed by a naming authority.  | [optional] 
 

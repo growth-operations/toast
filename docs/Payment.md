@@ -6,8 +6,8 @@ Defines a payment.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **external_id** | **str** | External identifier string that is prefixed by the naming authority. | [optional] 
 **paid_date** | **datetime** | The date on which the payment was made. | [optional] 
 **paid_business_date** | **int** | The business date (yyyyMMdd) on which this payment was first applied. Response only. | [optional] 

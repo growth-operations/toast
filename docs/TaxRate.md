@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **name** | **str** | The name of this tax rate. | [optional] 
 **is_default** | **bool** | True if this tax rate is the default tax rate. | [optional] 
 **rate** | **float** | The tax rate value.  | [optional] 

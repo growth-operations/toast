@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **name** | **str** | The human-readable name of the discount. | [optional] 
 **active** | **bool** | Indicates whether the discount is available and can be applied by restaurant employees.  | [optional] 
 **type** | **str** | * &#x60;PERCENT&#x60; - the discount reduces the price by a preconfigured percent. * &#x60;FIXED&#x60; - the discount reduces the price by a preconfigured currency amount. * &#x60;OPEN_PERCENT&#x60; - the discount reduces the price by a percent entered by a restaurant employee. * &#x60;OPEN_FIXED&#x60; - the discount reduces the price by a currency amount entered by a restaurant employee. * &#x60;BOGO&#x60; - a buy one get one (BOGO) discount. * &#x60;FIXED_TOTAL&#x60; - a combo discount that reduces the price of all eligible items to a preconfigured currency amount.  | [optional] 

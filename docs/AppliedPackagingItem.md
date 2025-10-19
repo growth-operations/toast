@@ -6,8 +6,8 @@ Indicates the guest preference for an individual packaging item in this order.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **item_config_id** | **str** | The identifier GUID of the packaging preference option.  | 
 **inclusion** | **str** | The packaging preference choice that the guest selected in your ordering interface.  | 
 **item_types** | **List[str]** | The packaging item types relevant for this packaging item as configured by the restaurant in Toast Web. Response only.  | [optional] 

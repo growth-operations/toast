@@ -28,8 +28,8 @@ class AppliedPackagingInfo(BaseModel):
     """
     Information describing the guest's packaging preferences for this order, for example utensils, napkins, condiments.  For more information, see <a href=\"https://doc.toasttab.com/doc/devguide/apiOrdersPackagingPreferences.html\">Packaging preferences</a> 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     applied_packaging_items: Optional[Annotated[List[AppliedPackagingItem], Field(min_length=1)]] = Field(default=None, alias="appliedPackagingItems")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "appliedPackagingItems"]
 

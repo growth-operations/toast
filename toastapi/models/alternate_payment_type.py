@@ -26,8 +26,8 @@ class AlternatePaymentType(BaseModel):
     """
     AlternatePaymentType
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     name: Optional[StrictStr] = Field(default=None, description="The name of the alternate payment type.")
     __properties: ClassVar[List[str]] = ["guid", "entityType", "externalId", "name"]

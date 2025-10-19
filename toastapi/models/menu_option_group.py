@@ -28,8 +28,8 @@ class MenuOptionGroup(BaseModel):
     """
     Information about a modifier group (option group) configured for a restaurant. For example, salad dressings might be a modifier group for a salad menu item. 
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     name: Optional[StrictStr] = Field(default=None, description="The name of the menu option group as it appears in the Toast POS. ")
     options: Optional[Annotated[List[ExternalReference], Field(min_length=0)]] = Field(default=None, description="An array of ExternalReference objects containing the identifiers of the menu items (modifiers) in the menu option group. ")

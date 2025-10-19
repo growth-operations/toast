@@ -36,8 +36,8 @@ class Check(BaseModel):
     """
     Represents a single check within an order.
     """ # noqa: E501
-    guid: StrictStr = Field(description="The GUID maintained by the Toast platform.")
-    entity_type: StrictStr = Field(description="The type of object this is. Response only.", alias="entityType")
+    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
+    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
     external_id: Optional[StrictStr] = Field(default=None, description="External identifier string that is prefixed by the naming authority.", alias="externalId")
     created_date: Optional[datetime] = Field(default=None, description="The date and time that the Toast platform received the check.", alias="createdDate")
     opened_date: Optional[datetime] = Field(default=None, description="The date on which this check was opened. If not specified, it is set to the current system time.", alias="openedDate")

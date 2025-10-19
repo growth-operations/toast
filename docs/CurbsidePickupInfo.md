@@ -6,8 +6,8 @@ Information that the restaurant can use to identify a guest when they arrive out
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**guid** | **str** | The GUID maintained by the Toast platform. | 
-**entity_type** | **str** | The type of object this is. Response only. | 
+**guid** | **str** | The GUID maintained by the Toast platform. | [optional] 
+**entity_type** | **str** | The type of object this is. Response only. | [optional] 
 **transport_color** | **str** | The color of the guest&#39;s vehicle if they will arrive at the restaurant in a vehicle to pick up their order.  | [optional] 
 **transport_description** | **str** | Information about how the guest will arrive at the restaurant to pick up their order.  For example, the make and model of the vehicle the guest will arrive in.  | [optional] 
 
