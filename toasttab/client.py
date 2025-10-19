@@ -23,6 +23,7 @@ from toastapi.api import (
     MenuItemsApi,
     MenusV2Api,
     MenusV3Api,
+    ModifierGroupsApi,
     NoSaleReasonsApi,
     OrdersApi,
     PaymentsApi,
@@ -177,6 +178,9 @@ class Toast:
         self.menus_v3: MenusV3Api = self._create_retry_wrapper(MenusV3Api)
         self.menu_groups: MenuGroupsApi = self._create_retry_wrapper(MenuGroupsApi)
         self.menu_items: MenuItemsApi = self._create_retry_wrapper(MenuItemsApi)
+        self.modifier_groups: ModifierGroupsApi = self._create_retry_wrapper(
+            ModifierGroupsApi
+        )
         self.printers: PrintersApi = self._create_retry_wrapper(PrintersApi)
         self.tables: TablesApi = self._create_retry_wrapper(TablesApi)
         self.no_sale_reasons: NoSaleReasonsApi = self._create_retry_wrapper(

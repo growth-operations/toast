@@ -149,8 +149,6 @@ requirements.txt
 setup.cfg
 test-requirements.txt
 test/__init__.py
-test/test_menu_option_group.py
-test/test_modifier_groups_api.py
 toastapi/__init__.py
 toastapi/api/__init__.py
 toastapi/api/alternate_payment_types_api.py
