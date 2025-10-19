@@ -3738,6 +3738,94 @@ paths:
       security:
         - oauth2:
             - config:read
+  /config/v2/menuOptionGroups/{guid}:
+    get:
+      tags:
+        - Modifier Groups
+      operationId: get_menu_option_group_by_id
+      summary: |
+        Get a modifier group
+      description: |
+        Returns a `MenuOptionGroup` object containing information about a modifier group. For example, salad dressings might be a modifier group for a salad menu item.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: guid
+          description: The Toast POS GUID of the modifier group.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a `MenuOptionGroup` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MenuOptionGroup"
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/menuOptionGroups:
+    get:
+      tags:
+        - Modifier Groups
+      operationId: list_menu_option_groups
+      summary: |
+        Get modifier groups
+      description: |
+        Returns an array of `MenuOptionGroup` objects containing information about modifier groups. For example, salad dressings might be a modifier group for a salad menu item.
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the endpoint will return in its response data. You can use this parameter to retrieve one page of response data. You get the value that you supply in the `pageToken` parameter from the `Toast-Next-Page-Token` header field value of a previous request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after a specific date and time. For example: `2024-06-20T00:00:00.000+0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "2024-06-20T00:00:00.000+0000"
+      responses:
+        "200":
+          description: Returns an array of `MenuOptionGroup` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/MenuOptionGroup"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects that the endpoint will return. You can use this value to retrieve that page of response data. To return the next page of objects you supply this value in the `pageToken` parameter of the next request to the endpoint. For more information, see <a href="https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html">Paginating response data</a>.
+
+                The endpoint does not return the `Toast-Next-Page-Token` field if there is no following page of response data objects. For example, the endpoint will not return a `Toast-Next-Page-Token` header field if all the data objects fit in one response or if you have reached the last page of response objects.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
   /config/v2/printers/{guid}:
     get:
       tags:
@@ -5941,6 +6029,35 @@ components:
           minItems: 0
           items:
             type: integer
+    MenuOptionGroup:
+      type: object
+      description: |
+        Information about a modifier group (option group) configured for a restaurant. For example, salad dressings might be a modifier group for a salad menu item.
+      allOf:
+        - $ref: "#/components/schemas/ExternalReference"
+        - type: object
+          properties:
+            name:
+              type: string
+              description: |
+                The name of the menu option group as it appears in the Toast POS.
+            options:
+              type: array
+              description: |
+                An array of ExternalReference objects containing the identifiers of the menu items (modifiers) in the menu option group.
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/ExternalReference"
+            minSelections:
+              type: number
+              format: integer
+              description: |
+                The minimum number of selections that must be made from this option group.
+            maxSelections:
+              type: number
+              format: integer
+              description: |
+                The maximum number of selections that can be made from this option group.
     ModifierOption:
       type: object
       description: |

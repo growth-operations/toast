@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.45"
+__version__ = "1.0.46"
 
 # Define package exports
 __all__ = [
@@ -31,6 +31,7 @@ __all__ = [
     "MenuItemsApi",
     "MenusV2Api",
     "MenusV3Api",
+    "ModifierGroupsApi",
     "NoSaleReasonsApi",
     "OrdersApi",
     "PaymentsApi",
@@ -112,6 +113,7 @@ __all__ = [
     "MenuItemSimple",
     "MenuItemSimpleImagesInner",
     "MenuItemSimpleOptionGroupsInner",
+    "MenuOptionGroup",
     "Metadata",
     "ModifierGroup",
     "ModifierOption",
@@ -182,6 +184,7 @@ from toastapi.api.menu_groups_api import MenuGroupsApi as MenuGroupsApi
 from toastapi.api.menu_items_api import MenuItemsApi as MenuItemsApi
 from toastapi.api.menus_v2_api import MenusV2Api as MenusV2Api
 from toastapi.api.menus_v3_api import MenusV3Api as MenusV3Api
+from toastapi.api.modifier_groups_api import ModifierGroupsApi as ModifierGroupsApi
 from toastapi.api.no_sale_reasons_api import NoSaleReasonsApi as NoSaleReasonsApi
 from toastapi.api.orders_api import OrdersApi as OrdersApi
 from toastapi.api.payments_api import PaymentsApi as PaymentsApi
@@ -267,6 +270,7 @@ from toastapi.models.menu_item import MenuItem as MenuItem
 from toastapi.models.menu_item_simple import MenuItemSimple as MenuItemSimple
 from toastapi.models.menu_item_simple_images_inner import MenuItemSimpleImagesInner as MenuItemSimpleImagesInner
 from toastapi.models.menu_item_simple_option_groups_inner import MenuItemSimpleOptionGroupsInner as MenuItemSimpleOptionGroupsInner
+from toastapi.models.menu_option_group import MenuOptionGroup as MenuOptionGroup
 from toastapi.models.metadata import Metadata as Metadata
 from toastapi.models.modifier_group import ModifierGroup as ModifierGroup
 from toastapi.models.modifier_option import ModifierOption as ModifierOption

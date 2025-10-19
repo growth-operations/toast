@@ -67,6 +67,7 @@ from toastapi.models.menu_item import MenuItem
 from toastapi.models.menu_item_simple import MenuItemSimple
 from toastapi.models.menu_item_simple_images_inner import MenuItemSimpleImagesInner
 from toastapi.models.menu_item_simple_option_groups_inner import MenuItemSimpleOptionGroupsInner
+from toastapi.models.menu_option_group import MenuOptionGroup
 from toastapi.models.metadata import Metadata
 from toastapi.models.modifier_group import ModifierGroup
 from toastapi.models.modifier_option import ModifierOption

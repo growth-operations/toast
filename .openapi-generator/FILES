@@ -67,10 +67,12 @@ docs/MenuItemSimple.md
 docs/MenuItemSimpleImagesInner.md
 docs/MenuItemSimpleOptionGroupsInner.md
 docs/MenuItemsApi.md
+docs/MenuOptionGroup.md
 docs/MenusV2Api.md
 docs/MenusV3Api.md
 docs/Metadata.md
 docs/ModifierGroup.md
+docs/ModifierGroupsApi.md
 docs/ModifierOption.md
 docs/ModifierOptionTaxInfo.md
 docs/NoSaleReason.md
@@ -147,8 +149,8 @@ requirements.txt
 setup.cfg
 test-requirements.txt
 test/__init__.py
-test/test_menu_item_simple_images_inner.py
-test/test_menu_item_simple_option_groups_inner.py
+test/test_menu_option_group.py
+test/test_modifier_groups_api.py
 toastapi/__init__.py
 toastapi/api/__init__.py
 toastapi/api/alternate_payment_types_api.py
@@ -164,6 +166,7 @@ toastapi/api/menu_groups_api.py
 toastapi/api/menu_items_api.py
 toastapi/api/menus_v2_api.py
 toastapi/api/menus_v3_api.py
+toastapi/api/modifier_groups_api.py
 toastapi/api/no_sale_reasons_api.py
 toastapi/api/orders_api.py
 toastapi/api/payments_api.py
@@ -241,6 +244,7 @@ toastapi/models/menu_item.py
 toastapi/models/menu_item_simple.py
 toastapi/models/menu_item_simple_images_inner.py
 toastapi/models/menu_item_simple_option_groups_inner.py
+toastapi/models/menu_option_group.py
 toastapi/models/metadata.py
 toastapi/models/modifier_group.py
 toastapi/models/modifier_option.py
