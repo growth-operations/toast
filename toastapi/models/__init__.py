@@ -107,6 +107,7 @@ from toastapi.models.size_sequence_pricing_rule import SizeSequencePricingRule
 from toastapi.models.table import Table
 from toastapi.models.takeout_payment_options import TakeoutPaymentOptions
 from toastapi.models.tax_rate import TaxRate
+from toastapi.models.tax_table_row import TaxTableRow
 from toastapi.models.time_entry import TimeEntry
 from toastapi.models.time_entry_break import TimeEntryBreak
 from toastapi.models.time_range import TimeRange

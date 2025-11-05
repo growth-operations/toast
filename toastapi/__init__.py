@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.48"
+__version__ = "1.0.49"
 
 # Define package exports
 __all__ = [
@@ -153,6 +153,7 @@ __all__ = [
     "Table",
     "TakeoutPaymentOptions",
     "TaxRate",
+    "TaxTableRow",
     "TimeEntry",
     "TimeEntryBreak",
     "TimeRange",
@@ -310,6 +311,7 @@ from toastapi.models.size_sequence_pricing_rule import SizeSequencePricingRule a
 from toastapi.models.table import Table as Table
 from toastapi.models.takeout_payment_options import TakeoutPaymentOptions as TakeoutPaymentOptions
 from toastapi.models.tax_rate import TaxRate as TaxRate
+from toastapi.models.tax_table_row import TaxTableRow as TaxTableRow
 from toastapi.models.time_entry import TimeEntry as TimeEntry
 from toastapi.models.time_entry_break import TimeEntryBreak as TimeEntryBreak
 from toastapi.models.time_range import TimeRange as TimeRange

@@ -8991,6 +8991,55 @@ components:
               format: double
               description: |
                 The tax rate value.
+            roundingType:
+              type: string
+              description: |
+                The method used to round fractional currency amounts to non-fractional currency amounts.
+
+                Only applies to PERCENT tax rates. For other tax rate types, roundingType is null.
+
+                Valid values:
+                HALF_UP - Round values up or down to the nearest number. If the last digit is 5, which is halfway, then always round up to the nearest number.
+                HALF_EVEN - Round values up or down to the nearest number. If the last digit is 5, which is halfway, then round up or down to the nearest even number.
+                ALWAYS_UP - Always round up to the next number.
+                ALWAYS_DOWN - Always round down to the next number.
+              enum:
+                - HALF_UP
+                - HALF_EVEN
+                - ALWAYS_UP
+                - ALWAYS_DOWN
+            taxTable:
+              type: array
+              description: An array of TaxTableRow objects that define a set of tax amounts that apply to specific sale amount ranges.
+              items:
+                $ref: "#/components/schemas/TaxTableRow"
+            type:
+              type: string
+              description: The type of tax rate.
+              enum:
+                - PERCENT
+                - FIXED
+                - TABLE
+                - NONE
+                - EXTERNAL
+    TaxTableRow:
+      type: object
+      properties:
+        end:
+          type: number
+          format: double
+          description: The end of a sale amount range that corresponds to a specific tax amount in a tax table.
+        pattern:
+          type: string
+          description: Specifies whether the price range is part of an incomplete set of ranges that establish an algorithm that you can use to calculate tax amounts.
+        start:
+          type: number
+          format: double
+          description: The start of a sale amount range that corresponds to a specific tax amount in a tax table.
+        tax:
+          type: number
+          format: double
+          description: The tax amount that applies to the sale amount range.
 
     TipWithholding:
       type: object

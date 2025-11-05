@@ -126,6 +126,7 @@ docs/TablesApi.md
 docs/TakeoutPaymentOptions.md
 docs/TaxRate.md
 docs/TaxRatesApi.md
+docs/TaxTableRow.md
 docs/TimeEntriesApi.md
 docs/TimeEntry.md
 docs/TimeEntryBreak.md
@@ -282,6 +283,7 @@ toastapi/models/size_sequence_pricing_rule.py
 toastapi/models/table.py
 toastapi/models/takeout_payment_options.py
 toastapi/models/tax_rate.py
+toastapi/models/tax_table_row.py
 toastapi/models/time_entry.py
 toastapi/models/time_entry_break.py
 toastapi/models/time_range.py

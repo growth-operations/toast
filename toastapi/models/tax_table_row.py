@@ -17,45 +17,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from toastapi.models.tax_table_row import TaxTableRow
 from typing import Optional, Set
 from typing_extensions import Self
 
-class TaxRate(BaseModel):
+class TaxTableRow(BaseModel):
     """
-    TaxRate
+    TaxTableRow
     """ # noqa: E501
-    guid: Optional[StrictStr] = Field(default=None, description="The GUID maintained by the Toast platform.")
-    entity_type: Optional[StrictStr] = Field(default=None, description="The type of object this is. Response only.", alias="entityType")
-    name: Optional[StrictStr] = Field(default=None, description="The name of this tax rate.")
-    is_default: Optional[StrictBool] = Field(default=None, description="True if this tax rate is the default tax rate.", alias="isDefault")
-    rate: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The tax rate value. ")
-    rounding_type: Optional[StrictStr] = Field(default=None, description="The method used to round fractional currency amounts to non-fractional currency amounts.  Only applies to PERCENT tax rates. For other tax rate types, roundingType is null.  Valid values: HALF_UP - Round values up or down to the nearest number. If the last digit is 5, which is halfway, then always round up to the nearest number. HALF_EVEN - Round values up or down to the nearest number. If the last digit is 5, which is halfway, then round up or down to the nearest even number. ALWAYS_UP - Always round up to the next number. ALWAYS_DOWN - Always round down to the next number. ", alias="roundingType")
-    tax_table: Optional[List[TaxTableRow]] = Field(default=None, description="An array of TaxTableRow objects that define a set of tax amounts that apply to specific sale amount ranges.", alias="taxTable")
-    type: Optional[StrictStr] = Field(default=None, description="The type of tax rate.")
-    __properties: ClassVar[List[str]] = ["guid", "entityType", "name", "isDefault", "rate", "roundingType", "taxTable", "type"]
-
-    @field_validator('rounding_type')
-    def rounding_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['HALF_UP', 'HALF_EVEN', 'ALWAYS_UP', 'ALWAYS_DOWN']):
-            raise ValueError("must be one of enum values ('HALF_UP', 'HALF_EVEN', 'ALWAYS_UP', 'ALWAYS_DOWN')")
-        return value
-
-    @field_validator('type')
-    def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['PERCENT', 'FIXED', 'TABLE', 'NONE', 'EXTERNAL']):
-            raise ValueError("must be one of enum values ('PERCENT', 'FIXED', 'TABLE', 'NONE', 'EXTERNAL')")
-        return value
+    end: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The end of a sale amount range that corresponds to a specific tax amount in a tax table.")
+    pattern: Optional[StrictStr] = Field(default=None, description="Specifies whether the price range is part of an incomplete set of ranges that establish an algorithm that you can use to calculate tax amounts.")
+    start: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The start of a sale amount range that corresponds to a specific tax amount in a tax table.")
+    tax: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The tax amount that applies to the sale amount range.")
+    __properties: ClassVar[List[str]] = ["end", "pattern", "start", "tax"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -75,7 +50,7 @@ class TaxRate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaxRate from a JSON string"""
+        """Create an instance of TaxTableRow from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -96,18 +71,11 @@ class TaxRate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in tax_table (list)
-        _items = []
-        if self.tax_table:
-            for _item_tax_table in self.tax_table:
-                if _item_tax_table:
-                    _items.append(_item_tax_table.to_dict())
-            _dict['taxTable'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaxRate from a dict"""
+        """Create an instance of TaxTableRow from a dict"""
         if obj is None:
             return None
 
@@ -115,14 +83,10 @@ class TaxRate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "guid": obj.get("guid"),
-            "entityType": obj.get("entityType"),
-            "name": obj.get("name"),
-            "isDefault": obj.get("isDefault"),
-            "rate": obj.get("rate"),
-            "roundingType": obj.get("roundingType"),
-            "taxTable": [TaxTableRow.from_dict(_item) for _item in obj["taxTable"]] if obj.get("taxTable") is not None else None,
-            "type": obj.get("type")
+            "end": obj.get("end"),
+            "pattern": obj.get("pattern"),
+            "start": obj.get("start"),
+            "tax": obj.get("tax")
         })
         return _obj
 

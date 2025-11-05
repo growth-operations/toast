@@ -10,6 +10,9 @@ Name | Type | Description | Notes
 **name** | **str** | The name of this tax rate. | [optional] 
 **is_default** | **bool** | True if this tax rate is the default tax rate. | [optional] 
 **rate** | **float** | The tax rate value.  | [optional] 
+**rounding_type** | **str** | The method used to round fractional currency amounts to non-fractional currency amounts.  Only applies to PERCENT tax rates. For other tax rate types, roundingType is null.  Valid values: HALF_UP - Round values up or down to the nearest number. If the last digit is 5, which is halfway, then always round up to the nearest number. HALF_EVEN - Round values up or down to the nearest number. If the last digit is 5, which is halfway, then round up or down to the nearest even number. ALWAYS_UP - Always round up to the next number. ALWAYS_DOWN - Always round down to the next number.  | [optional] 
+**tax_table** | [**List[TaxTableRow]**](TaxTableRow.md) | An array of TaxTableRow objects that define a set of tax amounts that apply to specific sale amount ranges. | [optional] 
+**type** | **str** | The type of tax rate. | [optional] 
 
 ## Example
 
