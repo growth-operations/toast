@@ -9805,7 +9805,7 @@ components:
           description: |
             The identifier assigned by the Toast platform used to identify an order.
         paymentDate:
-          type: integer
+          type: string
           description: |
             The date when the payment was processed.
         paymentGuid:

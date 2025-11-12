@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,7 +28,7 @@ class GuestReportingDataResponse(BaseModel):
     """ # noqa: E501
     card_fingerprint: Optional[StrictStr] = Field(default=None, description="The identifier assigned by the Toast platform used to identify a guest's payment card. ", alias="cardFingerprint")
     order_guid: Optional[StrictStr] = Field(default=None, description="The identifier assigned by the Toast platform used to identify an order. ", alias="orderGuid")
-    payment_date: Optional[StrictInt] = Field(default=None, description="The date when the payment was processed. ", alias="paymentDate")
+    payment_date: Optional[StrictStr] = Field(default=None, description="The date when the payment was processed. ", alias="paymentDate")
     payment_guid: Optional[StrictStr] = Field(default=None, description="The identifier assigned by the Toast platform used to identify the payment. ", alias="paymentGuid")
     restaurant_guid: Optional[StrictStr] = Field(default=None, description="The identifier assigned by the Toast platform used to identify a restaurant location. ", alias="restaurantGuid")
     restaurant_location_code: Optional[StrictStr] = Field(default=None, description="The restaurant's location code. ", alias="restaurantLocationCode")

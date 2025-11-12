@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **card_fingerprint** | **str** | The identifier assigned by the Toast platform used to identify a guest&#39;s payment card.  | [optional] 
 **order_guid** | **str** | The identifier assigned by the Toast platform used to identify an order.  | [optional] 
-**payment_date** | **int** | The date when the payment was processed.  | [optional] 
+**payment_date** | **str** | The date when the payment was processed.  | [optional] 
 **payment_guid** | **str** | The identifier assigned by the Toast platform used to identify the payment.  | [optional] 
 **restaurant_guid** | **str** | The identifier assigned by the Toast platform used to identify a restaurant location.  | [optional] 
 **restaurant_location_code** | **str** | The restaurant&#39;s location code.  | [optional] 
