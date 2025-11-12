@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.49"
+__version__ = "1.1.0"
 
 # Define package exports
 __all__ = [
@@ -43,6 +43,7 @@ __all__ = [
     "RestaurantServicesApi",
     "RestaurantsApi",
     "RevenueCentersApi",
+    "SalesCategoriesApi",
     "ServiceAreasApi",
     "ServiceChargesApi",
     "ShiftsApi",
@@ -197,6 +198,7 @@ from toastapi.api.printers_api import PrintersApi as PrintersApi
 from toastapi.api.restaurant_services_api import RestaurantServicesApi as RestaurantServicesApi
 from toastapi.api.restaurants_api import RestaurantsApi as RestaurantsApi
 from toastapi.api.revenue_centers_api import RevenueCentersApi as RevenueCentersApi
+from toastapi.api.sales_categories_api import SalesCategoriesApi as SalesCategoriesApi
 from toastapi.api.service_areas_api import ServiceAreasApi as ServiceAreasApi
 from toastapi.api.service_charges_api import ServiceChargesApi as ServiceChargesApi
 from toastapi.api.shifts_api import ShiftsApi as ShiftsApi

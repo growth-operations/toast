@@ -107,6 +107,7 @@ docs/RestaurantServicesApi.md
 docs/RestaurantsApi.md
 docs/RevenueCenter.md
 docs/RevenueCentersApi.md
+docs/SalesCategoriesApi.md
 docs/SalesCategory.md
 docs/Schedule.md
 docs/Schedules.md
@@ -177,6 +178,7 @@ toastapi/api/printers_api.py
 toastapi/api/restaurant_services_api.py
 toastapi/api/restaurants_api.py
 toastapi/api/revenue_centers_api.py
+toastapi/api/sales_categories_api.py
 toastapi/api/service_areas_api.py
 toastapi/api/service_charges_api.py
 toastapi/api/shifts_api.py

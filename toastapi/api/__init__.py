@@ -26,6 +26,7 @@ from toastapi.api.printers_api import PrintersApi
 from toastapi.api.restaurant_services_api import RestaurantServicesApi
 from toastapi.api.restaurants_api import RestaurantsApi
 from toastapi.api.revenue_centers_api import RevenueCentersApi
+from toastapi.api.sales_categories_api import SalesCategoriesApi
 from toastapi.api.service_areas_api import ServiceAreasApi
 from toastapi.api.service_charges_api import ServiceChargesApi
 from toastapi.api.shifts_api import ShiftsApi

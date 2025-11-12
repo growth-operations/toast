@@ -4489,6 +4489,132 @@ paths:
       security:
         - oauth2:
             - config:read
+  /config/v2/salesCategories/{guid}:
+    get:
+      tags:
+        - Sales Categories
+      summary: Get a menu item sales category
+      description: |
+        Returns a `SalesCategory` object
+        containing information about a type of menu item used to
+        analyze purchases at a restaurant. For example, food and
+        alcohol might be sales categories for a restaurant.
+      operationId: get_sales_category_by_id
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration
+            applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: guid
+          description: The Toast POS GUID of the sales category.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Returns a `SalesCategory` object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SalesCategory"
+        "404":
+          description: Sales category not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+      security:
+        - oauth2:
+            - config:read
+  /config/v2/salesCategories:
+    get:
+      tags:
+        - Sales Categories
+      summary: Get menu item sales categories
+      description: |
+        Returns an array of `SalesCategory` objects
+        containing information about the types of menu item used to
+        analyze purchases at a restaurant. For example, food and
+        alcohol might be sales categories for a restaurant. If a
+        `lastModified` date is specified, returns all objects that were
+        created or modified after that date.
+      operationId: list_sales_categories
+      parameters:
+        - name: Toast-Restaurant-External-ID
+          description: |
+            The Toast POS GUID of the restaurant that the configuration
+            applies to.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          description: The maximum number of objects to return. The default value is 300. The maximum value is 300.
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 300
+            maximum: 300
+        - name: pageToken
+          in: query
+          description: |
+            A string that identifies the set of data objects that the
+            endpoint will return in its response data. You can use this
+            parameter to retrieve one page of response data. You
+            get the value that you supply in the `pageToken` parameter
+            from the `Toast-Next-Page-Token` header field value of a
+            previous request to the endpoint. For more information, see
+            https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+          required: false
+          schema:
+            type: string
+        - name: lastModified
+          description: |
+            Limits the return data to objects created or modified after
+            a specific date and time. For example:
+            `2024-06-20T00:00:00.000+0000`.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2024-06-20T00:00:00.000+0000"
+      responses:
+        "200":
+          description: Returns an array of `SalesCategory` objects.
+          content:
+            application/json:
+              schema:
+                title: Response
+                type: array
+                minItems: 0
+                maxItems: 300
+                items:
+                  $ref: "#/components/schemas/SalesCategory"
+          headers:
+            Toast-Next-Page-Token:
+              description: |
+                A string that identifies the following set of objects
+                that the endpoint will return. You can use this value
+                to retrieve that page of response data. To return
+                the next page of objects you supply this value in the
+                `pageToken` parameter of the next request to the
+                endpoint. For more information, see
+                https://doc.toasttab.com/doc/devguide/apiResponseDataPagination.html.
+              schema:
+                type: string
+      security:
+        - oauth2:
+            - config:read
   /config/v2/serviceAreas/{guid}:
     get:
       tags:
