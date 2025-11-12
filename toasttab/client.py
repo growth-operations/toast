@@ -35,6 +35,7 @@ from toastapi.api import (
     RestaurantServicesApi,
     RestaurantsApi,
     RevenueCentersApi,
+    SalesCategoriesApi,
     ServiceAreasApi,
     ServiceChargesApi,
     ShiftsApi,
@@ -201,6 +202,9 @@ class Toast:
         )
         self.revenue_centers: RevenueCentersApi = self._create_retry_wrapper(
             RevenueCentersApi
+        )
+        self.sales_categories: SalesCategoriesApi = self._create_retry_wrapper(
+            SalesCategoriesApi
         )
         self.service_areas: ServiceAreasApi = self._create_retry_wrapper(
             ServiceAreasApi
